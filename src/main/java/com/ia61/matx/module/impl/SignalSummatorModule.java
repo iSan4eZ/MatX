@@ -1,11 +1,11 @@
-package com.ia61.matx.model.module.impl;
+package com.ia61.matx.module.impl;
 
 import com.ia61.matx.model.input.AbstractInput;
 import com.ia61.matx.model.input.impl.MultiInput;
-import com.ia61.matx.model.module.Module;
 import com.ia61.matx.model.output.impl.SingleOutput;
 import com.ia61.matx.model.signal.Signal;
 import com.ia61.matx.model.signal.impl.AnalogAbstractSignal;
+import com.ia61.matx.module.Module;
 import com.ia61.matx.util.NumberUtil;
 import java.util.ArrayList;
 import java.util.List;
