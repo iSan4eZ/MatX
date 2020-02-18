@@ -1,4 +1,4 @@
-package com.ia61.matx.module.impl;
+package com.ia61.matx.module.impl.summator;
 
 import com.ia61.matx.model.input.AbstractInput;
 import com.ia61.matx.model.input.impl.MultiInput;
@@ -40,4 +40,8 @@ public class SignalSummatorModule extends MultiInput<Signal> implements Module, 
     return new AnalogAbstractSignal(data, frequencyGcd);
   }
 
+  @Override
+  public String getModuleName() {
+    return "Signal Summator";
+  }
 }

@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 public class SinSignalGeneratorModule extends AbstractSignalGeneratorModule {
 
   public Double interval = Math.PI;
@@ -22,5 +24,10 @@ public class SinSignalGeneratorModule extends AbstractSignalGeneratorModule {
       data.add((float) Math.sin((Math.PI * i) / interval) * height);
     }
     return new AnalogAbstractSignal(data, getDiscretizationFrequency());
+  }
+
+  @Override
+  public String getModuleName() {
+    return "Sinus Signal Generator";
   }
 }
