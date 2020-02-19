@@ -2,6 +2,7 @@ package com.ia61.matx.util;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class NumberUtil {
 
@@ -13,8 +14,16 @@ public class NumberUtil {
    * @return Returns Greatest Common Divisor e.g. For 18 and 24 it will be 6.
    */
   public static Long findGCD(List<Long> numbers) {
-    final long min = min(numbers);
+    if (CollectionUtils.isEmpty(numbers)) {
+      throw new IllegalArgumentException("Provided collection can't be null or empty.");
+    }
+
+    final long min = Math.abs(min(numbers));
     long gcd = 1L;
+
+    if (min < 1) {
+      throw new IllegalArgumentException("Provided collection can't contain zeros only.");
+    }
 
     for (int i = 1; i <= min; i++) {
       int finalI = i;
@@ -32,6 +41,7 @@ public class NumberUtil {
    */
   public static Long min(List<Long> numbers) {
     return numbers.stream()
+        .filter(Objects::nonNull)
         .mapToLong(Long::longValue)
         .min()
         .orElse(0L);
