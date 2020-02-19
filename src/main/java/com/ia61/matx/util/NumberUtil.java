@@ -28,7 +28,7 @@ public class NumberUtil {
   }
 
   /**
-   * @return Returns minumum out of all provided numbers.
+   * @return Returns minimum out of all provided numbers.
    */
   public static Long min(List<Long> numbers) {
     return numbers.stream()
