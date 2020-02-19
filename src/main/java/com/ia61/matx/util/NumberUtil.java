@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class NumberUtil {
 
-  public static Long findGCD(Long... numbers){
+  public static Long findGCD(Long... numbers) {
     return findGCD(Arrays.asList(numbers));
   }
 
@@ -17,13 +17,13 @@ public class NumberUtil {
     if (CollectionUtils.isEmpty(numbers)) {
       throw new IllegalArgumentException("Provided collection can't be null or empty.");
     }
+    if (numbers.stream()
+        .allMatch(number -> number == 0L)) {
+      throw new IllegalArgumentException("Provided collection can't contain zeros only.");
+    }
 
     final long min = Math.abs(min(numbers));
     long gcd = 1L;
-
-    if (min < 1) {
-      throw new IllegalArgumentException("Provided collection can't contain zeros only.");
-    }
 
     for (int i = 1; i <= min; i++) {
       int finalI = i;
@@ -53,7 +53,7 @@ public class NumberUtil {
    * @return Returns random number in provided bounds.
    * @throws IllegalArgumentException When lowerBound >= upperBound.
    */
-  public static Float random(Float lowerBound, Float upperBound){
+  public static Float random(Float lowerBound, Float upperBound) {
     if (lowerBound >= upperBound) {
       throw new IllegalArgumentException("UpperBound must be greater than LowerBound");
     }
