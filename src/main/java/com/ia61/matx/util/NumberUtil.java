@@ -12,6 +12,7 @@ public class NumberUtil {
 
   /**
    * @return Returns Greatest Common Divisor e.g. For 18 and 24 it will be 6.
+   * @throws IllegalArgumentException When provided collection is null, empty, or contains of zeros only.
    */
   public static Long findGCD(List<Long> numbers) {
     if (CollectionUtils.isEmpty(numbers)) {
