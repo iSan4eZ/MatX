@@ -26,9 +26,10 @@ public class NumberUtil {
 
     numbers = numbers.stream()
             .filter(number -> number != 0)
+            .map(Math::abs)
             .collect(Collectors.toList());
 
-    final long min = Math.abs(min(numbers));
+    final long min = min(numbers);
     long gcd = 1L;
 
     for (int i = 1; i <= min; i++) {
@@ -63,9 +64,12 @@ public class NumberUtil {
    * @param lowerBound represents lower bound of randomly generated numbers EXCLUDING the bound itself.
    * @param upperBound represents upper bound of randomly generated numbers EXCLUDING the bound itself.
    * @return Returns random number in provided bounds.
-   * @throws IllegalArgumentException When lowerBound >= upperBound.
+   * @throws IllegalArgumentException When lowerBound >= upperBound, or any of bounds is null.
    */
   public static Float random(Float lowerBound, Float upperBound) {
+    if (Objects.isNull(lowerBound) || Objects.isNull(upperBound)) {
+      throw new IllegalArgumentException("None of bounds can be null");
+    }
     if (lowerBound >= upperBound) {
       throw new IllegalArgumentException("UpperBound must be greater than LowerBound");
     }
