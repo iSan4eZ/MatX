@@ -48,6 +48,19 @@ public class NumberUtilTest {
     assertThat(result).isEqualTo(expectedResult);
 
   }
+  @Test
+  public void shouldFindGCDWithDifferent() {
+    //Given
+    final List<Long> givenValues = Arrays.asList(9L, -6L);
+    final long expectedResult = 3L;
+
+    //When
+    final Long result = NumberUtil.findGCD(givenValues);
+
+    //Then
+    assertThat(result).isEqualTo(expectedResult);
+
+  }
 
   @Test
   public void shouldThrowExceptionCaseValuesZeroOnly() {
@@ -88,14 +101,25 @@ public class NumberUtilTest {
   @Test
   public void shouldFindMinWithNull() {
     //Given
-    final List<Long> givenValues = Arrays.asList(-20L, null, 17L);
-    final long expectedResult = -20L;
+    final List<Long> givenValues = null;
 
     //When
-    final Long result = NumberUtil.min(givenValues);
 
     //Then
-    assertThat(result).isEqualTo(expectedResult);
+    //assertThat(result).isEqualTo(expectedResult);
+    assertThatThrownBy(() -> NumberUtil.min(givenValues))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Provided collection can't be null or empty.");
+  }
+  @Test
+  public void shouldFindMinWithListOfNull() {
+    //Given
+    final List<Long> givenValues = Collections.singletonList(null);
+    //givenValues.add(null);
+    //Then
+    assertThatThrownBy(() -> NumberUtil.min(givenValues))
+        .isInstanceOf(ArithmeticException.class)
+        .hasMessage("Can't find minimum value of non-empty collection");
   }
   @Test
   public void shouldFindMinWithSameMins() {
@@ -121,29 +145,15 @@ public class NumberUtilTest {
     //Then
     assertThat(result).isEqualTo(expectedResult);
   }
-  @Test
-  public void shouldFindMinWithoutNormalValue() {
-    //Given
-    final List<Long> givenValues = Collections.singletonList(null);
-    final long expectedResult = 0L;
 
-    //When
-    final Long result = NumberUtil.min(givenValues);
-
-    //Then
-    assertThat(result).isEqualTo(expectedResult);
-  }
   @Test
   public void shouldFindMinWithoutValues() {
     //Given
     final List<Long> givenValues = Arrays.asList();
-    final long expectedResult = 0L;
-
-    //When
-    final Long result = NumberUtil.min(givenValues);
-
     //Then
-    assertThat(result).isEqualTo(expectedResult);
+    assertThatThrownBy(() -> NumberUtil.min(givenValues))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Provided collection can't be null or empty.");
   }
 //============================Random=====================================
 
