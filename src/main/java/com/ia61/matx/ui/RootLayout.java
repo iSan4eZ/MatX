@@ -13,16 +13,21 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class RootLayout extends AnchorPane{
+public class RootLayout extends BorderPane{
+
+	@FXML
+	BorderPane borderPane;
+
 
 	@FXML SplitPane base_pane;
 	@FXML AnchorPane right_pane;
 	@FXML VBox left_pane;
-	@FXML TreeView<String> treeView;
+	@FXML TreeView<String> elementsTree;
 
 	private DragIcon mDragOverIcon = null;
 	
@@ -38,28 +43,8 @@ public class RootLayout extends AnchorPane{
 		
 		fxmlLoader.setRoot(this); 
 		fxmlLoader.setController(this);
-
-		// определяем корневой узел
-		TreeItem<String> rootTreeNode = new TreeItem<String>("Languages");
-
-		// определяем набор вложенных узлов
-		TreeItem<String> germanics = new TreeItem<String>("Germanic");
-		germanics.getChildren().add(new TreeItem<String>("German"));
-		germanics.getChildren().add(new TreeItem<String>("English"));
-
-		TreeItem<String> romans = new TreeItem<String>("Roman");
-		romans.getChildren().add(new TreeItem<String>("French"));
-		romans.getChildren().add(new TreeItem<String>("Spanish"));
-		romans.getChildren().add(new TreeItem<String>("Italian"));
-
-		// добавляем узлы в корневой узел
-		rootTreeNode.getChildren().add(germanics);
-		rootTreeNode.getChildren().add(romans);
-
-		// устанавливаем корневой узел для TreeView
-		treeView = new TreeView<String>(rootTreeNode);
 		
-		try { 
+		try {
 			fxmlLoader.load();
         
 		} catch (IOException exception) {
