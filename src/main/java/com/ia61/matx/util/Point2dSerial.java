@@ -1,4 +1,4 @@
-package com.ia61.matx.ui;
+package com.ia61.matx.util;
 
 import javafx.geometry.Point2D;
 

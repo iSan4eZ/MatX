@@ -1,5 +1,6 @@
-package com.ia61.matx.ui;
+package com.ia61.matx.model.ui;
 
+import com.ia61.matx.model.ui.DragIconType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;

@@ -1,4 +1,4 @@
-package com.ia61.matx.ui;
+package com.ia61.matx.model.ui;
 
 import javafx.scene.input.DataFormat;
 import javafx.util.Pair;

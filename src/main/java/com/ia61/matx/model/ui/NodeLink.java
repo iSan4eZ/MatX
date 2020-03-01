@@ -1,5 +1,6 @@
-package com.ia61.matx.ui;
+package com.ia61.matx.model.ui;
 
+import com.ia61.matx.model.ui.DraggableNode;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.When;
 import javafx.beans.property.DoubleProperty;

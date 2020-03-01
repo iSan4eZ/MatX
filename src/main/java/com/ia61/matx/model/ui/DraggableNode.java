@@ -1,5 +1,6 @@
-package com.ia61.matx.ui;
+package com.ia61.matx.model.ui;
 
+import com.ia61.matx.util.Point2dSerial;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -44,7 +45,7 @@ public class DraggableNode extends AnchorPane {
 		private final DraggableNode self;
 		
 		private NodeLink mDragLink = null;
-		private AnchorPane right_pane = null;
+		private AnchorPane workingPane = null;
 
 		private final List <String> mLinkIds = new ArrayList <String> ();
 
@@ -90,7 +91,7 @@ public class DraggableNode extends AnchorPane {
 				@Override
 				public void changed(ObservableValue observable,
 						Object oldValue, Object newValue) {
-					right_pane = (AnchorPane) getParent();
+					workingPane = (AnchorPane) getParent();
 					
 				}
 				
@@ -276,7 +277,7 @@ public class DraggableNode extends AnchorPane {
 					getParent().setOnDragDropped(mContextLinkDragDropped);
 					
 					//Set up user-draggable link
-					right_pane.getChildren().add(0,mDragLink);					
+					workingPane.getChildren().add(0,mDragLink);
 					
 					mDragLink.setVisible(false);
 
@@ -320,7 +321,7 @@ public class DraggableNode extends AnchorPane {
 
 					//hide the draggable NodeLink and remove it from the right-hand AnchorPane's children
 					mDragLink.setVisible(false);
-					right_pane.getChildren().remove(0);
+					workingPane.getChildren().remove(0);
 					
 					AnchorPane link_handle = (AnchorPane) event.getSource();
 					
@@ -366,7 +367,7 @@ public class DraggableNode extends AnchorPane {
 
 					//hide the draggable NodeLink and remove it from the right-hand AnchorPane's children
 					mDragLink.setVisible(false);
-					right_pane.getChildren().remove(0);
+					workingPane.getChildren().remove(0);
 					
 					event.setDropCompleted(true);
 					event.consume();

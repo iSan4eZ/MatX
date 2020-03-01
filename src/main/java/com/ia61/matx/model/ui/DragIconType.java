@@ -1,4 +1,4 @@
-package com.ia61.matx.ui;
+package com.ia61.matx.model.ui;
 
 public enum DragIconType {
 	cubic_curve,	
