@@ -2,29 +2,29 @@ package com.ia61.matx.model.output.impl;
 
 import com.ia61.matx.model.output.Output;
 
-public interface QuadOutput<TYPE> {
+public interface QuadOutput {
 
-  TYPE getDataToFirstOutput();
+  Float getDataToFirstOutput(Long timestamp);
 
-  TYPE getDataToSecondOutput();
+  Float getDataToSecondOutput(Long timestamp);
 
-  TYPE getDataToThirdOutput();
+  Float getDataToThirdOutput(Long timestamp);
 
-  TYPE getDataToFourthOutput();
+  Float getDataToFourthOutput(Long timestamp);
 
-  default Output<TYPE> getFirstOutput() {
+  default Output getFirstOutput() {
     return this::getDataToFirstOutput;
   }
 
-  default Output<TYPE> getSecondOutput() {
+  default Output getSecondOutput() {
     return this::getDataToSecondOutput;
   }
 
-  default Output<TYPE> getThirdOutput() {
+  default Output getThirdOutput() {
     return this::getDataToThirdOutput;
   }
 
-  default Output<TYPE> getFouthOutput() {
+  default Output getFouthOutput() {
     return this::getDataToFourthOutput;
   }
 }

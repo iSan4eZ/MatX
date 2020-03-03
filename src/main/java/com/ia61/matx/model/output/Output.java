@@ -1,7 +1,7 @@
 package com.ia61.matx.model.output;
 
-public interface Output<TYPE> {
+public interface Output {
 
-  TYPE gatherData();
+  Float gatherData(Long timestamp);
 
 }

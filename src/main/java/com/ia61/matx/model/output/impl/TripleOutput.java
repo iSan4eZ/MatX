@@ -2,23 +2,23 @@ package com.ia61.matx.model.output.impl;
 
 import com.ia61.matx.model.output.Output;
 
-public interface TripleOutput<TYPE> {
+public interface TripleOutput {
 
-  TYPE getDataToFirstOutput();
+  Float getDataToFirstOutput(Long timestamp);
 
-  TYPE getDataToSecondOutput();
+  Float getDataToSecondOutput(Long timestamp);
 
-  TYPE getDataToThirdOutput();
+  Float getDataToThirdOutput(Long timestamp);
 
-  default Output<TYPE> getFirstOutput() {
+  default Output getFirstOutput() {
     return this::getDataToFirstOutput;
   }
 
-  default Output<TYPE> getSecondOutput() {
+  default Output getSecondOutput() {
     return this::getDataToSecondOutput;
   }
 
-  default Output<TYPE> getThirdOutput() {
+  default Output getThirdOutput() {
     return this::getDataToThirdOutput;
   }
 }

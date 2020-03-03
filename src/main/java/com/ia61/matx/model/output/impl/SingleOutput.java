@@ -2,11 +2,11 @@ package com.ia61.matx.model.output.impl;
 
 import com.ia61.matx.model.output.Output;
 
-public interface SingleOutput<TYPE> {
+public interface SingleOutput {
 
-  TYPE getDataToFirstOutput();
+  Float getDataToFirstOutput(Long timestamp);
 
-  default Output<TYPE> getFirstOutput() {
+  default Output getFirstOutput() {
     return this::getDataToFirstOutput;
   }
 
