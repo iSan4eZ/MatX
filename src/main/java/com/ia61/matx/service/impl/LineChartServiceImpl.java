@@ -12,7 +12,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,7 @@ public class LineChartServiceImpl implements LineChartService {
     public List<SortedMap<Long, Float>> overlayNoiseOverSinChart() {
         //Sin generator
         SinSignalGeneratorModule sinSignalGeneratorModule = new SinSignalGeneratorModule();
-        sinSignalGeneratorModule.setHalfInterval(250.0);
+        sinSignalGeneratorModule.setFrequency(2f);
 
         //Noise generator
         NoiseSignalGeneratorModule noiseSignalGeneratorModule = new NoiseSignalGeneratorModule();
@@ -66,17 +65,21 @@ public class LineChartServiceImpl implements LineChartService {
     public List<SortedMap<Long, Float>> correlateSinChart() {
         //Sin generator
         SinSignalGeneratorModule sinSignalGeneratorModule = new SinSignalGeneratorModule();
-        sinSignalGeneratorModule.setHalfInterval(500.0);
+        sinSignalGeneratorModule.setFrequency(3f);
+        sinSignalGeneratorModule.setPeriodsPerSymbol(1);
+        sinSignalGeneratorModule.setSymbol("101");
 
-        //Second sin generator
-        SinSignalGeneratorModule sinSignalGeneratorModule2 = new SinSignalGeneratorModule();
-        sinSignalGeneratorModule2.setHalfInterval(500.0);
+        //Perfect sin generator
+        SinSignalGeneratorModule perfectSignalGeneratorModule = new SinSignalGeneratorModule();
+        perfectSignalGeneratorModule.setFrequency(3f);
+        perfectSignalGeneratorModule.setPeriodsPerSymbol(1);
+        perfectSignalGeneratorModule.setSymbol("1");
+        perfectSignalGeneratorModule.setRepeatable(true);
 
         //Correlator
-
         CorrelatorModule correlatorModule = new CorrelatorModule();
         correlatorModule.connectFirstInput(sinSignalGeneratorModule);
-        correlatorModule.connectSecondInput(sinSignalGeneratorModule2);
+        correlatorModule.connectSecondInput(perfectSignalGeneratorModule);
 
         //Interrupter
         CorrelatorInterrupterModule correlatorInterrupterModule = new CorrelatorInterrupterModule();
@@ -87,6 +90,8 @@ public class LineChartServiceImpl implements LineChartService {
         SignalMonitor signalMonitor = new SignalMonitor();
         signalMonitor.setPullRate(50L);
         signalMonitor.connectInput(correlatorModule);
+//        signalMonitor.connectInput(sinSignalGeneratorModule);
+//        signalMonitor.connectInput(perfectSignalGeneratorModule);
 
         GeneralProcessor.simulate();
 
