@@ -7,13 +7,18 @@ import com.ia61.matx.service.impl.LineChartServiceImpl;
 import com.ia61.matx.service.impl.NodeServiceImpl;
 import com.ia61.matx.service.impl.WindowServiceImpl;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -56,7 +61,16 @@ public class Controller implements Initializable {
     private void handleMonitorButton() {
         monitorButton.setOnMouseClicked((event) -> {
 //            windowService.buildWindow("LineChart.fxml");
-            LineChartViewer lineChartViewer = new LineChartViewer();
+
+            FXMLLoader fxmlLoader = new FXMLLoader(
+                Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource("LineChart.fxml")));
+            Stage stage = new Stage();
+            try {
+                stage.setScene(new Scene(fxmlLoader.load(), 500, 500));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            stage.show();
         });
     }
 }

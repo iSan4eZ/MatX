@@ -30,8 +30,8 @@ public class ProportionalSignalSummatorModule extends DualInput<Signal> implemen
     final long maxLength = Math.max(firstSignal.getLength(), secondSignal.getLength());
     List<Float> data = new ArrayList<>();
     for (long i = 0; i <= maxLength; i += frequencyGcd) {
-      final Float firstValue = firstSignal.getValueAtTimestamp(frequencyGcd * i) * firstSignalCoefficient;
-      final Float secondValue = secondSignal.getValueAtTimestamp(frequencyGcd * i) * secondSignalCoefficient;
+      final Float firstValue = firstSignal.getValueAtTimestamp(i) * firstSignalCoefficient;
+      final Float secondValue = secondSignal.getValueAtTimestamp(i) * secondSignalCoefficient;
       data.add(firstValue + secondValue);
     }
     return new AnalogAbstractSignal(data, frequencyGcd);

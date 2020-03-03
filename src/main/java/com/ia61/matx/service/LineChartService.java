@@ -8,5 +8,8 @@ import java.util.Map;
  */
 
 public interface LineChartService extends ChartService {
-    List<Map<Float, Float>> generateRandomChart();
+    List<Map<Float, Float>> generateSinChart();
+
+    List<Map<Float, Float>> generateNoiseChart();
+
 }

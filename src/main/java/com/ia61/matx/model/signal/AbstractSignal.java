@@ -1,8 +1,6 @@
 package com.ia61.matx.model.signal;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AbstractSignal implements Signal {
 
@@ -15,9 +13,9 @@ public abstract class AbstractSignal implements Signal {
   }
 
   @Override
-  public Map<Float, Float> getData(Long pullRate, Long pullTime) {
-    final Map<Float, Float> result = new HashMap<>();
-    for (long i = 0; i < pullRate; i += pullRate) {
+  public SortedMap<Float, Float> getData(Long pullRate, Long pullTime) {
+    final SortedMap<Float, Float> result = new TreeMap<>();
+    for (long i = 0; i < pullTime; i += pullRate) {
       result.put(i / 1000f, getValueAtTimestamp(i));
     }
     return result;
