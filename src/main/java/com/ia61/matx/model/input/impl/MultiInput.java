@@ -13,11 +13,11 @@ import lombok.Data;
 import lombok.Getter;
 
 @Getter
-public abstract class MultiInput<TYPE> implements Input<TYPE> {
+public abstract class MultiInput implements Input {
 
-  private List<InputConnection<TYPE>> inputList = new ArrayList<>();
+  private List<InputConnection> inputList = new ArrayList<>();
 
-  public void connectInput(SingleOutput<TYPE> singleOutput) {
+  public void connectInput(SingleOutput singleOutput) {
     inputList.add(getConnection(singleOutput));
   }
 

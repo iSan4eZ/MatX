@@ -3,7 +3,7 @@
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:controller="com.ia61.matx.LineChartViewer" fx:id="rootViewerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:controller="com.ia61.matx.LineChartViewer" fx:id="rootViewerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <LineChart fx:id="lineChart" BorderPane.alignment="CENTER">
         <xAxis>

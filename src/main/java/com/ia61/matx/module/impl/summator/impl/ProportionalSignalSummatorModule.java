@@ -17,25 +17,17 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProportionalSignalSummatorModule extends DualInput<Signal> implements Summator, SingleOutput<Signal> {
+public class ProportionalSignalSummatorModule extends DualInput implements Summator, SingleOutput {
 
   private Float firstSignalCoefficient = 1f;
   private Float secondSignalCoefficient = 1f;
 
-  @Override
-  public Signal getDataToFirstOutput() {
-    final Signal firstSignal = getFirstInput().requestData();
-    final Signal secondSignal = getSecondInput().requestData();
 
-    final Long frequencyGcd = NumberUtil.findGCD(firstSignal.getFrequency(), secondSignal.getFrequency());
-    final long maxLength = Math.max(firstSignal.getLength(), secondSignal.getLength());
-    List<Float> data = new ArrayList<>();
-    for (long i = 0; i <= maxLength; i += frequencyGcd) {
-      final Float firstValue = firstSignal.getValueAtTimestamp(i) * firstSignalCoefficient;
-      final Float secondValue = secondSignal.getValueAtTimestamp(i) * secondSignalCoefficient;
-      data.add(firstValue + secondValue);
-    }
-    return new AnalogAbstractSignal(data, frequencyGcd);
+  @Override
+  public Float getDataToFirstOutput(Long timestamp) {
+    Float firstValue = getFirstInput().requestData(timestamp) * firstSignalCoefficient;
+    Float secondValue = getSecondInput().requestData(timestamp) * secondSignalCoefficient;
+    return firstValue + secondValue;
   }
 
   @Override

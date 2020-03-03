@@ -7,16 +7,16 @@ import lombok.Data;
 import lombok.Getter;
 
 @Getter
-public abstract class DualInput<TYPE> implements Input<TYPE> {
+public abstract class DualInput implements Input {
 
-  private InputConnection<TYPE> firstInput;
-  private InputConnection<TYPE> secondInput;
+  private InputConnection firstInput;
+  private InputConnection secondInput;
 
-  public void connectFirstInput(SingleOutput<TYPE> singleOutput){
+  public void connectFirstInput(SingleOutput singleOutput){
     firstInput = getConnection(singleOutput);
   }
 
-  public void connectSecondInput(SingleOutput<TYPE> singleOutput){
+  public void connectSecondInput(SingleOutput singleOutput){
     secondInput = getConnection(singleOutput);
   }
 

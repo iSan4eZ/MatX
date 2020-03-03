@@ -10,7 +10,7 @@ public class CorrelatorInterrupterModule extends AbstractInterrupter<CorrelatorM
 
   @Override
   public String getModuleName() {
-    return "Correlator";
+    return "Correlator Interrupter";
   }
 
 }

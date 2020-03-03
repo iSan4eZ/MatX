@@ -7,9 +7,6 @@ import lombok.*;
 
 @Getter
 @Setter
-public abstract class AbstractSignalGeneratorModule implements SignalGenerator, SingleOutput<Signal> {
-
-  private Long discretizationFrequency = 50L;
-  private Long lenght = 10000L;
+public abstract class AbstractSignalGeneratorModule implements SignalGenerator, SingleOutput {
 
 }

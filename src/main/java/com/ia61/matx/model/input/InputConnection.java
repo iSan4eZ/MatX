@@ -2,16 +2,16 @@ package com.ia61.matx.model.input;
 
 import com.ia61.matx.model.output.Output;
 
-public class InputConnection<TYPE> {
+public class InputConnection {
 
-  private Output<TYPE> connectedOutput;
+  private Output connectedOutput;
 
-  public InputConnection(Output<TYPE> connectedOutput) {
+  public InputConnection(Output connectedOutput) {
     this.connectedOutput = connectedOutput;
   }
 
-  public TYPE requestData() {
-    return connectedOutput.gatherData();
+  public Float requestData(Long timestamp) {
+    return connectedOutput.gatherData(timestamp);
   }
 
 }

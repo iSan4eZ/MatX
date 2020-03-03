@@ -11,11 +11,11 @@ import lombok.Getter;
 import java.util.Objects;
 
 @Getter
-public abstract class SingleInput<TYPE> implements Input<TYPE> {
+public abstract class SingleInput implements Input {
 
-  private InputConnection<TYPE> firstInput;
+  private InputConnection firstInput;
 
-  public void connectFirstInput(SingleOutput<TYPE> singleOutput){
+  public void connectFirstInput(SingleOutput singleOutput){
     firstInput = getConnection(singleOutput);
   }
 

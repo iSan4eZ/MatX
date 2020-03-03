@@ -2,17 +2,17 @@ package com.ia61.matx.model.output.impl;
 
 import com.ia61.matx.model.output.Output;
 
-public interface DualOutput<TYPE> {
+public interface DualOutput {
 
-  TYPE getDataToFirstOutput();
+  Float getDataToFirstOutput(Long timestamp);
 
-  TYPE getDataToSecondOutput();
+  Float getDataToSecondOutput(Long timestamp);
 
-  default Output<TYPE> getFirstOutput() {
+  default Output getFirstOutput() {
     return this::getDataToFirstOutput;
   }
 
-  default Output<TYPE> getSecondOutput() {
+  default Output getSecondOutput() {
     return this::getDataToSecondOutput;
   }
 }

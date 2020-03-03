@@ -13,34 +13,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CorrelatorModule extends DualInput<Signal> implements Correlator, SingleOutput<Signal>, Interruptable {
+public class CorrelatorModule extends DualInput implements Correlator, SingleOutput, Interruptable {
 
   private Float currentValue = 0f;
 
+
   @Override
-  public Signal getDataToFirstOutput() {
-    interrupt();
-    final List<Signal> allSignals = Arrays.asList(getFirstInput().requestData(), getSecondInput().requestData());
-
-    final List<Long> allFrequencies = allSignals.stream()
-        .map(Signal::getFrequency)
-        .collect(Collectors.toList());
-
-    final long maxLength = allSignals.stream()
-        .mapToLong(Signal::getLength)
-        .max()
-        .orElse(0L);
-
-    final Long frequencyGcd = NumberUtil.findGCD(allFrequencies);
-    List<Float> data = new ArrayList<>();
-    for (long i = 0; i <= maxLength; i += frequencyGcd) {
-      long finalI = i;
-      currentValue += (float) allSignals.stream()
-          .mapToDouble(signal -> signal.getValueAtTimestamp(finalI))
-          .reduce(0, (a, b) -> a * b);
-      data.add(currentValue);
-    }
-    return new AnalogAbstractSignal(data, frequencyGcd);
+  public Float getDataToFirstOutput(Long timestamp) {
+    Float firstValue = getFirstInput().requestData(timestamp);
+    Float secondValue = getSecondInput().requestData(timestamp);
+    currentValue += firstValue * secondValue;
+    return currentValue;
   }
 
   @Override

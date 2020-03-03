@@ -7,26 +7,26 @@ import lombok.Data;
 import lombok.Getter;
 
 @Getter
-public abstract class QuadInput<TYPE> implements Input<TYPE> {
+public abstract class QuadInput implements Input {
 
-  private InputConnection<TYPE> firstInput;
-  private InputConnection<TYPE> secondInput;
-  private InputConnection<TYPE> thirdInput;
-  private InputConnection<TYPE> fourthInput;
+  private InputConnection firstInput;
+  private InputConnection secondInput;
+  private InputConnection thirdInput;
+  private InputConnection fourthInput;
 
-  public void connectFirstInput(SingleOutput<TYPE> singleOutput){
+  public void connectFirstInput(SingleOutput singleOutput){
     firstInput = getConnection(singleOutput);
   }
 
-  public void connectSecondInput(SingleOutput<TYPE> singleOutput){
+  public void connectSecondInput(SingleOutput singleOutput){
     secondInput = getConnection(singleOutput);
   }
 
-  public void connectThirdInput(SingleOutput<TYPE> singleOutput){
+  public void connectThirdInput(SingleOutput singleOutput){
     thirdInput = getConnection(singleOutput);
   }
 
-  public void connectFourthInput(SingleOutput<TYPE> singleOutput){
+  public void connectFourthInput(SingleOutput singleOutput){
     fourthInput = getConnection(singleOutput);
   }
 

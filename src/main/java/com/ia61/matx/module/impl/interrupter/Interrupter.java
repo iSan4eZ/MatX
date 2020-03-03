@@ -4,4 +4,6 @@ import com.ia61.matx.module.Module;
 
 public interface Interrupter extends Module {
 
+  void interruptAll(Long timestamp);
+
 }

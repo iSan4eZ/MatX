@@ -20,12 +20,8 @@ public class NoiseSignalGeneratorModule extends AbstractSignalGeneratorModule {
   public Float lowerBound = 0f;
 
   @Override
-  public Signal getDataToFirstOutput() {
-    final List<Float> data = new ArrayList<>();
-    for (long i = 0; i <= getLenght(); i += getDiscretizationFrequency()) {
-      data.add(NumberUtil.random(lowerBound, upperBound));
-    }
-    return new AnalogAbstractSignal(data, getDiscretizationFrequency());
+  public Float getDataToFirstOutput(Long timestamp) {
+    return NumberUtil.random(lowerBound, upperBound);
   }
 
   @Override

@@ -4,11 +4,11 @@ import com.ia61.matx.model.output.impl.SingleOutput;
 
 import java.util.Objects;
 
-public interface Input<TYPE> {
+public interface Input {
 
-  default InputConnection<TYPE> getConnection(SingleOutput<TYPE> singleOutput) {
+  default InputConnection getConnection(SingleOutput singleOutput) {
     if (Objects.nonNull(singleOutput)) {
-      return new InputConnection<>(singleOutput.getFirstOutput());
+      return new InputConnection(singleOutput.getFirstOutput());
     }
     return null;
   }
