@@ -1,11 +1,11 @@
 package com.ia61.matx.module.impl.monitor.impl;
 
 import com.ia61.matx.model.input.InputConnection;
-import com.ia61.matx.model.signal.Signal;
 import com.ia61.matx.module.impl.monitor.AbstractMonitorModule;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class SignalMonitor extends AbstractMonitorModule {
 

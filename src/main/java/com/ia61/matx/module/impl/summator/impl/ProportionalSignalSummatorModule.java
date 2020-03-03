@@ -2,18 +2,9 @@ package com.ia61.matx.module.impl.summator.impl;
 
 import com.ia61.matx.model.input.impl.DualInput;
 import com.ia61.matx.model.output.impl.SingleOutput;
-import com.ia61.matx.model.signal.Signal;
-import com.ia61.matx.model.signal.impl.AnalogAbstractSignal;
-import com.ia61.matx.module.Module;
 import com.ia61.matx.module.impl.summator.Summator;
-import com.ia61.matx.util.NumberUtil;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter

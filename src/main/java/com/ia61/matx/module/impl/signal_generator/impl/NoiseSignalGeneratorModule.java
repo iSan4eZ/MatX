@@ -1,14 +1,7 @@
 package com.ia61.matx.module.impl.signal_generator.impl;
 
-import com.ia61.matx.model.signal.Signal;
-import com.ia61.matx.model.signal.impl.AnalogAbstractSignal;
 import com.ia61.matx.module.impl.signal_generator.AbstractSignalGeneratorModule;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ia61.matx.util.NumberUtil;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
