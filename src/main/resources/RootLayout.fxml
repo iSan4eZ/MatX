@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.shape.*?>
-<?import javafx.geometry.*?>
-<?import java.net.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.BorderPane?>
 
 <BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ia61.matx.Controller">
    <top>
@@ -33,7 +28,7 @@
             </MenuBar>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
               <items>
-                <Button mnemonicParsing="false" text="Button" />
+                <Button fx:id="monitorButton" mnemonicParsing="false" text="Monitor" />
               </items>
             </ToolBar>
          </children>
@@ -47,7 +42,7 @@
                 <AnchorPane fx:id="elements" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
               </content>
                <graphic>
-                  <TextField />
+                  <TextField fx:id="searchField" />
                </graphic>
             </TitledPane>
          </children>
