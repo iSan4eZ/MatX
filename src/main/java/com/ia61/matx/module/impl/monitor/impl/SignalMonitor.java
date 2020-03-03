@@ -1,6 +1,5 @@
 package com.ia61.matx.module.impl.monitor.impl;
 
-import com.ia61.matx.model.input.AbstractInput;
 import com.ia61.matx.model.signal.Signal;
 import com.ia61.matx.module.impl.monitor.AbstractMonitorModule;
 
@@ -11,10 +10,10 @@ import java.util.stream.Collectors;
 public class SignalMonitor extends AbstractMonitorModule<Signal> {
 
     @Override
-    public List<Map<Float, Float>> gatherAllInputs() {
-        return getInputList().stream()
+    public void gatherAllInputs() {
+        setResult(getInputList().stream()
                 .map(input -> input.requestData().getData(getPullRate(), getPullTime()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     @Override

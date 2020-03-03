@@ -1,10 +1,11 @@
-package com.ia61.matx.module.impl.summator;
+package com.ia61.matx.module.impl.summator.impl;
 
 import com.ia61.matx.model.input.impl.DualInput;
 import com.ia61.matx.model.output.impl.SingleOutput;
 import com.ia61.matx.model.signal.Signal;
 import com.ia61.matx.model.signal.impl.AnalogAbstractSignal;
 import com.ia61.matx.module.Module;
+import com.ia61.matx.module.impl.summator.Summator;
 import com.ia61.matx.util.NumberUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProportionalSignalSummatorModule extends DualInput<Signal> implements Module, SingleOutput<Signal> {
+public class ProportionalSignalSummatorModule extends DualInput<Signal> implements Summator, SingleOutput<Signal> {
 
   private Float firstSignalCoefficient = 1f;
   private Float secondSignalCoefficient = 1f;

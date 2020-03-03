@@ -6,18 +6,21 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Getter
 @Setter
-public abstract class AbstractMonitorModule<TYPE> extends MultiInput<TYPE> implements Module {
+public abstract class AbstractMonitorModule<TYPE> extends MultiInput<TYPE> implements Monitor {
 
     //frequency of data points in milliseconds
     private Long pullRate = 50L;
     //total graph length in milliseconds
     private Long pullTime = 10000L;
 
-    public abstract List<Map<Float, Float>> gatherAllInputs();
+    private List<Map<Float, Float>> result = new ArrayList<>();
+
+    public abstract void gatherAllInputs();
 
 }
