@@ -12,7 +12,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.stream.Collectors;
 

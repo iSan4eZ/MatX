@@ -86,17 +86,10 @@ public class DraggableNode extends AnchorPane {
 			mDragLink = new NodeLink();
 			mDragLink.setVisible(false);
 			
-			parentProperty().addListener(new ChangeListener() {
+			parentProperty().addListener((ChangeListener) (observable, oldValue, newValue) -> workingPane = (AnchorPane) getParent());
 
-				@Override
-				public void changed(ObservableValue observable,
-						Object oldValue, Object newValue) {
-					workingPane = (AnchorPane) getParent();
-					
-				}
-				
-			});
-			
+			setType(DragIconType.values()[7]);
+
 			Circle c =new Circle();
 			c.setRadius(5.0f);
 			this.getChildren().add(c);
@@ -231,36 +224,33 @@ public class DraggableNode extends AnchorPane {
 			});
 			
 			//drag detection for node dragging
-			title_bar.setOnDragDetected ( new EventHandler <MouseEvent> () {
+			title_bar
+					.setOnDragDetected (event -> {
 
-				@Override
-				public void handle(MouseEvent event) {
+						getParent().setOnDragOver(null);
+						getParent().setOnDragDropped(null);
 
-					getParent().setOnDragOver(null);
-					getParent().setOnDragDropped(null);
+						getParent().setOnDragOver (mContextDragOver);
+						getParent().setOnDragDropped (mContextDragDropped);
 
-					getParent().setOnDragOver (mContextDragOver);
-					getParent().setOnDragDropped (mContextDragDropped);
+						//begin drag ops
+						mDragOffset = new Point2D(event.getX(), event.getY());
 
-	                //begin drag ops
-	                mDragOffset = new Point2D(event.getX(), event.getY());
-	                
-	                relocateToPoint(
-	                		new Point2D(event.getSceneX(), event.getSceneY())
-	                		);
-	                
-	                ClipboardContent content = new ClipboardContent();
-					DragContainer container = new DragContainer();
-					
-					container.addData ("type", mType.toString());
-					content.put(DragContainer.AddNode, container);
-					
-	                startDragAndDrop (TransferMode.ANY).setContent(content);                
-	                
-	                event.consume();					
-				}
-				
-			});		
+						relocateToPoint(
+								new Point2D(event.getSceneX(), event.getSceneY())
+								);
+
+						ClipboardContent content = new ClipboardContent();
+						DragContainer container = new DragContainer();
+						container
+								.addData("type",
+										mType.toString());
+						content.put(DragContainer.AddNode, container);
+
+						startDragAndDrop (TransferMode.ANY).setContent(content);
+
+						event.consume();
+					});
 		}
 		
 		private void buildLinkDragHandlers() {

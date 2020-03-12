@@ -1,6 +1,5 @@
 package com.ia61.matx;
 
-import com.ia61.matx.ui.RootLayout;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
