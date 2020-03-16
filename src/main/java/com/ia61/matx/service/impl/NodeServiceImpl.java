@@ -12,8 +12,6 @@ public class NodeServiceImpl implements NodeService {
 
     @Override
     public Node getNativeNodes() {
-        DraggableNode node = new DraggableNode();
-        node.setId("iddd");
-        return node;
+        return new DraggableNode();
     }
 }

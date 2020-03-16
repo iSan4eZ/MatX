@@ -34,7 +34,7 @@ public class DragIcon extends AnchorPane{
 	}
 	
 	@FXML
-	private void initialize() {}
+	private void initialize() { }
 	
 	public void relocateToPoint (Point2D p) {
 

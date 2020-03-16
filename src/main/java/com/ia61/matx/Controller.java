@@ -22,6 +22,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -35,13 +36,15 @@ public class Controller extends BorderPane implements Initializable {
     BorderPane rootPane;
 
     @FXML
-    AnchorPane elements;
+    VBox elements;
 
     @FXML
     AnchorPane workingPane;
 
     @FXML
     Button monitorButton;
+
+    public static ClipboardContent clipboardContent = new ClipboardContent();
 
     private NodeService nodeService;
     private LineChartService lineChartService;
@@ -58,10 +61,9 @@ public class Controller extends BorderPane implements Initializable {
         this.nodeService = new NodeServiceImpl();
     }
 
-    @Override //TODO @FXML
+    @FXML
     public void initialize(URL location, ResourceBundle resources) {
         handleMonitorButton();
-        final StackPane sp1 = new StackPane();
 
         mDragOverIcon = new DragIcon();
 
@@ -71,10 +73,12 @@ public class Controller extends BorderPane implements Initializable {
 
         Node node = nodeService.getNativeNodes();
         DragIcon icn = new DragIcon();
+        icn.setType(DragIconType.grey);
 
-        addDragDetection((DraggableNode) node);
+        addDragDetection( icn);
 
-        elements.getChildren().add(node);
+
+        elements.getChildren().add(icn);;
 
         workingPane.getChildren().add(nodeService.getNativeNodes());
 
@@ -83,7 +87,7 @@ public class Controller extends BorderPane implements Initializable {
         });
     }
 
-    private void addDragDetection(DraggableNode dragIcon) {
+    private void addDragDetection(DragIcon dragIcon) {
 
         dragIcon.setOnDragDetected (new EventHandler <MouseEvent> () {
 
@@ -99,16 +103,16 @@ public class Controller extends BorderPane implements Initializable {
                 DragIcon icn = (DragIcon) event.getSource();
 
                 //begin drag ops
-//                mDragOverIcon.setType(icn.getType());
+                mDragOverIcon.setType(icn.getType());
                 mDragOverIcon.relocateToPoint(new Point2D (event.getSceneX(), event.getSceneY()));
 
                 ClipboardContent content = new ClipboardContent();
                 DragContainer container = new DragContainer();
 
                 container.addData ("type", mDragOverIcon.getType().toString());
-                content.put(DragContainer.DragNode, container);
+                Controller.clipboardContent.put(DragContainer.DragNode, container);
 
-                //mDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
+                mDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(Controller.clipboardContent);
                 mDragOverIcon.setVisible(true);
                 mDragOverIcon.setMouseTransparent(true);
                 event.consume();
@@ -175,10 +179,9 @@ public class Controller extends BorderPane implements Initializable {
             container.addData("scene_coords",
                     new Point2D(event.getSceneX(), event.getSceneY()));
 
-            ClipboardContent content = new ClipboardContent();
-            content.put(DragContainer.AddNode, container);
+            Controller.clipboardContent.put(DragContainer.AddNode, container);
 
-            event.getDragboard().setContent(content);
+            event.getDragboard().setContent(Controller.clipboardContent);
             event.setDropCompleted(true);
         };
 
@@ -212,7 +215,7 @@ public class Controller extends BorderPane implements Initializable {
 
                         DraggableNode node = new DraggableNode();
 
-                        node.setType(DragIconType.valueOf(container.getValue("type")));
+                        node.setType();
                         workingPane.getChildren().add(node);
 
                         Point2D cursorPoint = container.getValue("scene_coords");

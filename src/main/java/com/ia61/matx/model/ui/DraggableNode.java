@@ -1,5 +1,6 @@
 package com.ia61.matx.model.ui;
 
+import com.ia61.matx.Controller;
 import com.ia61.matx.util.Point2dSerial;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,10 +18,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.UUID;
+import java.util.*;
 
 public class DraggableNode extends AnchorPane {
 		
@@ -88,11 +86,8 @@ public class DraggableNode extends AnchorPane {
 			
 			parentProperty().addListener((ChangeListener) (observable, oldValue, newValue) -> workingPane = (AnchorPane) getParent());
 
-			setType(DragIconType.values()[7]);
+			setType();
 
-			Circle c =new Circle();
-			c.setRadius(5.0f);
-			this.getChildren().add(c);
 
 		}
 
@@ -114,43 +109,33 @@ public class DraggableNode extends AnchorPane {
 		
 		public DragIconType getType () { return mType; }
 		
-		public void setType (DragIconType type) {
-			
-			mType = type;
-			
+		public void setType () {
+
 			getStyleClass().clear();
 			getStyleClass().add("dragicon");
-			
-			switch (mType) {
-			
-			case blue:
-				getStyleClass().add("icon-blue");
-			break;
-
-			case red:
-				getStyleClass().add("icon-red");			
-			break;
-
-			case green:
-				getStyleClass().add("icon-green");
-			break;
-
-			case grey:
-				getStyleClass().add("icon-grey");
-			break;
-
-			case purple:
-				getStyleClass().add("icon-purple");
-			break;
-
-			case yellow:
-				getStyleClass().add("icon-yellow");
-			break;
-
-			case black:
-				getStyleClass().add("icon-black");
-			break;
-			
+			Random random = new Random();
+			switch (random.nextInt(6)) {
+				case 0:
+					getStyleClass().add("icon-black");
+					break;
+				case 1:
+					getStyleClass().add("icon-blue");
+					break;
+				case 2:
+					getStyleClass().add("icon-red");
+					break;
+				case 3:
+					getStyleClass().add("icon-green");
+					break;
+				case 4:
+					getStyleClass().add("icon-grey");
+					break;
+				case 5:
+					getStyleClass().add("icon-purple");
+					break;
+				case 6:
+					getStyleClass().add("icon-yellow");
+					break;
 			default:
 			break;
 			}
@@ -244,7 +229,7 @@ public class DraggableNode extends AnchorPane {
 						DragContainer container = new DragContainer();
 						container
 								.addData("type",
-										mType.toString());
+										mType);
 						content.put(DragContainer.AddNode, container);
 
 						startDragAndDrop (TransferMode.ANY).setContent(content);
@@ -254,21 +239,21 @@ public class DraggableNode extends AnchorPane {
 		}
 		
 		private void buildLinkDragHandlers() {
-			
+
 			mLinkHandleDragDetected = new EventHandler <MouseEvent> () {
 
 				@Override
 				public void handle(MouseEvent event) {
-					
+
 					getParent().setOnDragOver(null);
 					getParent().setOnDragDropped(null);
-					
+
 					getParent().setOnDragOver(mContextLinkDragOver);
 					getParent().setOnDragDropped(mContextLinkDragDropped);
-					
+
 					//Set up user-draggable link
 					workingPane.getChildren().add(0,mDragLink);
-					
+
 					mDragLink.setVisible(false);
 
 					Point2D p = new Point2D(
@@ -276,56 +261,48 @@ public class DraggableNode extends AnchorPane {
 							getLayoutY() + (getHeight() / 2.0)
 							);
 
-					mDragLink.setStart(p);					
-					
+					mDragLink.setStart(p);
+
 					//Drag content code
-	                ClipboardContent content = new ClipboardContent();
 	                DragContainer container = new DragContainer ();
-	                
+
 	                //pass the UUID of the source node for later lookup
 	                container.addData("source", getId());
 
-	                content.put(DragContainer.AddLink, container);
-					
-					startDragAndDrop (TransferMode.ANY).setContent(content);	
+	                Controller.clipboardContent.put(DragContainer.AddLink, container);
+
+					startDragAndDrop (TransferMode.ANY).setContent(Controller.clipboardContent);
 
 					event.consume();
 				}
 			};
 
-			mLinkHandleDragDropped = new EventHandler <DragEvent> () {
+			//TODO investigate this block of code, possibly it's linking
+			mLinkHandleDragDropped = event -> {
 
-				@Override
-				public void handle(DragEvent event) {
+				getParent().setOnDragOver(null);
+				getParent().setOnDragDropped(null);
 
-					getParent().setOnDragOver(null);
-					getParent().setOnDragDropped(null);
-										
-					//get the drag data.  If it's null, abort.  
-					//This isn't the drag event we're looking for.
-					DragContainer container = 
-							(DragContainer) event.getDragboard().getContent(DragContainer.AddLink);
-								
-					if (container == null)
-						return;
+				//get the drag data.  If it's null, abort.
+				//This isn't the drag event we're looking for.
+				DragContainer container =
+						(DragContainer) event.getDragboard().getContent(DragContainer.AddLink);
 
-					//hide the draggable NodeLink and remove it from the right-hand AnchorPane's children
-					mDragLink.setVisible(false);
-					workingPane.getChildren().remove(0);
-					
-					AnchorPane link_handle = (AnchorPane) event.getSource();
-					
-					ClipboardContent content = new ClipboardContent();
-					
-					//pass the UUID of the target node for later lookup
-					container.addData("target", getId());
-					
-					content.put(DragContainer.AddLink, container);
-					
-					event.getDragboard().setContent(content);
-					event.setDropCompleted(true);
-					event.consume();				
-				}
+				if (container == null)
+					return;
+				AnchorPane link_handle = (AnchorPane) event.getSource();
+				//hide the draggable NodeLink and remove it from the right-hand AnchorPane's children
+				mDragLink.setVisible(false);
+				workingPane.getChildren().remove(0);
+
+				//pass the UUID of the target node for later lookup
+				container.addData("target", getId());
+
+				Controller.clipboardContent.put(DragContainer.AddLink, container);
+
+				event.getDragboard().setContent(Controller.clipboardContent);
+				event.setDropCompleted(true);
+				event.consume();
 			};
 
 			mContextLinkDragOver = new EventHandler <DragEvent> () {
