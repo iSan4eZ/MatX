@@ -11,19 +11,12 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root fx:id="root_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="64.0" styleClass="dragicon" stylesheets="@application.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
-    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <GridPane styleClass="node-overlay">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="25.0"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            </rowConstraints>
-            <Label prefHeight="21.0" prefWidth="61.0" text="Node"/>
-        </GridPane>
-        <HBox >
-            <AnchorPane/>
-        </HBox>
-    </VBox>
+<fx:root fx:id="root_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="64.0" styleClass="dragicon" stylesheets="@application.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox alignment="CENTER" prefHeight="64.0" prefWidth="64.0">
+            <children>
+                <Label fx:id="unit_name" alignment="BOTTOM_CENTER" text="Label" />
+            </children>
+        </VBox>
+    </children>
 </fx:root>

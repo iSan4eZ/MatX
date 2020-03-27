@@ -200,22 +200,22 @@ public class Controller extends BorderPane implements Initializable {
             if (container != null) {
                 if (container.getValue("scene_coords") != null) {
 
-                    if (container.getValue("type").equals(DragIconType.cubic_curve.toString())) {
-                        CubicCurveDemo curve = new CubicCurveDemo();
-
-                        workingPane.getChildren().add(curve);
-
-                        Point2D cursorPoint = container.getValue("scene_coords");
-
-                        curve.relocateToPoint(
-                                new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
-                        );
-                    }
-                    else {
+//                    if (container.getValue("type").equals(DragIconType.cubic_curve.toString())) {
+//                        CubicCurveDemo curve = new CubicCurveDemo();
+//
+//                        workingPane.getChildren().add(curve);
+//
+//                        Point2D cursorPoint = container.getValue("scene_coords");
+//
+//                        curve.relocateToPoint(
+//                                new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
+//                        );
+//                    }
+//                    else {
 
                         DraggableNode node = new DraggableNode();
 
-                        node.setType();
+//                        node.setType();
                         workingPane.getChildren().add(node);
 
                         Point2D cursorPoint = container.getValue("scene_coords");
@@ -223,7 +223,7 @@ public class Controller extends BorderPane implements Initializable {
                         node.relocateToPoint(
                                 new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
                         );
-                    }
+//                    }
                 }
             }
             /*

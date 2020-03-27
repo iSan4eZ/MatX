@@ -1,5 +1,6 @@
 package com.ia61.matx;
 
+import com.ia61.matx.model.ui.RootLayout;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,10 +22,10 @@ public class Main extends Application {
 
   @Override
   public void start(Stage primaryStage) {
-//    BorderPane root = new BorderPane();
+    BorderPane root = new BorderPane();
 
     try {
-      Parent root = FXMLLoader.load(Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource("RootLayout.fxml")));
+//      Parent rootPane = FXMLLoader.load(Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource("Controller.fxml")));
       Scene scene = new Scene(root,1680,920);
       scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
       primaryStage.setScene(scene);
@@ -34,7 +35,7 @@ public class Main extends Application {
       e.printStackTrace();
     }
 
-    //root.setCenter(new RootLayout());
+    root.setCenter(new RootLayout());
   }
 
 
