@@ -15,6 +15,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 
 import java.io.IOException;
@@ -25,6 +26,8 @@ public class DraggableNode extends AnchorPane {
 	@FXML private AnchorPane root_pane;
 	@FXML private AnchorPane left_link_handle;
 	@FXML private AnchorPane right_link_handle;
+	@FXML private VBox left_handle_panes;
+	@FXML private VBox right_handle_panes;
 	@FXML private Label title_bar;
 	@FXML private Label close_button;
 
@@ -56,6 +59,7 @@ public class DraggableNode extends AnchorPane {
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 
+
 		self = this;
 
 		try {
@@ -75,12 +79,6 @@ public class DraggableNode extends AnchorPane {
 		buildNodeDragHandlers();
 		buildLinkDragHandlers();
 
-		left_link_handle.setOnDragDetected(mLinkHandleDragDetected);
-		right_link_handle.setOnDragDetected(mLinkHandleDragDetected);
-
-		left_link_handle.setOnDragDropped(mLinkHandleDragDropped);
-		right_link_handle.setOnDragDropped(mLinkHandleDragDropped);
-
 		mDragLink = new NodeLink();
 		mDragLink.setVisible(false);
 
@@ -99,6 +97,45 @@ public class DraggableNode extends AnchorPane {
 		c.setRadius(5.0f);
 		this.getChildren().add(c);
 
+		setType(DragIconType.grey);
+
+		setLinkPanesAmount(left_handle_panes, 5);
+		setLinkPanesAmount(right_handle_panes, 5);
+		left_handle_panes.setVisible(true);
+		right_handle_panes.setVisible(true);
+	}
+
+	private void addLinkPanels(VBox linkPanes, double paneHeight) {
+		AnchorPane anchorPane = new AnchorPane();
+		anchorPane.setId(UUID.randomUUID().toString());
+		anchorPane.setMinHeight(paneHeight);
+		anchorPane.setMinWidth(25);
+
+		if (linkPanes.getId().contains("left")) {
+			anchorPane.getStyleClass().add("left-link-handle");
+		} else if (linkPanes.getId().contains("right")) {
+			anchorPane.getStyleClass().add("right-link-handle");
+		}
+
+        Circle c =new Circle();
+        c.setRadius(5.0f);
+        anchorPane.getChildren().add(c);
+
+
+		anchorPane.setOnDragDetected(mLinkHandleDragDetected);
+		anchorPane.setOnDragDropped(mLinkHandleDragDropped);
+
+		anchorPane.setVisible(true);
+		linkPanes.getChildren().add(anchorPane);
+	}
+
+	private void setLinkPanesAmount(VBox linkPanes, int n) {
+		double paneHeight = linkPanes.getPrefHeight() / n;
+		if(n > 0) {
+			for (int i = 0; i < n; i++) {
+				addLinkPanels(linkPanes, paneHeight);
+			}
+		}
 	}
 
 	public void registerLink(String linkId) {
