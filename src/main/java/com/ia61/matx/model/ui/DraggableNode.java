@@ -129,10 +129,10 @@ public class DraggableNode extends AnchorPane {
 		linkPanes.getChildren().add(anchorPane);
 	}
 
-	private void setLinkPanesAmount(VBox linkPanes, int n) {
-		double paneHeight = linkPanes.getPrefHeight() / n;
-		if(n > 0) {
-			for (int i = 0; i < n; i++) {
+	private void setLinkPanesAmount(VBox linkPanes, int inputsAmount) {
+		if(inputsAmount > 0) {
+            double paneHeight = linkPanes.getPrefHeight() / inputsAmount;
+			for (int i = 0; i < inputsAmount; i++) {
 				addLinkPanels(linkPanes, paneHeight);
 			}
 		}
