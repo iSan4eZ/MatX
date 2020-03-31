@@ -1,13 +1,12 @@
 package com.ia61.matx.model.input.impl;
 
+import com.ia61.matx.model.input.Input;
 import com.ia61.matx.model.input.InputConnection;
+import com.ia61.matx.model.output.impl.SingleOutput;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.ia61.matx.model.input.Input;
-import com.ia61.matx.model.output.impl.SingleOutput;
-import lombok.Getter;
 
 @Getter
 public abstract class MultiInput implements Input {

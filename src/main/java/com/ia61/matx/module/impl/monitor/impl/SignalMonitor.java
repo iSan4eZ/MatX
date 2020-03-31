@@ -4,6 +4,7 @@ import com.ia61.matx.model.input.InputConnection;
 import com.ia61.matx.module.impl.monitor.AbstractMonitorModule;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -17,7 +18,10 @@ public class SignalMonitor extends AbstractMonitorModule {
     }
     for (int i = 0; i < getInputList().size(); i++) {
       InputConnection signalInputConnection = getInputList().get(i);
-      result.get(i).put(timestamp, signalInputConnection.requestData(timestamp));
+      final Float value = signalInputConnection.requestData(timestamp);
+      if (Objects.nonNull(value)) {
+        result.get(i).put(timestamp, value);
+      }
     }
   }
 
