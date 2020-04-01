@@ -3,6 +3,8 @@ package com.ia61.matx.model.output.impl;
 import com.ia61.matx.model.output.Output;
 import com.ia61.matx.model.output.OutputConnection;
 
+import java.util.Optional;
+
 public interface TripleOutput extends Output {
 
   Float getDataToFirstOutput(Long timestamp);
@@ -25,5 +27,18 @@ public interface TripleOutput extends Output {
 
   default OutputConnection getThirdOutput() {
     return this::getDataToThirdOutput;
+  }
+
+  default Optional<OutputConnection> getOutput(Integer outputNumber) {
+    switch (outputNumber) {
+      case 0:
+        return Optional.of(getFirstOutput());
+      case 1:
+        return Optional.of(getSecondOutput());
+      case 2:
+        return Optional.of(getThirdOutput());
+      default:
+        return Optional.empty();
+    }
   }
 }

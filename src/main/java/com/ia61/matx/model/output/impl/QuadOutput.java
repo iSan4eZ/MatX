@@ -3,6 +3,8 @@ package com.ia61.matx.model.output.impl;
 import com.ia61.matx.model.output.Output;
 import com.ia61.matx.model.output.OutputConnection;
 
+import java.util.Optional;
+
 public interface QuadOutput extends Output {
 
   Float getDataToFirstOutput(Long timestamp);
@@ -31,5 +33,20 @@ public interface QuadOutput extends Output {
 
   default OutputConnection getFouthOutput() {
     return this::getDataToFourthOutput;
+  }
+
+  default Optional<OutputConnection> getOutput(Integer outputNumber) {
+    switch (outputNumber) {
+      case 0:
+        return Optional.of(getFirstOutput());
+      case 1:
+        return Optional.of(getSecondOutput());
+      case 2:
+        return Optional.of(getThirdOutput());
+      case 3:
+        return Optional.of(getFouthOutput());
+      default:
+        return Optional.empty();
+    }
   }
 }
