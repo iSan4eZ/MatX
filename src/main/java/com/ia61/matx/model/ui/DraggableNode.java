@@ -1,6 +1,7 @@
 package com.ia61.matx.model.ui;
 
 import com.ia61.matx.Controller;
+import com.ia61.matx.module.Module;
 import com.ia61.matx.util.Point2dSerial;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -44,6 +45,7 @@ public class DraggableNode extends AnchorPane {
 
 	private NodeLink mDragLink = null;
 	private AnchorPane right_pane = null;
+	private Module module;
 
 	private final List <String> mLinkIds = new ArrayList <String> ();
 
@@ -103,6 +105,18 @@ public class DraggableNode extends AnchorPane {
 
 	public void registerLink(String linkId) {
 		mLinkIds.add(linkId);
+	}
+
+	public List<String> getLinkIds() {
+		return mLinkIds;
+	}
+
+	public Module getModule() {
+		return module;
+	}
+
+	public void setModule(Module module) {
+		this.module = module;
 	}
 
 	public void relocateToPoint (Point2D p) {

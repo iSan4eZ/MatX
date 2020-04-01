@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Objects;
 
 public class RootLayout extends AnchorPane{
@@ -63,14 +64,14 @@ public class RootLayout extends AnchorPane{
 		getChildren().add(mDragOverIcon);
 		
 		//populate left pane with multiple colored icons for testing
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < ModuleIcon.values().length; i++) {
 			
 			DragIcon icn = new DragIcon();
 			
 			addDragDetection(icn);
 
 //			icn.setType(DragIconType.common);
-			icn.setUnitName(UnitName.values()[i].getName());
+			icn.setModuleIcon(ModuleIcon.values()[i]);
 			left_pane.getChildren().add(icn);
 		}
 		
@@ -95,13 +96,13 @@ public class RootLayout extends AnchorPane{
 				
 				//begin drag ops
 //				mDragOverIcon.setType(icn.getType());
-				mDragOverIcon.setUnitName(icn.getUnitName());
+				mDragOverIcon.setModuleIcon(icn.getModuleIcon());
 				mDragOverIcon.relocateToPoint(new Point2D (event.getSceneX(), event.getSceneY()));
             
 				ClipboardContent content = new ClipboardContent();
 				DragContainer container = new DragContainer();
 				
-				container.addData("type", mDragOverIcon.getUnitName());
+				container.addData("type", mDragOverIcon.getModuleIcon());
 				content.put(DragContainer.AddNode, container);
 
 				mDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
@@ -205,8 +206,10 @@ public class RootLayout extends AnchorPane{
 //						else {
 							
 							DraggableNode node = new DraggableNode();
-							
-							node.setTitle_bar(container.getValue("type"));
+
+							ModuleIcon moduleIcon = container.getValue("type");
+							node.setTitle_bar(moduleIcon.getName());
+							node.setModule(moduleIcon.getModule());
 							right_pane.getChildren().add(node);
 	
 							Point2D cursorPoint = container.getValue("scene_coords");
@@ -239,31 +242,36 @@ public class RootLayout extends AnchorPane{
 					String targetId = container.getValue("target");
 
 					if (sourceId != null && targetId != null) {
-						
-						//	System.out.println(container.getData());
-						NodeLink link = new NodeLink();
-						
-						//add our link at the top of the rendering order so it's rendered first
-						right_pane.getChildren().add(0,link);
-						
+
 						DraggableNode source = null;
 						DraggableNode target = null;
-						
+
 						for (Node n: right_pane.getChildren()) {
-							
-							if (n.getId() == null)
+
+							if (n.getId() == null) {
 								continue;
-							
-							if (n.getId().equals(sourceId))
+							}
+
+							if (n.getId().equals(sourceId)) {
 								source = (DraggableNode) n;
-						
-							if (n.getId().equals(targetId))
+							}
+
+							if (n.getId().equals(targetId)) {
 								target = (DraggableNode) n;
-							
+							}
+
 						}
-						
-						if (source != null && target != null)
+
+						if (source != null && target != null && Collections.disjoint(source.getLinkIds(), target.getLinkIds())) {
+							//	System.out.println(container.getData());
+							NodeLink link = new NodeLink();
+
+							//add our link at the top of the rendering order so it's rendered first
+							right_pane.getChildren().add(0,link);
+
+							//TODO link node modules here
 							link.bindEnds(source, target);
+						}
 					}
 						
 				}

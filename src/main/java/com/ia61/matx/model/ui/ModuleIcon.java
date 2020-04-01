@@ -1,14 +1,25 @@
 package com.ia61.matx.model.ui;
 
-public enum UnitName {
-  Unit1("U1"),
-  Unit2("U2"),
-  Unit3("U3");
+import com.ia61.matx.module.Module;
+import com.ia61.matx.service.factory.ModuleFactory;
+import com.ia61.matx.service.factory.impl.*;
+
+public enum ModuleIcon {
+
+  CORR("Correlator", new CorrelatorFactory()),
+  INTERRAPTOR("CorrInterraptor", new CorrelatorInterraptorFactory()),
+  MONITOR("Monitor", new SignalMonitorFactory()),
+  NOISE("NoiseSignal", new NoiseSignalGeneratorFactor()),
+  SIN("SinSignal", new SinSignalGeneratorFactory()),
+  PSUMM("PropSummator", new ProportionalSignalSummatorFactory()),
+  SSUM("SignalSummator", new SignalSummatorFactory());
 
   private String name;
+  private ModuleFactory factory;
 
-  UnitName(String name) {
+  ModuleIcon(String name, ModuleFactory factory) {
     this.name = name;
+    this.factory = factory;
   }
 
   public String getName() {
@@ -17,5 +28,9 @@ public enum UnitName {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Module getModule() {
+    return factory.getNewModule();
   }
 }
