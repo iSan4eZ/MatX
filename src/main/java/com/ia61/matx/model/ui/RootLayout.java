@@ -8,10 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -111,7 +108,30 @@ public class RootLayout extends AnchorPane{
 				event.consume();					
 			}
 		});
-	}	
+	}
+
+	private void addLinkDeleteHandler(NodeLink nodeLink) {
+
+		nodeLink.setOnMouseClicked(new EventHandler <MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				if (event.getButton() == MouseButton.SECONDARY) {
+					NodeLink nl =
+							(NodeLink) event.getSource();
+
+          for (Node n: right_pane.getChildren()) {
+
+            if (n.getId().equals(nl.getSourceId()) || n.getId().equals(nl.getTargetId())) {
+							((DraggableNode) n).removeLink(nl.getId());
+            }
+
+          }
+
+          right_pane.getChildren().remove(nl);
+				}
+			}
+		});
+	}
 	
 	private void buildDragHandlers() {
 		
@@ -263,14 +283,18 @@ public class RootLayout extends AnchorPane{
 						}
 
 						if (source != null && target != null && Collections.disjoint(source.getLinkIds(), target.getLinkIds())) {
-							//	System.out.println(container.getData());
-							NodeLink link = new NodeLink();
+							//TODO define number of output and input
+							if (source.getModule().getOutput(0).isPresent()) {
+								//	System.out.println(container.getData());
+								NodeLink link = new NodeLink();
 
-							//add our link at the top of the rendering order so it's rendered first
-							right_pane.getChildren().add(0,link);
+								//add our link at the top of the rendering order so it's rendered first
+								right_pane.getChildren().add(0, link);
 
-							//TODO link node modules here
-							link.bindEnds(source, target);
+								addLinkDeleteHandler(link);
+								target.getModule().connectToInput(source.getModule().getOutput(0).get(), 0);
+								link.bindEnds(source, target);
+							}
 						}
 					}
 						

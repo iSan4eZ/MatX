@@ -107,6 +107,10 @@ public class DraggableNode extends AnchorPane {
 		mLinkIds.add(linkId);
 	}
 
+	public void removeLink(String linkId) {
+		mLinkIds.remove(linkId);
+	}
+
 	public List<String> getLinkIds() {
 		return mLinkIds;
 	}
