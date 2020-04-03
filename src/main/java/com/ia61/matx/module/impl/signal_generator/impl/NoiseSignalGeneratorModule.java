@@ -1,9 +1,14 @@
 package com.ia61.matx.module.impl.signal_generator.impl;
 
+import com.ia61.matx.model.ui.FieldType;
+import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.signal_generator.AbstractSignalGeneratorModule;
 import com.ia61.matx.util.NumberUtil;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,6 +24,14 @@ public class NoiseSignalGeneratorModule extends AbstractSignalGeneratorModule {
 
   @Override
   public String getModuleName() {
-    return "Noise Signal Generator";
+    return "Генератор шума";
+  }
+
+  @Override
+  public List<PopupField> getPopupFields() {
+    return Arrays.asList(
+        new PopupField<>(FieldType.FLOAT, this::getLowerBound, this::setLowerBound, "Нижний предел:"),
+        new PopupField<>(FieldType.FLOAT, this::getUpperBound, this::setUpperBound, "Верхний предел:")
+    );
   }
 }
