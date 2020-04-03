@@ -71,8 +71,8 @@ public class LineChartServiceImpl implements LineChartService {
     public List<SortedMap<Long, Float>> correlateSinChart() {
         //Sin generator
         SinSignalGeneratorModule sinSignalGeneratorModule = new SinSignalGeneratorModule();
-        sinSignalGeneratorModule.setFrequency(3f);
-        sinSignalGeneratorModule.setPeriodsPerSymbol(1);
+        sinSignalGeneratorModule.setFrequency(1f);
+        sinSignalGeneratorModule.setPeriodsPerSymbol(2);
         sinSignalGeneratorModule.setSymbol("101");
 
         //Perfect sin generator
@@ -94,7 +94,7 @@ public class LineChartServiceImpl implements LineChartService {
 
         //Monitor
         SignalMonitor signalMonitor = new SignalMonitor();
-        signalMonitor.setPullRate(50L);
+        signalMonitor.setPullRate(10L);
         signalMonitor.connectInput(correlatorModule);
 //        signalMonitor.connectInput(sinSignalGeneratorModule);
 //        signalMonitor.connectInput(perfectSignalGeneratorModule);

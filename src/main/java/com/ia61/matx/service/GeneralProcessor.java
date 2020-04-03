@@ -17,7 +17,7 @@ public class GeneralProcessor {
 
   public static void simulate() {
     monitorList.forEach(Monitor::resetResult);
-    for (long i = 0L; i < simulationTime; i += 10) {
+    for (long i = 0L; i < simulationTime; i += 1) {
       long finalI = i;
       interrupterList.forEach(interrupter -> interrupter.interruptAll(finalI));
       monitorList.forEach(monitor -> monitor.gatherAllInputs(finalI));

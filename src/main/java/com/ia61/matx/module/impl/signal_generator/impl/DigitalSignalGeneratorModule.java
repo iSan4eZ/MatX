@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SinSignalGeneratorModule extends AbstractSignalGeneratorModule {
+public class DigitalSignalGeneratorModule extends AbstractSignalGeneratorModule {
 
   private Float height = 1f;
   private Integer periodsPerSymbol = 1;
@@ -19,13 +19,16 @@ public class SinSignalGeneratorModule extends AbstractSignalGeneratorModule {
 
   @Override
   public Float getDataToFirstOutput(Long timestamp) {
-    int coefficient = getCurrentCoefficient(timestamp, frequency, repeatable, symbol);
-    return (((float) Math.sin((Math.PI * timestamp) / getHalfInterval(frequency, periodsPerSymbol)) * height)
-        * coefficient) + offset;
+    final int coefficient = getCurrentCoefficient(timestamp, frequency, repeatable, symbol);
+
+    final float signalPart = getHalfInterval(frequency, periodsPerSymbol)
+        .compareTo(timestamp % getInterval(frequency, periodsPerSymbol)) * height;
+
+    return (signalPart * coefficient) + offset;
   }
 
   @Override
   public String getModuleName() {
-    return "Sinus Signal Generator";
+    return "Digital Signal Generator";
   }
 }
