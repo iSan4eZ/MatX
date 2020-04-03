@@ -72,6 +72,33 @@ public class NumberUtilTest {
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Provided collection can't contain zeros only.");
   }
+
+  @Test
+  public void shouldFindGCDWithNonListNormalValues() {
+    //Given
+    final Long givenValue1 = 27L;
+    final Long givenValue2 = 51L;
+    final Long givenValue3 = 81L;
+
+    final long expectedResult = 3L;
+
+    //When
+    final Long result = NumberUtil.findGCD(givenValue1, givenValue2, givenValue3);
+
+    //Then
+    assertThat(result).isEqualTo(expectedResult);
+  }
+  @Test
+  public void shouldThrowExceptionWithoutValues() {
+    //Given
+    final List<Long> givenValues = Arrays.asList();
+
+    //When
+    assertThatThrownBy(() -> NumberUtil.findGCD(givenValues))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Provided collection can't be null or empty.");
+  }
+
 //============================Min=====================================
 
   @Test
