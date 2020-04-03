@@ -24,10 +24,10 @@ public abstract class AbstractMonitorModule extends MultiInput implements Monito
     GeneralProcessor.monitorList.add(this);
   }
 
-    public abstract void gatherAllInputs(Long timestamp);
+  public abstract void gatherAllInputs(Long timestamp);
 
-    public void resetResult(){
-        result.clear();
-    }
+  public void resetResult() {
+    result.clear();
+  }
 
 }
