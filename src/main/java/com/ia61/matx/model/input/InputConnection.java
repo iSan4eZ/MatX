@@ -1,12 +1,12 @@
 package com.ia61.matx.model.input;
 
-import com.ia61.matx.model.output.Output;
+import com.ia61.matx.model.output.OutputConnection;
 
 public class InputConnection {
 
-  private Output connectedOutput;
+  private OutputConnection connectedOutput;
 
-  public InputConnection(Output connectedOutput) {
+  public InputConnection(OutputConnection connectedOutput) {
     this.connectedOutput = connectedOutput;
   }
 

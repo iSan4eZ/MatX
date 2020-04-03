@@ -1,5 +1,7 @@
 package com.ia61.matx.module.impl.interrupter;
 
+import com.ia61.matx.model.input.impl.NoInput;
+import com.ia61.matx.model.output.impl.NoOutput;
 import com.ia61.matx.service.GeneralProcessor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +11,10 @@ import java.util.List;
 
 @Setter
 @Getter
-public abstract class AbstractInterrupter<MODULE extends Interruptable> implements Interrupter {
+public abstract class AbstractInterrupter<MODULE extends Interruptable> extends NoInput implements Interrupter,
+    NoOutput {
 
-  private Long interruptFrequency = 1000L;
+  private Long interruptFrequency = 3L;
   private List<MODULE> interruptableModuleList = new ArrayList<>();
 
   public AbstractInterrupter() {
@@ -23,7 +26,7 @@ public abstract class AbstractInterrupter<MODULE extends Interruptable> implemen
   }
 
   public void interruptAll(Long timestamp) {
-    if (timestamp % interruptFrequency == 0) {
+    if (timestamp % (1000 / interruptFrequency) == 0) {
       interruptableModuleList.forEach(MODULE::interrupt);
     }
   }
