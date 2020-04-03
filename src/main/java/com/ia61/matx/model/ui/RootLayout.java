@@ -248,22 +248,45 @@ public class RootLayout extends AnchorPane{
 						
 						DraggableNode source = null;
 						DraggableNode target = null;
-						
+						AnchorPane sourcePane = null;
+						AnchorPane targetPane = null;
+
 						for (Node n: right_pane.getChildren()) {
-							
-							if (n.getId() == null)
-								continue;
-							
-							if (n.getId().equals(sourceId))
-								source = (DraggableNode) n;
-						
-							if (n.getId().equals(targetId))
-								target = (DraggableNode) n;
-							
+							if (n instanceof DraggableNode) {
+								for (Node child : ((DraggableNode) n).getInputs().getChildren()) {
+									if(child.getId() == null) {
+										System.out.println("child id = null");
+										continue;
+									}
+									if (targetId.equals(child.getId())) {
+										target = (DraggableNode) n;
+										targetPane = (AnchorPane) child;
+									}
+									if(sourceId.equals(child.getId())) {
+										source = (DraggableNode) n;
+										sourcePane = (AnchorPane) child;
+									}
+								}
+
+								for (Node child : ((DraggableNode) n).getOutputs().getChildren()) {
+									if(child.getId() == null) {
+										System.out.println("child id = null");
+										continue;
+									}
+									if (targetId.equals(child.getId())) {
+										target = (DraggableNode) n;
+										targetPane = (AnchorPane) child;
+									}
+									if(sourceId.equals(child.getId())) {
+										source = (DraggableNode) n;
+										sourcePane = (AnchorPane) child;
+									}
+								}
+							}
 						}
 						
 						if (source != null && target != null)
-							link.bindEnds(source, target);
+							link.bindEnds(source, target, sourcePane, targetPane);
 					}
 						
 				}
