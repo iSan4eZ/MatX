@@ -122,7 +122,13 @@ public class RootLayout extends AnchorPane{
           for (Node n: right_pane.getChildren()) {
 
             if (n.getId().equals(nl.getSourceId()) || n.getId().equals(nl.getTargetId())) {
-							((DraggableNode) n).removeLink(nl.getId());
+
+				 if (n.getId().equals(nl.getTargetId())) {
+					DraggableNode targetNode = (DraggableNode) n;
+					int number = targetNode.getLinkIds().indexOf(nl.getId());
+					targetNode.getModule().disconnectFromInput(number);
+				}
+				((DraggableNode) n).removeLink(nl.getId());
             }
 
           }
@@ -292,7 +298,8 @@ public class RootLayout extends AnchorPane{
 								right_pane.getChildren().add(0, link);
 
 								addLinkDeleteHandler(link);
-								target.getModule().connectToInput(source.getModule().getOutput(0).get(), 0);
+								int number = target.getLinkIds().size();
+								target.getModule().connectToInput(source.getModule().getOutput(0).get(), number);
 								link.bindEnds(source, target);
 							}
 						}

@@ -2,6 +2,7 @@ package com.ia61.matx.service.impl;
 
 import com.ia61.matx.module.impl.correlator.impl.CorrelatorModule;
 import com.ia61.matx.module.impl.interrupter.impl.CorrelatorInterrupterModule;
+import com.ia61.matx.module.impl.monitor.AbstractMonitorModule;
 import com.ia61.matx.module.impl.monitor.impl.SignalMonitor;
 import com.ia61.matx.module.impl.signal_generator.impl.NoiseSignalGeneratorModule;
 import com.ia61.matx.module.impl.signal_generator.impl.SinSignalGeneratorModule;
@@ -24,8 +25,13 @@ public class LineChartServiceImpl implements LineChartService {
     @Override
     public void buildChart(LineChart<?, ?> lineChart) {
 
+        GeneralProcessor.simulate();
+
+        if (GeneralProcessor.monitorList.size() != 0)
+            ((AbstractMonitorModule) GeneralProcessor.monitorList.get(0)).getResult()
+
 //        overlayNoiseOverSinChart()
-        correlateSinChart()
+//        correlateSinChart()
             .forEach(coordinatesMap -> {
             XYChart.Series series = new XYChart.Series();
             series.getData().addAll(coordinatesMap.entrySet().stream()
