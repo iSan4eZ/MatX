@@ -27,6 +27,9 @@ public class NodeLink extends AnchorPane {
 	private final DoubleProperty mControlDirectionX2 = new SimpleDoubleProperty();
 	private final DoubleProperty mControlDirectionY2 = new SimpleDoubleProperty();
 
+	private String sourceId;
+	private String targetId;
+
 	public NodeLink() {
 		
 		FXMLLoader fxmlLoader = new FXMLLoader(
@@ -88,7 +91,14 @@ public class NodeLink extends AnchorPane {
 				);
 	}
 
-	
+	public String getSourceId() {
+		return sourceId;
+	}
+
+	public String getTargetId() {
+		return targetId;
+	}
+
 	public void setStart(Point2D startPoint) {
 
 		node_link.setStartX(startPoint.getX());
@@ -120,6 +130,9 @@ public class NodeLink extends AnchorPane {
 		node_link.endYProperty().bind(
 				Bindings.add(target.layoutYProperty().add(DRAGGABLE_NODE_HEADER_HEIGHT + targetPane.getLayoutY()),
 						(source.getInputs().getPrefHeight() / source.getInputs().getChildren().size()) / 2));
+
+		sourceId = source.getId();
+		targetId = target.getId();
 		
 		source.registerLink(getId());
 		target.registerLink(getId());

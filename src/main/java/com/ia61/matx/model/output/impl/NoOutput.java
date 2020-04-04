@@ -5,22 +5,13 @@ import com.ia61.matx.model.output.OutputConnection;
 
 import java.util.Optional;
 
-public interface SingleOutput extends Output {
-
-  Float getDataToFirstOutput(Long timestamp);
+public interface NoOutput extends Output {
 
   default int getOutputCount() {
-    return 1;
-  }
-
-  default OutputConnection getFirstOutput() {
-    return this::getDataToFirstOutput;
+    return 0;
   }
 
   default Optional<OutputConnection> getOutput(Integer outputNumber) {
-    if (outputNumber == 0) {
-      return Optional.of(getFirstOutput());
-    }
     return Optional.empty();
   }
 

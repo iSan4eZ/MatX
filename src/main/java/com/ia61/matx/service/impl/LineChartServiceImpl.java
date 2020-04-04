@@ -2,6 +2,7 @@ package com.ia61.matx.service.impl;
 
 import com.ia61.matx.module.impl.correlator.impl.CorrelatorModule;
 import com.ia61.matx.module.impl.interrupter.impl.CorrelatorInterrupterModule;
+import com.ia61.matx.module.impl.monitor.AbstractMonitorModule;
 import com.ia61.matx.module.impl.monitor.impl.SignalMonitor;
 import com.ia61.matx.module.impl.signal_generator.impl.NoiseSignalGeneratorModule;
 import com.ia61.matx.module.impl.signal_generator.impl.SinSignalGeneratorModule;
@@ -24,8 +25,13 @@ public class LineChartServiceImpl implements LineChartService {
     @Override
     public void buildChart(LineChart<?, ?> lineChart) {
 
+        GeneralProcessor.simulate();
+
+        if (GeneralProcessor.monitorList.size() != 0)
+            ((AbstractMonitorModule) GeneralProcessor.monitorList.get(0)).getResult()
+
 //        overlayNoiseOverSinChart()
-        correlateSinChart()
+//        correlateSinChart()
             .forEach(coordinatesMap -> {
             XYChart.Series series = new XYChart.Series();
             series.getData().addAll(coordinatesMap.entrySet().stream()
@@ -39,7 +45,7 @@ public class LineChartServiceImpl implements LineChartService {
     public List<SortedMap<Long, Float>> overlayNoiseOverSinChart() {
         //Sin generator
         SinSignalGeneratorModule sinSignalGeneratorModule = new SinSignalGeneratorModule();
-        sinSignalGeneratorModule.setHalfInterval(250.0);
+        sinSignalGeneratorModule.setFrequency(2f);
 
         //Noise generator
         NoiseSignalGeneratorModule noiseSignalGeneratorModule = new NoiseSignalGeneratorModule();
@@ -65,17 +71,21 @@ public class LineChartServiceImpl implements LineChartService {
     public List<SortedMap<Long, Float>> correlateSinChart() {
         //Sin generator
         SinSignalGeneratorModule sinSignalGeneratorModule = new SinSignalGeneratorModule();
-        sinSignalGeneratorModule.setHalfInterval(500.0);
+        sinSignalGeneratorModule.setFrequency(1f);
+        sinSignalGeneratorModule.setPeriodsPerSymbol(2);
+        sinSignalGeneratorModule.setSymbol("101");
 
-        //Second sin generator
-        SinSignalGeneratorModule sinSignalGeneratorModule2 = new SinSignalGeneratorModule();
-        sinSignalGeneratorModule2.setHalfInterval(500.0);
+        //Perfect sin generator
+        SinSignalGeneratorModule perfectSignalGeneratorModule = new SinSignalGeneratorModule();
+        perfectSignalGeneratorModule.setFrequency(3f);
+        perfectSignalGeneratorModule.setPeriodsPerSymbol(1);
+        perfectSignalGeneratorModule.setSymbol("1");
+        perfectSignalGeneratorModule.setRepeatable(true);
 
         //Correlator
-
         CorrelatorModule correlatorModule = new CorrelatorModule();
         correlatorModule.connectFirstInput(sinSignalGeneratorModule);
-        correlatorModule.connectSecondInput(sinSignalGeneratorModule2);
+        correlatorModule.connectSecondInput(perfectSignalGeneratorModule);
 
         //Interrupter
         CorrelatorInterrupterModule correlatorInterrupterModule = new CorrelatorInterrupterModule();
@@ -84,8 +94,10 @@ public class LineChartServiceImpl implements LineChartService {
 
         //Monitor
         SignalMonitor signalMonitor = new SignalMonitor();
-        signalMonitor.setPullRate(50L);
+        signalMonitor.setPullRate(10L);
         signalMonitor.connectInput(correlatorModule);
+//        signalMonitor.connectInput(sinSignalGeneratorModule);
+//        signalMonitor.connectInput(perfectSignalGeneratorModule);
 
         GeneralProcessor.simulate();
 

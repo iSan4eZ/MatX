@@ -271,8 +271,8 @@ public class Controller extends BorderPane implements Initializable {
 
                     }
 
-//                    if (source != null && target != null)
-//                        link.bindEnds(source, target);
+                    if (source != null && target != null)
+                        link.bindEnds(source, target);
                 }
 
             }

@@ -17,7 +17,8 @@ public class DragIcon extends AnchorPane{
 	@FXML Label unit_name;
 
 	private DragIconType mType = null;
-	
+	private ModuleIcon moduleIcon;
+
 	public DragIcon() {
 		
 		FXMLLoader fxmlLoader = new FXMLLoader(
@@ -50,12 +51,13 @@ public class DragIcon extends AnchorPane{
 			);
 	}
 
-	public String getUnitName() {
-		return unit_name.getText();
+	public ModuleIcon getModuleIcon() {
+		return moduleIcon;
 	}
 
-	public void setUnitName(String unitName) {
-		this.unit_name.setText(unitName);
+	public void setModuleIcon(ModuleIcon moduleIcon) {
+		this.moduleIcon = moduleIcon;
+		this.unit_name.setText(moduleIcon.getName());
 	}
 
 	public DragIconType getType() { return mType; }
