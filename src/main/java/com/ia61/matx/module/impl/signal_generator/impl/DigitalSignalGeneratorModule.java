@@ -1,8 +1,16 @@
 package com.ia61.matx.module.impl.signal_generator.impl;
 
+import com.ia61.matx.model.ui.FieldType;
+import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.signal_generator.AbstractSignalGeneratorModule;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Control;
+import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,6 +37,17 @@ public class DigitalSignalGeneratorModule extends AbstractSignalGeneratorModule 
 
   @Override
   public String getModuleName() {
-    return "Digital Signal Generator";
+    return "Генератор дискретного сигнала.";
+  }
+
+  @Override
+  public List<PopupField<?>> getPopupFields() {
+    return Arrays.asList(
+        new PopupField<>(FieldType.INTEGER, this::getPeriodsPerSymbol, this::setPeriodsPerSymbol, "Периоды на символ:"),
+        new PopupField<>(FieldType.FLOAT, this::getFrequency, this::setFrequency, "Частота (Гц):"),
+        new PopupField<>(FieldType.FLOAT, this::getHeight, this::setHeight, "Амплитуда:"),
+        new PopupField<>(FieldType.BOOLEAN, this::getRepeatable, this::setRepeatable, "Цикличный:"),
+        new PopupField<>(FieldType.BINARY_STRING, this::getSymbol, this::setSymbol, "Символ:")
+    );
   }
 }
