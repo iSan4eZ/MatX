@@ -1,33 +1,29 @@
-package com.ia61.matx.ui;
+package com.ia61.matx.model.ui;
 
-import com.ia61.matx.model.ui.*;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TreeView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Objects;
 
-public class RootLayout extends BorderPane{
-
-	@FXML
-	BorderPane borderPane;
-
+public class RootLayout extends AnchorPane{
 
 	@FXML SplitPane base_pane;
 	@FXML AnchorPane right_pane;
 	@FXML VBox left_pane;
-	@FXML TreeView<String> elementsTree;
+
+	@FXML Button monitorButton;
 
 	private DragIcon mDragOverIcon = null;
 	
@@ -44,7 +40,7 @@ public class RootLayout extends BorderPane{
 		fxmlLoader.setRoot(this); 
 		fxmlLoader.setController(this);
 		
-		try {
+		try { 
 			fxmlLoader.load();
         
 		} catch (IOException exception) {
@@ -63,19 +59,21 @@ public class RootLayout extends BorderPane{
 		mDragOverIcon.setVisible(false);
 		mDragOverIcon.setOpacity(0.65);
 		getChildren().add(mDragOverIcon);
-
+		
 		//populate left pane with multiple colored icons for testing
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < ModuleIcon.values().length; i++) {
 			
 			DragIcon icn = new DragIcon();
 			
 			addDragDetection(icn);
-			
-			icn.setType(DragIconType.values()[i]);
+
+//			icn.setType(DragIconType.common);
+			icn.setModuleIcon(ModuleIcon.values()[i]);
 			left_pane.getChildren().add(icn);
 		}
 		
 		buildDragHandlers();
+		handleMonitorButton();
 	}
 	
 	private void addDragDetection(DragIcon dragIcon) {
@@ -94,13 +92,14 @@ public class RootLayout extends BorderPane{
 				DragIcon icn = (DragIcon) event.getSource();
 				
 				//begin drag ops
-				mDragOverIcon.setType(icn.getType());
+//				mDragOverIcon.setType(icn.getType());
+				mDragOverIcon.setModuleIcon(icn.getModuleIcon());
 				mDragOverIcon.relocateToPoint(new Point2D (event.getSceneX(), event.getSceneY()));
             
 				ClipboardContent content = new ClipboardContent();
 				DragContainer container = new DragContainer();
 				
-				container.addData ("type", mDragOverIcon.getType().toString());
+				container.addData("type", mDragOverIcon.getModuleIcon());
 				content.put(DragContainer.AddNode, container);
 
 				mDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
@@ -109,7 +108,36 @@ public class RootLayout extends BorderPane{
 				event.consume();					
 			}
 		});
-	}	
+	}
+
+	private void addLinkDeleteHandler(NodeLink nodeLink) {
+
+		nodeLink.setOnMouseClicked(new EventHandler <MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				if (event.getButton() == MouseButton.SECONDARY) {
+					NodeLink nl =
+							(NodeLink) event.getSource();
+
+          for (Node n: right_pane.getChildren()) {
+
+            if (n.getId().equals(nl.getSourceId()) || n.getId().equals(nl.getTargetId())) {
+
+				 if (n.getId().equals(nl.getTargetId())) {
+					DraggableNode targetNode = (DraggableNode) n;
+					int number = targetNode.getLinkIds().indexOf(nl.getId());
+					targetNode.getModule().disconnectFromInput(number);
+				}
+				((DraggableNode) n).removeLink(nl.getId());
+            }
+
+          }
+
+          right_pane.getChildren().remove(nl);
+				}
+			}
+		});
+	}
 	
 	private void buildDragHandlers() {
 		
@@ -158,7 +186,7 @@ public class RootLayout extends BorderPane{
 			@Override
 			public void handle(DragEvent event) {
 				
-				DragContainer container = 
+				DragContainer container =
 						(DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
 				
 				container.addData("scene_coords", 
@@ -184,28 +212,30 @@ public class RootLayout extends BorderPane{
 				mDragOverIcon.setVisible(false);
 				
 				//Create node drag operation
-				DragContainer container = 
+				DragContainer container =
 						(DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
 				
 				if (container != null) {
 					if (container.getValue("scene_coords") != null) {
 					
-						if (container.getValue("type").equals(DragIconType.cubic_curve.toString())) {
-							CubicCurveDemo curve = new CubicCurveDemo();
-							
-							right_pane.getChildren().add(curve);
-							
-							Point2D cursorPoint = container.getValue("scene_coords");
-
-							curve.relocateToPoint(
-									new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
-									);							
-						}
-						else {
+//						if (container.getValue("type").equals(DragIconType.cubic_curve.toString())) {
+//							CubicCurveDemo curve = new CubicCurveDemo();
+//
+//							right_pane.getChildren().add(curve);
+//
+//							Point2D cursorPoint = container.getValue("scene_coords");
+//
+//							curve.relocateToPoint(
+//									new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
+//									);
+//						}
+//						else {
 							
 							DraggableNode node = new DraggableNode();
-							
-							node.setType(DragIconType.valueOf(container.getValue("type")));
+
+							ModuleIcon moduleIcon = container.getValue("type");
+							node.setTitle_bar(moduleIcon.getName());
+							node.setModule(moduleIcon.getModule());
 							right_pane.getChildren().add(node);
 	
 							Point2D cursorPoint = container.getValue("scene_coords");
@@ -213,7 +243,7 @@ public class RootLayout extends BorderPane{
 							node.relocateToPoint(
 									new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
 									);
-						}
+//						}
 					}
 				}
 				/*
@@ -238,31 +268,41 @@ public class RootLayout extends BorderPane{
 					String targetId = container.getValue("target");
 
 					if (sourceId != null && targetId != null) {
-						
-						//	System.out.println(container.getData());
-						NodeLink link = new NodeLink();
-						
-						//add our link at the top of the rendering order so it's rendered first
-						right_pane.getChildren().add(0,link);
-						
+
 						DraggableNode source = null;
 						DraggableNode target = null;
-						
+
 						for (Node n: right_pane.getChildren()) {
-							
-							if (n.getId() == null)
+
+							if (n.getId() == null) {
 								continue;
-							
-							if (n.getId().equals(sourceId))
+							}
+
+							if (n.getId().equals(sourceId)) {
 								source = (DraggableNode) n;
-						
-							if (n.getId().equals(targetId))
+							}
+
+							if (n.getId().equals(targetId)) {
 								target = (DraggableNode) n;
-							
+							}
+
 						}
-						
-						if (source != null && target != null)
-							link.bindEnds(source, target);
+
+						if (source != null && target != null && Collections.disjoint(source.getLinkIds(), target.getLinkIds())) {
+							//TODO define number of output and input
+							if (source.getModule().getOutput(0).isPresent()) {
+								//	System.out.println(container.getData());
+								NodeLink link = new NodeLink();
+
+								//add our link at the top of the rendering order so it's rendered first
+								right_pane.getChildren().add(0, link);
+
+								addLinkDeleteHandler(link);
+								int number = target.getLinkIds().size();
+								target.getModule().connectToInput(source.getModule().getOutput(0).get(), number);
+								link.bindEnds(source, target);
+							}
+						}
 					}
 						
 				}
@@ -270,5 +310,22 @@ public class RootLayout extends BorderPane{
 				event.consume();
 			}
 		});		
+	}
+
+	private void handleMonitorButton() {
+		monitorButton.setOnMouseClicked((event) -> {
+//            windowService.buildWindow("LineChart.fxml");
+
+			FXMLLoader fxmlLoader = new FXMLLoader(
+					Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource("LineChart.fxml")));
+			Stage stage = new Stage();
+			try {
+				stage.setScene(new Scene(fxmlLoader.load(), 500, 500));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			stage.show();
+		});
+		buildDragHandlers();
 	}
 }
