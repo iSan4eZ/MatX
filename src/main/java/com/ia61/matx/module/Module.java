@@ -13,6 +13,4 @@ public interface Module extends Input, Output {
 
   List<PopupField<?>> getPopupFields();
 
-//  List<Control> getControls();
-
 }
