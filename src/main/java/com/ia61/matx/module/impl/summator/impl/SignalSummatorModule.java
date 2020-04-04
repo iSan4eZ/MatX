@@ -5,6 +5,7 @@ import com.ia61.matx.model.output.impl.SingleOutput;
 import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.summator.Summator;
+import javafx.scene.control.Label;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +25,7 @@ public class SignalSummatorModule extends MultiInput implements Summator, Single
   }
 
   @Override
-  public List<PopupField> getPopupFields() {
+  public List<PopupField<?>> getPopupFields() {
     return Collections.singletonList(
         new PopupField<>(FieldType.LABEL, null, null, "Сумматор сигналов (S1 + S2 + .... + Sn)"));
   }

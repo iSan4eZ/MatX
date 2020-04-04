@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
@@ -29,7 +30,7 @@ public class DraggableNode extends AnchorPane {
 		@FXML private AnchorPane right_link_handle;
 		@FXML private Label title_bar;
 		@FXML private Label close_button;
-		
+
 		private EventHandler <MouseEvent> mLinkHandleDragDetected;
 		private EventHandler <DragEvent> mLinkHandleDragDropped;
 		private EventHandler <DragEvent> mContextLinkDragOver;

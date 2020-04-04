@@ -4,6 +4,7 @@ import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.signal_generator.AbstractSignalGeneratorModule;
 import com.ia61.matx.util.NumberUtil;
+import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,7 +29,7 @@ public class NoiseSignalGeneratorModule extends AbstractSignalGeneratorModule {
   }
 
   @Override
-  public List<PopupField> getPopupFields() {
+  public List<PopupField<?>> getPopupFields() {
     return Arrays.asList(
         new PopupField<>(FieldType.FLOAT, this::getLowerBound, this::setLowerBound, "Нижний предел:"),
         new PopupField<>(FieldType.FLOAT, this::getUpperBound, this::setUpperBound, "Верхний предел:")

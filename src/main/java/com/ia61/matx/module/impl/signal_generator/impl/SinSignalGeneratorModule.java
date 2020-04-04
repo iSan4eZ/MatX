@@ -3,6 +3,8 @@ package com.ia61.matx.module.impl.signal_generator.impl;
 import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.signal_generator.AbstractSignalGeneratorModule;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,7 +37,7 @@ public class SinSignalGeneratorModule extends AbstractSignalGeneratorModule {
   }
 
   @Override
-  public List<PopupField> getPopupFields() {
+  public List<PopupField<?>> getPopupFields() {
     return Arrays.asList(
         new PopupField<>(FieldType.INTEGER, this::getPeriodsPerSymbol, this::setPeriodsPerSymbol, "Периоды на символ:"),
         new PopupField<>(FieldType.FLOAT, this::getFrequency, this::setFrequency, "Частота (Гц):"),

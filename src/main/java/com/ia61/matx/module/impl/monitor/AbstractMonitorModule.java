@@ -5,6 +5,7 @@ import com.ia61.matx.model.output.impl.NoOutput;
 import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.service.GeneralProcessor;
+import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,7 +35,7 @@ public abstract class AbstractMonitorModule extends MultiInput implements Monito
   }
 
   @Override
-  public List<PopupField> getPopupFields() {
+  public List<PopupField<?>> getPopupFields() {
     return Arrays.asList(
         new PopupField<>(FieldType.INTEGER, this::getPullRate, this::setPullRate, "Частота дискретизации:"),
         new PopupField<>(FieldType.GRAPH, this::getResult, null, ""));

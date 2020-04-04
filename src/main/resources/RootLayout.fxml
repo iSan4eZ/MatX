@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ia61.matx.Controller">
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ia61.matx.Controller">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -29,6 +29,7 @@
             <ToolBar prefHeight="40.0" prefWidth="200.0">
               <items>
                 <Button fx:id="monitorButton" mnemonicParsing="false" text="Monitor" />
+                  <Button fx:id="new_proprty_btn" mnemonicParsing="false" text="new property" />
               </items>
             </ToolBar>
          </children>

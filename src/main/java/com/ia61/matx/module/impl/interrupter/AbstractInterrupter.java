@@ -34,7 +34,7 @@ public abstract class AbstractInterrupter<MODULE extends Interruptable> extends 
   }
 
   @Override
-  public List<PopupField> getPopupFields() {
+  public List<PopupField<?>> getPopupFields() {
     return Collections.emptyList();
   }
 

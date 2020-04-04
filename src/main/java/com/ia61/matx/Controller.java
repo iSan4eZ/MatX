@@ -1,5 +1,8 @@
 package com.ia61.matx;
 
+import com.ia61.matx.model.ui.PropertyWindow;
+import com.ia61.matx.module.Module;
+import com.ia61.matx.module.impl.signal_generator.impl.DigitalSignalGeneratorModule;
 import com.ia61.matx.service.LineChartService;
 import com.ia61.matx.service.NodeService;
 import com.ia61.matx.service.WindowService;
@@ -32,6 +35,11 @@ public class Controller implements Initializable {
     @FXML
     Button monitorButton;
 
+    @FXML
+    Button new_proprty_btn;
+
+    Module module = new DigitalSignalGeneratorModule();
+
     private NodeService nodeService;
     private LineChartService lineChartService;
     private WindowService windowService;
@@ -45,6 +53,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         handleMonitorButton();
+        handlePropertyButton();
         //elementsTree.setRoot((TreeItem<String>) nodeService.getNativeNodes());
         final StackPane sp1 = new StackPane();
         //Circle circle = new Circle(150.0f, 150.0f, 80.f);
@@ -71,6 +80,12 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
             stage.show();
+        });
+    }
+
+    private void handlePropertyButton() {
+        new_proprty_btn.setOnMouseClicked((event) -> {
+            new PropertyWindow(module.getPopupFields());
         });
     }
 }

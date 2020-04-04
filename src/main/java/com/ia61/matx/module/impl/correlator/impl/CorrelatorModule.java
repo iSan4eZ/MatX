@@ -6,6 +6,7 @@ import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.correlator.Correlator;
 import com.ia61.matx.module.impl.interrupter.Interruptable;
+import javafx.scene.control.Label;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +35,7 @@ public class CorrelatorModule extends DualInput implements Correlator, SingleOut
   }
 
   @Override
-  public List<PopupField> getPopupFields() {
+  public List<PopupField<?>> getPopupFields() {
     return Collections.singletonList(
         new PopupField<>(FieldType.LABEL, null, null,
             "Коррелятор сигналов. Осуществляющет накопительное суммирование (интегрирование) произведения двух входящих сигналов. Прерывается Тактовым Генератором"));
