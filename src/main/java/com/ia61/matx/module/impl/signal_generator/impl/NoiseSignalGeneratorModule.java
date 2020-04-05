@@ -4,7 +4,6 @@ import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.signal_generator.AbstractSignalGeneratorModule;
 import com.ia61.matx.util.NumberUtil;
-import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,7 +24,7 @@ public class NoiseSignalGeneratorModule extends AbstractSignalGeneratorModule {
 
   @Override
   public String getModuleName() {
-    return "Генератор шума";
+    return "Генератор завад";
   }
 
   @Override

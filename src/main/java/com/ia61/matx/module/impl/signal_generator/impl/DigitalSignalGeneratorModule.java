@@ -3,9 +3,6 @@ package com.ia61.matx.module.impl.signal_generator.impl;
 import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.signal_generator.AbstractSignalGeneratorModule;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Control;
-import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,7 +34,7 @@ public class DigitalSignalGeneratorModule extends AbstractSignalGeneratorModule 
 
   @Override
   public String getModuleName() {
-    return "Генератор дискретного сигнала.";
+    return "Генератор дискретного сигналу";
   }
 
   @Override

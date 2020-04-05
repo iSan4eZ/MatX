@@ -6,7 +6,7 @@ public class TactInterrupterModule extends AbstractInterrupter {
 
   @Override
   public String getModuleName() {
-    return "Тактовый Генератор";
+    return "Тактовий генератор";
   }
 
   @Override

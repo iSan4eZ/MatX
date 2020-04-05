@@ -5,8 +5,6 @@ import com.ia61.matx.model.output.impl.SingleOutput;
 import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.summator.Summator;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +28,7 @@ public class ProportionalSignalSummatorModule extends DualInput implements Summa
 
   @Override
   public String getModuleName() {
-    return "Пропорциональный Сумматор Сигналов";
+    return "Пропорційний суматор сигналів";
   }
 
   @Override

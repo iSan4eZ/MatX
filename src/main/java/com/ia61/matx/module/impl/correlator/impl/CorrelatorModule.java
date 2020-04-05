@@ -38,7 +38,7 @@ public class CorrelatorModule extends TripleInput implements Correlator, SingleO
 
   @Override
   public String getModuleName() {
-    return "Коррелятор";
+    return "Корелятор";
   }
 
   @Override

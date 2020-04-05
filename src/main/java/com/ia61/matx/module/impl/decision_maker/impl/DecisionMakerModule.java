@@ -63,7 +63,7 @@ public class DecisionMakerModule extends AbstractDecisionMakerModule {
 
   @Override
   public String getModuleName() {
-    return "Модуль принятия решения";
+    return "Модуль прийняття рішення";
   }
 
   @Override
