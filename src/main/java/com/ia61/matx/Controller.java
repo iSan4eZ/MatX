@@ -47,9 +47,6 @@ public class Controller extends BorderPane implements Initializable {
 
     public static ClipboardContent clipboardContent = new ClipboardContent();
 
-    @FXML
-    Button new_proprty_btn;
-
     Module module = new DigitalSignalGeneratorModule();
 
     private NodeService nodeService;
@@ -284,12 +281,6 @@ public class Controller extends BorderPane implements Initializable {
             }
 
             event.consume();
-        });
-    }
-
-    private void handlePropertyButton() {
-        new_proprty_btn.setOnMouseClicked((event) -> {
-            new PropertyWindow(module.getPopupFields());
         });
     }
 }

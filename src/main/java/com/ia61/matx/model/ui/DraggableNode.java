@@ -1,6 +1,5 @@
 package com.ia61.matx.model.ui;
 
-import com.ia61.matx.Controller;
 import com.ia61.matx.module.Module;
 import com.ia61.matx.util.Point2dSerial;
 import javafx.beans.value.ChangeListener;
@@ -11,11 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 
 import java.io.IOException;
@@ -28,6 +25,7 @@ public class DraggableNode extends AnchorPane {
 	@FXML private AnchorPane right_link_handle;
 	@FXML private Label title_bar;
 	@FXML private Label close_button;
+	@FXML private HBox node_content;
 
 	private EventHandler <MouseEvent> mLinkHandleDragDetected;
 	private EventHandler <DragEvent> mLinkHandleDragDropped;
@@ -252,6 +250,15 @@ public class DraggableNode extends AnchorPane {
 				}
 			}
 
+		});
+
+		//node content double click (show popup window)
+		node_content.setOnMouseClicked(event -> {
+			if (event.getButton().equals(MouseButton.PRIMARY)) {
+				if (event.getClickCount() == 2) {
+					new PropertyWindow(module.getPopupFields());
+				}
+			}
 		});
 
 		//drag detection for node dragging

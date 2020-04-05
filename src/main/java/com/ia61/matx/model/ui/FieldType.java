@@ -6,6 +6,7 @@ public enum FieldType {
   GRAPH,
   INTEGER,
   FLOAT,
+  LONG,
   BOOLEAN,
   BINARY_STRING
 

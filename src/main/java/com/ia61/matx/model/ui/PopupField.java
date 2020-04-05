@@ -3,6 +3,7 @@ package com.ia61.matx.model.ui;
 import javafx.scene.control.*;
 import javafx.util.converter.FloatStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LongStringConverter;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -50,7 +51,7 @@ public class PopupField<T> {
 
     switch (fieldType) {
       case LABEL:
-        control = new Label(getValue().toString());
+        control = new Label(getValue() != null ? getValue().toString() : "");
         break;
       case GRAPH:
         //TODO create LineChart
@@ -62,6 +63,10 @@ public class PopupField<T> {
       case FLOAT:
         control = new TextField();
         ((TextField) control).setTextFormatter(new TextFormatter<>(new FloatStringConverter(), (Float) getValue(), floatFilter ));
+        break;
+      case LONG:
+        control = new TextField();
+        ((TextField) control).setTextFormatter(new TextFormatter<>(new LongStringConverter(), (Long) getValue(), integerFilter ));
         break;
       case BINARY_STRING:
         control = new TextField(getValue().toString());
