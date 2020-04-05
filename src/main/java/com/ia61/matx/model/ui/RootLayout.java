@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.CubicCurve;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
@@ -125,23 +126,26 @@ public class RootLayout extends AnchorPane {
 
   private void addLinkDeleteHandler(NodeLink nodeLink) {
 
-    nodeLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
+    nodeLink.getNode_link().setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
         if (event.getButton() == MouseButton.SECONDARY) {
           NodeLink nl =
-              (NodeLink) event.getSource();
+              (NodeLink) ((CubicCurve) event.getSource()).getParent();
 
           for (Node n : right_pane.getChildren()) {
 
-            if (n.getId().equals(nl.getSourceId()) || n.getId().equals(nl.getTargetId())) {
-
-              if (n.getId().equals(nl.getTargetId())) {
-                DraggableNode targetNode = (DraggableNode) n;
-                int number = targetNode.getLinkIds().indexOf(nl.getId());
-                targetNode.getModule().disconnectFromInput(number);
-              }
-              ((DraggableNode) n).removeLink(nl.getId());
+            if (n.getId().equals(nl.getSourceId())) {
+              DraggableNode sourceNode = (DraggableNode) n;
+              sourceNode.getTakenInputs().remove(nl.getSourcePaneId());
+              sourceNode.removeLink(nl.getId());
+            }
+            if (n.getId().equals(nl.getTargetId())) {
+              DraggableNode targetNode = (DraggableNode) n;
+              int inputIndex = targetNode.getInputIndexNumber(nl.getTargetPaneId());
+              targetNode.getTakenInputs().remove(nl.getTargetPaneId());
+              targetNode.getModule().disconnectFromInput(inputIndex);
+              targetNode.removeLink(nl.getId());
             }
 
           }
@@ -317,20 +321,23 @@ public class RootLayout extends AnchorPane {
             if (source != null && target != null) {
                 NodeLink link = new NodeLink();
 
-                //add our link at the top of the rendering order so it's rendered first
-                                Boolean connected = target.getModule().connectToInput(
-                                        source.getModule(),
-                                        source.getOutputIndexNumber(sourcePane.getId()),
-                                        target.getInputIndexNumber(targetPane.getId()));
                 int inputCount = target.getModule().getInputCount();
 
-                if(connected && ((inputCount > 0 && !target.getTakenInputs().contains(targetPane.getId())
-                                        // check if target has free input
-                                        ) || inputCount < 0 )) {
-                                    addLinkDeleteHandler(link);
-                                    right_pane.getChildren().add(0, link);
-                                    link.bindEnds(source, target, sourcePane, targetPane);
-                                }
+                if((inputCount > 0 && !target.getTakenInputs().contains(targetPane.getId()))
+                    // check if target has free input
+                    || inputCount < 0 ) {
+                  //UI is ready for connecting, now trying to connect on backend
+                  Boolean connected = target.getModule().connectToInput(
+                      source.getModule(),
+                      source.getOutputIndexNumber(sourcePane.getId()),
+                      target.getInputIndexNumber(targetPane.getId()));
+                  //Check if modules are connected on backend and perform linking
+                  if (connected) {
+                    addLinkDeleteHandler(link);
+                    right_pane.getChildren().add(0, link);
+                    link.bindEnds(source, target, sourcePane, targetPane);
+                  }
+                }
 							}
 						}
 

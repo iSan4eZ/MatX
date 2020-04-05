@@ -29,6 +29,8 @@ public class NodeLink extends AnchorPane {
 
 	private String sourceId;
 	private String targetId;
+	private String sourcePaneId;
+	private String targetPaneId;
 
 	public NodeLink() {
 		
@@ -99,6 +101,18 @@ public class NodeLink extends AnchorPane {
 		return targetId;
 	}
 
+	public String getSourcePaneId() {
+		return sourcePaneId;
+	}
+
+	public String getTargetPaneId() {
+		return targetPaneId;
+	}
+
+	public CubicCurve getNode_link() {
+		return node_link;
+	}
+
 	public void setStart(Point2D startPoint) {
 
 		node_link.setStartX(startPoint.getX());
@@ -133,7 +147,9 @@ public class NodeLink extends AnchorPane {
 
 		sourceId = source.getId();
 		targetId = target.getId();
-		
+		sourcePaneId = sourcePane.getId();
+		targetPaneId = targetPane.getId();
+
 		source.registerLink(getId());
 		target.registerLink(getId());
 		target.addTakenInput(targetPane.getId());
