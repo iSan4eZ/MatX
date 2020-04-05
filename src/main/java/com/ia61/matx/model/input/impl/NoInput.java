@@ -1,7 +1,7 @@
 package com.ia61.matx.model.input.impl;
 
 import com.ia61.matx.model.input.Input;
-import com.ia61.matx.model.output.OutputConnection;
+import com.ia61.matx.module.Module;
 import lombok.Getter;
 
 @Getter
@@ -11,7 +11,7 @@ public abstract class NoInput implements Input {
     return 0;
   }
 
-  public Boolean connectToInput(OutputConnection output, Integer inputNumber) {
+  public Boolean connectToInput(Module module, Integer outputNumber, Integer inputNumber) {
     return false;
   }
 

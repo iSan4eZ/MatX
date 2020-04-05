@@ -303,7 +303,7 @@ public class RootLayout extends AnchorPane {
 
                 addLinkDeleteHandler(link);
                 int number = target.getLinkIds().size();
-                target.getModule().connectToInput(source.getModule().getOutput(0).get(), number);
+                target.getModule().connectToInput(source.getModule(), 0, number);
                 link.bindEnds(source, target);
               }
             }
