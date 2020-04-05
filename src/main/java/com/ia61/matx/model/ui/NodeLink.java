@@ -120,7 +120,7 @@ public class NodeLink extends AnchorPane {
 		
 		node_link.startYProperty().bind(
 				Bindings.add(source.layoutYProperty().add(DRAGGABLE_NODE_HEADER_HEIGHT + sourcePane.getLayoutY()),
-						(source.getInputs().getPrefHeight() / source.getInputs().getChildren().size()) / 2));
+						(source.getOutputs().getPrefHeight() / source.getOutputs().getChildren().size()) / 2));
 
 
 		node_link.endXProperty().bind(
@@ -129,13 +129,14 @@ public class NodeLink extends AnchorPane {
 		
 		node_link.endYProperty().bind(
 				Bindings.add(target.layoutYProperty().add(DRAGGABLE_NODE_HEADER_HEIGHT + targetPane.getLayoutY()),
-						(source.getInputs().getPrefHeight() / source.getInputs().getChildren().size()) / 2));
+						(target.getInputs().getPrefHeight() / target.getInputs().getChildren().size()) / 2));
 
 		sourceId = source.getId();
 		targetId = target.getId();
 		
 		source.registerLink(getId());
 		target.registerLink(getId());
+		target.addTakenInput(targetPane.getId());
 	}
 
 	private int getExtraX(DraggableNode node, AnchorPane pane) {

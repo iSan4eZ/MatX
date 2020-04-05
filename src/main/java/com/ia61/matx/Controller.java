@@ -255,7 +255,6 @@ public class Controller extends BorderPane implements Initializable {
 
                 if (sourceId != null && targetId != null) {
 
-                    //	System.out.println(container.getData());
                     NodeLink link = new NodeLink();
 
                     //add our link at the top of the rendering order so it's rendered first

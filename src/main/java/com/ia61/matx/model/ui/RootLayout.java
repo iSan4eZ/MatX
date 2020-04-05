@@ -277,7 +277,6 @@ public class RootLayout extends AnchorPane {
 							if (n instanceof DraggableNode) {
 								for (Node child : ((DraggableNode) n).getInputs().getChildren()) {
 									if(child.getId() == null) {
-										System.out.println("child id = null");
 										continue;
 									}
 									if (targetId.equals(child.getId())) {
@@ -292,7 +291,6 @@ public class RootLayout extends AnchorPane {
 
 								for (Node child : ((DraggableNode) n).getOutputs().getChildren()) {
 									if(child.getId() == null) {
-										System.out.println("child id = null");
 										continue;
 									}
 									if (targetId.equals(child.getId())) {
@@ -308,26 +306,25 @@ public class RootLayout extends AnchorPane {
             }
 
             if (source != null && target != null) {
-              //TODO define number of output and input
-              if (source.getModule().getOutput(source.getOutputIndexNumber(sourcePane.getId())).isPresent()) {
-                //	System.out.println(container.getData());
                 NodeLink link = new NodeLink();
 
                 //add our link at the top of the rendering order so it's rendered first
-                right_pane.getChildren().add(0, link);
-
-								addLinkDeleteHandler(link);
                                 Boolean connected = target.getModule().connectToInput(
-                                        source.getModule().getOutput(source.getOutputIndexNumber(sourcePane.getId())).get(),
+                                        source.getModule(),
+                                        source.getOutputIndexNumber(sourcePane.getId()),
                                         target.getInputIndexNumber(targetPane.getId()));
-                                if(connected) {
-                                    System.out.println("connected");
+                int inputCount = target.getModule().getInputCount();
+
+                if(connected && ((inputCount > 0 && !target.getTakenInputs().contains(targetPane.getId())
+                                        // check if target has free input
+                                        ) || inputCount < 0 )) {
+                                    addLinkDeleteHandler(link);
+                                    right_pane.getChildren().add(0, link);
                                     link.bindEnds(source, target, sourcePane, targetPane);
                                 }
 							}
 						}
-					}
-						
+
 				}
 
         event.consume();

@@ -52,14 +52,14 @@ public class DraggableNode extends AnchorPane {
 	private Module module;
 	private List<String> inputsList = new ArrayList<>();
 	private List<String> outputsList = new ArrayList<>();
+	private ModuleIcon moduleIcon;
 
 	private final List <String> mLinkIds = new ArrayList <String> ();
+	private List <String> takenInputs = new ArrayList<>();
 
 	public DraggableNode(ModuleIcon moduleIcon) {
-		System.out.println(moduleIcon.getModule());
-		System.out.println(moduleIcon.getName());
 		setModule(moduleIcon.getModule());
-		setTitle_bar(moduleIcon.getName());
+		setModuleIcon(moduleIcon);
 
 		FXMLLoader fxmlLoader = new FXMLLoader(
 				getClass().getResource("/DraggableNode.fxml")
@@ -88,6 +88,7 @@ public class DraggableNode extends AnchorPane {
 		buildNodeDragHandlers();
 		buildLinkDragHandlers();
 
+		setTitle_bar(moduleIcon.getName());
 
 		mDragLink = new NodeLink();
 		mDragLink.setVisible(false);
@@ -109,8 +110,6 @@ public class DraggableNode extends AnchorPane {
 
 		setType(DragIconType.grey);
 
-		System.out.println( module.getInputCount() + " " + module.getOutputCount());
-
 
 		setLinkPanesAmount(inputs,
                 getModule().getInputCount()
@@ -118,27 +117,21 @@ public class DraggableNode extends AnchorPane {
 		setLinkPanesAmount(outputs,
                 getModule().getOutputCount()
         );
-		System.out.println("inputs size = " + inputsList.size());
-		System.out.println("outputs size = " + outputsList.size());
 		inputs.setVisible(true);
 		outputs.setVisible(true);
 	}
 
-	private void addLinkPanels(VBox linkPanes, double paneHeight) {
+	private void addLinkPanel(VBox linkPanes, double paneHeight) {
 		AnchorPane anchorPane = new AnchorPane();
 		anchorPane.setId(UUID.randomUUID().toString());
 		anchorPane.setMinHeight(paneHeight);
 		anchorPane.setMinWidth(linkPanes.getPrefWidth());
-
-		System.out.println("MODULE NAME " + linkPanes.getId());
 		if (linkPanes.getId().contains("inputs")) {
 			anchorPane.getStyleClass().add("left-link-handle");
 			inputsList.add(anchorPane.getId());
-			System.out.println("left " + anchorPane.getId());
 		} else if (linkPanes.getId().contains("outputs")) {
 			outputsList.add(anchorPane.getId());
 			anchorPane.getStyleClass().add("right-link-handle");
-			System.out.println("right " + anchorPane.getId());
 		}
 
         Circle c =new Circle();
@@ -154,11 +147,17 @@ public class DraggableNode extends AnchorPane {
 	}
 
 	private void setLinkPanesAmount(VBox linkPanes, int portsAmount) {
+		double paneHeight = linkPanes.getPrefHeight();
 		if(portsAmount > 0) {
-            double paneHeight = linkPanes.getPrefHeight() / portsAmount;
+            paneHeight = paneHeight / portsAmount;
 			for (int i = 0; i < portsAmount; i++) {
-				addLinkPanels(linkPanes, paneHeight);
+				addLinkPanel(linkPanes, paneHeight);
 			}
+		} else if (portsAmount == -1) {
+			paneHeight = linkPanes.getPrefHeight();
+			addLinkPanel(linkPanes, paneHeight);
+		} else {
+			System.out.println("panes will not be added");
 		}
 	}
 
@@ -167,6 +166,8 @@ public class DraggableNode extends AnchorPane {
 	}
 
 	public void removeLink(String linkId) {
+		inputsList.remove(linkId);
+		outputsList.remove(linkId);
 		mLinkIds.remove(linkId);
 	}
 
@@ -199,7 +200,6 @@ public class DraggableNode extends AnchorPane {
 			this.title_bar = new Label();
 		}
 		this.title_bar.setText(title_bar);
-		System.out.println(getTitle_bar());
 	}
 
 	public DragIconType getType () { return mType; }
@@ -369,7 +369,6 @@ public class DraggableNode extends AnchorPane {
 
 				AnchorPane sourcePane = (AnchorPane) event.getSource();
 
-				System.out.println("source " + sourcePane.getId()  + " this " + getId());
 				// set left link
 				for (Node child : inputs.getChildren()) {
 					if (child.getId().equals(sourcePane.getId())) {
@@ -426,7 +425,6 @@ public class DraggableNode extends AnchorPane {
 				right_pane.getChildren().remove(0);
 
 				AnchorPane targetPane = (AnchorPane) event.getSource();
-				System.out.println("target " + targetPane.getId() + " this " + getId());
 
 				ClipboardContent content = new ClipboardContent();
 
@@ -504,11 +502,26 @@ public class DraggableNode extends AnchorPane {
 		int index = 0;
 		for (String s : elements) {
 			if(s.equals(paneID)) {
-				System.out.println("INDEX " + index);
 				return index;
 			}
 			index += 1;
 		}
 		return -1;
+	}
+
+	public ModuleIcon getModuleIcon() {
+		return moduleIcon;
+	}
+
+	public void setModuleIcon(ModuleIcon moduleIcon) {
+		this.moduleIcon = moduleIcon;
+	}
+
+	public void addTakenInput(String inputID) {
+		takenInputs.add(inputID);
+	}
+
+	public List<String> getTakenInputs() {
+		return takenInputs;
 	}
 }
