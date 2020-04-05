@@ -67,10 +67,10 @@ public class DecisionMakerModule extends AbstractDecisionMakerModule {
   @Override
   public List<PopupField<?>> getPopupFields() {
     return Arrays.asList(
-        new PopupField<>(FieldType.BOOLEAN, this::getShowUnacceptedSymbols, this::setShowUnacceptedSymbols,
-            "Показывать '?' в случае, если символ не принят:"),
-        new PopupField<>(FieldType.FLOAT, this::getSymbolsReceived, this::setSymbolsReceived,
-            "Нижний порог принятия символа (например, 0.4 для 40%):"),
-        new PopupField<>(FieldType.RESULT_LABEL, this::getResultSymbol, null, "Принятый сигнал:"));
+            new PopupField<>(FieldType.BOOLEAN, this::getShowUnacceptedSymbols, this::setShowUnacceptedSymbols,
+                    "Показывать '?' в случае, если символ не принят:"),
+            new PopupField<>(FieldType.FLOAT, this::getSymbolsReceived, this::setSymbolsReceived,
+                    "Нижний порог принятия символа (например, 0.4 для 40%):"),
+            new PopupField<>(FieldType.LABEL, this::getResultSymbol, null, "Принятый сигнал:"));
   }
 }
