@@ -5,7 +5,6 @@ import com.ia61.matx.model.output.impl.NoOutput;
 import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.service.GeneralProcessor;
-import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +18,7 @@ import java.util.SortedMap;
 public abstract class AbstractMonitorModule extends MultiInput implements Monitor, NoOutput {
 
   //frequency of data points in milliseconds
-  private Long pullRate = 50L;
+  private Long pullRate = 10L;
 
   //cached result
   private List<SortedMap<Long, Float>> result = new ArrayList<>();
