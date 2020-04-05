@@ -18,7 +18,7 @@ public class DragIcon extends AnchorPane{
 
 	private DragIconType mType = null;
 	private ModuleIcon moduleIcon;
-	
+
 	public DragIcon() {
 		
 		FXMLLoader fxmlLoader = new FXMLLoader(
