@@ -1,6 +1,5 @@
 package com.ia61.matx.model.ui;
 
-import com.ia61.matx.Controller;
 import com.ia61.matx.module.Module;
 import com.ia61.matx.util.Point2dSerial;
 import javafx.beans.value.ChangeListener;
@@ -29,8 +28,8 @@ public class DraggableNode extends AnchorPane {
 	@FXML private AnchorPane root_pane;
 	@FXML private AnchorPane left_link_handle;
 	@FXML private AnchorPane right_link_handle;
-	@FXML private VBox left_handle_panes;
-	@FXML private VBox right_handle_panes;
+	@FXML private VBox inputs;
+	@FXML private VBox outputs;
 	@FXML private Label title_bar;
 	@FXML private Label close_button;
 
@@ -51,10 +50,16 @@ public class DraggableNode extends AnchorPane {
 	private NodeLink mDragLink = null;
 	private AnchorPane right_pane = null;
 	private Module module;
+	private List<String> inputsList = new ArrayList<>();
+	private List<String> outputsList = new ArrayList<>();
 
 	private final List <String> mLinkIds = new ArrayList <String> ();
 
-	public DraggableNode() {
+	public DraggableNode(ModuleIcon moduleIcon) {
+		System.out.println(moduleIcon.getModule());
+		System.out.println(moduleIcon.getName());
+		setModule(moduleIcon.getModule());
+		setTitle_bar(moduleIcon.getName());
 
 		FXMLLoader fxmlLoader = new FXMLLoader(
 				getClass().getResource("/DraggableNode.fxml")
@@ -83,6 +88,7 @@ public class DraggableNode extends AnchorPane {
 		buildNodeDragHandlers();
 		buildLinkDragHandlers();
 
+
 		mDragLink = new NodeLink();
 		mDragLink.setVisible(false);
 
@@ -103,24 +109,36 @@ public class DraggableNode extends AnchorPane {
 
 		setType(DragIconType.grey);
 
-		setLinkPanesAmount(left_handle_panes, 4);
-		setLinkPanesAmount(right_handle_panes, 2);
-		left_handle_panes.setVisible(true);
-		right_handle_panes.setVisible(true);
+		System.out.println( module.getInputCount() + " " + module.getOutputCount());
+
+
+		setLinkPanesAmount(inputs,
+                getModule().getInputCount()
+        );
+		setLinkPanesAmount(outputs,
+                getModule().getOutputCount()
+        );
+		System.out.println("inputs size = " + inputsList.size());
+		System.out.println("outputs size = " + outputsList.size());
+		inputs.setVisible(true);
+		outputs.setVisible(true);
 	}
 
 	private void addLinkPanels(VBox linkPanes, double paneHeight) {
 		AnchorPane anchorPane = new AnchorPane();
 		anchorPane.setId(UUID.randomUUID().toString());
 		anchorPane.setMinHeight(paneHeight);
-		anchorPane.setMinWidth(25);
+		anchorPane.setMinWidth(linkPanes.getPrefWidth());
 
-		if (linkPanes.getId().contains("left")) {
+		System.out.println("MODULE NAME " + linkPanes.getId());
+		if (linkPanes.getId().contains("inputs")) {
 			anchorPane.getStyleClass().add("left-link-handle");
+			inputsList.add(anchorPane.getId());
 			System.out.println("left " + anchorPane.getId());
-		} else if (linkPanes.getId().contains("right")) {
-			System.out.println("right " + anchorPane.getId());
+		} else if (linkPanes.getId().contains("outputs")) {
+			outputsList.add(anchorPane.getId());
 			anchorPane.getStyleClass().add("right-link-handle");
+			System.out.println("right " + anchorPane.getId());
 		}
 
         Circle c =new Circle();
@@ -135,10 +153,10 @@ public class DraggableNode extends AnchorPane {
 		linkPanes.getChildren().add(anchorPane);
 	}
 
-	private void setLinkPanesAmount(VBox linkPanes, int inputsAmount) {
-		if(inputsAmount > 0) {
-            double paneHeight = linkPanes.getPrefHeight() / inputsAmount;
-			for (int i = 0; i < inputsAmount; i++) {
+	private void setLinkPanesAmount(VBox linkPanes, int portsAmount) {
+		if(portsAmount > 0) {
+            double paneHeight = linkPanes.getPrefHeight() / portsAmount;
+			for (int i = 0; i < portsAmount; i++) {
 				addLinkPanels(linkPanes, paneHeight);
 			}
 		}
@@ -160,10 +178,6 @@ public class DraggableNode extends AnchorPane {
 		return module;
 	}
 
-	public void setModule(Module module) {
-		this.module = module;
-	}
-
 	public void relocateToPoint (Point2D p) {
 
 		//relocates the object to a point that has been converted to
@@ -181,7 +195,11 @@ public class DraggableNode extends AnchorPane {
 	}
 
 	public void setTitle_bar(String title_bar) {
+		if(this.title_bar == null) {
+			this.title_bar = new Label();
+		}
 		this.title_bar.setText(title_bar);
+		System.out.println(getTitle_bar());
 	}
 
 	public DragIconType getType () { return mType; }
@@ -353,18 +371,18 @@ public class DraggableNode extends AnchorPane {
 
 				System.out.println("source " + sourcePane.getId()  + " this " + getId());
 				// set left link
-				for (Node child : left_handle_panes.getChildren()) {
+				for (Node child : inputs.getChildren()) {
 					if (child.getId().equals(sourcePane.getId())) {
 						x += +5;
-						y += child.getLayoutY() + DRAGGABLE_NODE_HEADER_HEIGHT + (right_handle_panes.getPrefHeight() / right_handle_panes.getChildren().size()) / 2;
+						y += child.getLayoutY() + DRAGGABLE_NODE_HEADER_HEIGHT + (outputs.getPrefHeight() / outputs.getChildren().size()) / 2;
 					}
 				}
 				if(x == getLayoutX() && y == getLayoutY()) {
 					// set right link
-					for (Node child : right_handle_panes.getChildren()) {
+					for (Node child : outputs.getChildren()) {
 						if (child.getId().equals(sourcePane.getId())) {
 							x += getPrefWidth() - 5;
-							y += child.getLayoutY() + DRAGGABLE_NODE_HEADER_HEIGHT + (right_handle_panes.getPrefHeight() / right_handle_panes.getChildren().size()) / 2;
+							y += child.getLayoutY() + DRAGGABLE_NODE_HEADER_HEIGHT + (outputs.getPrefHeight() / outputs.getChildren().size()) / 2;
 						}
 					}
 				}
@@ -463,10 +481,34 @@ public class DraggableNode extends AnchorPane {
 	}
 
 	public VBox getInputs() {
-		return left_handle_panes;
+		return inputs;
 	}
 
 	public VBox getOutputs() {
-		return right_handle_panes;
+		return outputs;
+	}
+
+	private void setModule(Module module) {
+		this.module = module;
+	}
+
+	public int getInputIndexNumber(String paneID) {
+		return findIndexNumber(inputsList, paneID);
+	}
+
+	public int getOutputIndexNumber(String paneID) {
+		return findIndexNumber(outputsList, paneID);
+	}
+
+	private int findIndexNumber(List <String> elements, String paneID) {
+		int index = 0;
+		for (String s : elements) {
+			if(s.equals(paneID)) {
+				System.out.println("INDEX " + index);
+				return index;
+			}
+			index += 1;
+		}
+		return -1;
 	}
 }

@@ -213,16 +213,16 @@ public class Controller extends BorderPane implements Initializable {
 //                    }
 //                    else {
 
-                        DraggableNode node = new DraggableNode();
+//                        DraggableNode node = new DraggableNode();
 
 //                        node.setType();
-                        workingPane.getChildren().add(node);
-
-                        Point2D cursorPoint = container.getValue("scene_coords");
-
-                        node.relocateToPoint(
-                                new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
-                        );
+//                        workingPane.getChildren().add(node);
+//
+//                        Point2D cursorPoint = container.getValue("scene_coords");
+//
+//                        node.relocateToPoint(
+//                                new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
+//                        );
 //                    }
                 }
             }
@@ -271,8 +271,9 @@ public class Controller extends BorderPane implements Initializable {
 
                     }
 
-                    if (source != null && target != null)
-                        link.bindEnds(source, target);
+                    if (source != null && target != null) {
+                        //                        link.bindEnds(source, target);
+                    }
                 }
 
             }

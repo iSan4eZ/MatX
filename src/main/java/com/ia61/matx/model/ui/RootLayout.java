@@ -230,19 +230,15 @@ public class RootLayout extends AnchorPane{
 //									);
 //						}
 //						else {
-							
-							DraggableNode node = new DraggableNode();
+						ModuleIcon moduleIcon = container.getValue("type");
+						DraggableNode node = new DraggableNode(moduleIcon);
+						right_pane.getChildren().add(node);
 
-							ModuleIcon moduleIcon = container.getValue("type");
-							node.setTitle_bar(moduleIcon.getName());
-							node.setModule(moduleIcon.getModule());
-							right_pane.getChildren().add(node);
-	
-							Point2D cursorPoint = container.getValue("scene_coords");
-	
-							node.relocateToPoint(
-									new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
-									);
+						Point2D cursorPoint = container.getValue("scene_coords");
+
+						node.relocateToPoint(
+								new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
+						);
 //						}
 					}
 				}
@@ -271,7 +267,7 @@ public class RootLayout extends AnchorPane{
 
 						DraggableNode source = null;
 						DraggableNode target = null;
-AnchorPane sourcePane = null;
+						AnchorPane sourcePane = null;
 						AnchorPane targetPane = null;
 						for (Node n: right_pane.getChildren()) {
 							if (n instanceof DraggableNode) {
@@ -307,9 +303,9 @@ AnchorPane sourcePane = null;
 							}
 						}
 
-						if (source != null && target != null && Collections.disjoint(source.getLinkIds(), target.getLinkIds())) {
+						if (source != null && target != null) {
 							//TODO define number of output and input
-							if (source.getModule().getOutput(0).isPresent()) {
+							if (source.getModule().getOutput(source.getOutputIndexNumber(sourcePane.getId())).isPresent()) {
 								//	System.out.println(container.getData());
 								NodeLink link = new NodeLink();
 
@@ -317,9 +313,13 @@ AnchorPane sourcePane = null;
 								right_pane.getChildren().add(0, link);
 
 								addLinkDeleteHandler(link);
-								int number = target.getLinkIds().size();
-								target.getModule().connectToInput(source.getModule().getOutput(0).get(), number);
-								link.bindEnds(source, target, sourcePane, targetPane);
+                                Boolean connected = target.getModule().connectToInput(
+                                        source.getModule().getOutput(source.getOutputIndexNumber(sourcePane.getId())).get(),
+                                        target.getInputIndexNumber(targetPane.getId()));
+                                if(connected) {
+                                    System.out.println("connected");
+                                    link.bindEnds(source, target, sourcePane, targetPane);
+                                }
 							}
 						}
 					}
