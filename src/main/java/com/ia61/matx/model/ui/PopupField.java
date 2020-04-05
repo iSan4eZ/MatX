@@ -2,6 +2,7 @@ package com.ia61.matx.model.ui;
 
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.util.converter.FloatStringConverter;
@@ -12,6 +13,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 public class PopupField<T> {
 
@@ -79,11 +81,21 @@ public class PopupField<T> {
     }
   }
 
-  private LineChart<Number,Number> createLineChart() {
-    final NumberAxis xAxis = new NumberAxis();
-    final NumberAxis yAxis = new NumberAxis();
+  private LineChart<?,?> createLineChart() {
+     final List<SortedMap<Long, Float>> source = (List<SortedMap<Long, Float>>) getValue();
+     NumberAxis xAxis = new NumberAxis();
+     NumberAxis yAxis = new NumberAxis();
+     LineChart<?, ?> lineChart = new LineChart<>(xAxis, yAxis);
 
-    return new LineChart<>(xAxis, yAxis);
+     source.forEach(coordinatesMap -> {
+         XYChart.Series series = new XYChart.Series();
+         series.getData().addAll(coordinatesMap.entrySet().stream()
+                 .map(entry -> new XYChart.Data(entry.getKey().toString(), entry.getValue()))
+                 .collect(Collectors.toList()));
+         lineChart.getData().add(series);
+     });
+
+     return lineChart;
   }
 
   public void setValue(Object value) {
