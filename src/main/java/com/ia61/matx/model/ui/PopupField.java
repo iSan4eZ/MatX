@@ -74,8 +74,6 @@ public class PopupField<T> {
     }
   }
 
-
-
   public void setValue(Object value) {
     if (Objects.nonNull(valueSetter)) {
       valueSetter.accept((T) value);
