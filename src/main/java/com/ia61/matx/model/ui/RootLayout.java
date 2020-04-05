@@ -1,21 +1,23 @@
 package com.ia61.matx.model.ui;
 
 import com.ia61.matx.service.GeneralProcessor;
+import javafx.concurrent.Service;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.function.UnaryOperator;
 
 public class RootLayout extends AnchorPane {
 
@@ -25,9 +27,12 @@ public class RootLayout extends AnchorPane {
   AnchorPane right_pane;
   @FXML
   VBox left_pane;
-
   @FXML
   Button simulate_btn;
+  @FXML
+  TextField sim_time;
+  @FXML
+  ProgressBar progress_bar;
 
   private DragIcon mDragOverIcon = null;
 
@@ -78,6 +83,7 @@ public class RootLayout extends AnchorPane {
 
     buildDragHandlers();
     handleSimulateButton();
+    handleSimTimeField();
   }
 
   private void addDragDetection(DragIcon dragIcon) {
@@ -334,7 +340,22 @@ public class RootLayout extends AnchorPane {
 
   private void handleSimulateButton() {
     simulate_btn.setOnMouseClicked((event) -> {
-      GeneralProcessor.simulate();
+      Service simulation = GeneralProcessor.getProgress();
+      progress_bar.progressProperty().bind(simulation.progressProperty());
+      simulation.start();
     });
   }
+
+  private void handleSimTimeField() {
+    UnaryOperator<TextFormatter.Change> integerFilter = c -> {
+      String text = c.getControlNewText();
+      if (text.matches("-?([1-9][0-9]*)?")) {
+        return c;
+      }
+      return null;
+    };
+    sim_time.setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), Math.toIntExact(GeneralProcessor.getSimulationTime() / 1000), integerFilter ));
+    sim_time.textProperty().addListener((observable, oldValue, newValue) -> GeneralProcessor.setSimulationTime(Long.parseLong(newValue) * 1000));
+  }
+
 }
