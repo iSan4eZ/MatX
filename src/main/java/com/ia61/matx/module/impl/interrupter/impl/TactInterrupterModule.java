@@ -24,7 +24,7 @@ public class TactInterrupterModule extends AbstractInterrupter {
     return Arrays.asList(
         new PopupField<>(FieldType.LABEL, null, null,
             "Cкидає значення кореляторів, до яких під'єднаний виход тактового генератору, на 0 з вказаною частотою."),
-        new PopupField<>(FieldType.INTEGER, this::getInterruptFrequency, this::setInterruptFrequency,
+        new PopupField<>(FieldType.LONG, this::getInterruptFrequency, this::setInterruptFrequency,
             "Частота переривання (Гц):")
     );
   }
