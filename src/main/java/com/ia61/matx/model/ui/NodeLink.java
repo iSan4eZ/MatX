@@ -1,6 +1,5 @@
 package com.ia61.matx.model.ui;
 
-import com.ia61.matx.model.ui.DraggableNode;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.When;
 import javafx.beans.property.DoubleProperty;
@@ -8,11 +7,14 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.CubicCurve;
 
 import java.io.IOException;
 import java.util.UUID;
+
+import static com.ia61.matx.constants.UIConstants.DRAGGABLE_NODE_HEADER_HEIGHT;
 
 public class NodeLink extends AnchorPane {
 
@@ -110,24 +112,45 @@ public class NodeLink extends AnchorPane {
 	}	
 	
 
-	public void bindEnds (DraggableNode source, DraggableNode target) {
+	public void bindEnds (DraggableNode source, DraggableNode target, AnchorPane sourcePane, AnchorPane targetPane) {
+
 		node_link.startXProperty().bind(
-				Bindings.add(source.layoutXProperty(), (source.getWidth() / 2.0)));
+				Bindings.add(source.layoutXProperty().add(getExtraX(source, sourcePane)),
+						sourcePane.getLayoutX()));
 		
 		node_link.startYProperty().bind(
-				Bindings.add(source.layoutYProperty(), (source.getWidth() / 2.0)));
-		
+				Bindings.add(source.layoutYProperty().add(DRAGGABLE_NODE_HEADER_HEIGHT + sourcePane.getLayoutY()),
+						(source.getOutputs().getPrefHeight() / source.getOutputs().getChildren().size()) / 2));
+
+
 		node_link.endXProperty().bind(
-				Bindings.add(target.layoutXProperty(), (target.getWidth() / 2.0)));
+				Bindings.add(target.layoutXProperty().add(getExtraX(target, targetPane)),
+						targetPane.getLayoutX()));
 		
 		node_link.endYProperty().bind(
-				Bindings.add(target.layoutYProperty(), (target.getWidth() / 2.0)));
+				Bindings.add(target.layoutYProperty().add(DRAGGABLE_NODE_HEADER_HEIGHT + targetPane.getLayoutY()),
+						(target.getInputs().getPrefHeight() / target.getInputs().getChildren().size()) / 2));
 
 		sourceId = source.getId();
 		targetId = target.getId();
 		
-		source.registerLink (getId());
-		target.registerLink (getId());
+		source.registerLink(getId());
+		target.registerLink(getId());
+		target.addTakenInput(targetPane.getId());
+	}
+
+	private int getExtraX(DraggableNode node, AnchorPane pane) {
+		for (Node left : node.getInputs().getChildren()) {
+			if (pane.getId().equals(left.getId())) {
+				return 5; //additional X
+			}
+		}
+		for (Node right : node.getOutputs().getChildren()) {
+			if (pane.getId().equals(right.getId())) {
+				return 75; //additional X
+			}
+		}
+		return 0;
 	}
 
 }

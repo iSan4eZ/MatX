@@ -234,19 +234,15 @@ public class RootLayout extends AnchorPane {
 //									);
 //						}
 //						else {
+						ModuleIcon moduleIcon = container.getValue("type");
+						DraggableNode node = new DraggableNode(moduleIcon);
+						right_pane.getChildren().add(node);
 
-            DraggableNode node = new DraggableNode();
+						Point2D cursorPoint = container.getValue("scene_coords");
 
-            ModuleIcon moduleIcon = container.getValue("type");
-            node.setTitle_bar(moduleIcon.getName());
-            node.setModule(moduleIcon.getModule());
-            right_pane.getChildren().add(node);
-
-            Point2D cursorPoint = container.getValue("scene_coords");
-
-            node.relocateToPoint(
-                new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
-            );
+						node.relocateToPoint(
+								new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
+						);
 //						}
           }
         }
@@ -273,43 +269,63 @@ public class RootLayout extends AnchorPane {
 
           if (sourceId != null && targetId != null) {
 
-            DraggableNode source = null;
-            DraggableNode target = null;
+						DraggableNode source = null;
+						DraggableNode target = null;
+						AnchorPane sourcePane = null;
+						AnchorPane targetPane = null;
+						for (Node n: right_pane.getChildren()) {
+							if (n instanceof DraggableNode) {
+								for (Node child : ((DraggableNode) n).getInputs().getChildren()) {
+									if(child.getId() == null) {
+										continue;
+									}
+									if (targetId.equals(child.getId())) {
+										target = (DraggableNode) n;
+										targetPane = (AnchorPane) child;
+									}
+									if(sourceId.equals(child.getId())) {
+										source = (DraggableNode) n;
+										sourcePane = (AnchorPane) child;
+									}
+								}
 
-            for (Node n : right_pane.getChildren()) {
-
-              if (n.getId() == null) {
-                continue;
-              }
-
-              if (n.getId().equals(sourceId)) {
-                source = (DraggableNode) n;
-              }
-
-              if (n.getId().equals(targetId)) {
-                target = (DraggableNode) n;
-              }
-
+								for (Node child : ((DraggableNode) n).getOutputs().getChildren()) {
+									if(child.getId() == null) {
+										continue;
+									}
+									if (targetId.equals(child.getId())) {
+										target = (DraggableNode) n;
+										targetPane = (AnchorPane) child;
+									}
+									if(sourceId.equals(child.getId())) {
+										source = (DraggableNode) n;
+										sourcePane = (AnchorPane) child;
+									}
+								}
+							}
             }
 
-            if (source != null && target != null && Collections.disjoint(source.getLinkIds(), target.getLinkIds())) {
-              //TODO define number of output and input
-              if (source.getModule().getOutput(0).isPresent()) {
-                //	System.out.println(container.getData());
+            if (source != null && target != null) {
                 NodeLink link = new NodeLink();
 
                 //add our link at the top of the rendering order so it's rendered first
-                right_pane.getChildren().add(0, link);
+                                Boolean connected = target.getModule().connectToInput(
+                                        source.getModule(),
+                                        source.getOutputIndexNumber(sourcePane.getId()),
+                                        target.getInputIndexNumber(targetPane.getId()));
+                int inputCount = target.getModule().getInputCount();
 
-                addLinkDeleteHandler(link);
-                int number = target.getLinkIds().size();
-                target.getModule().connectToInput(source.getModule(), 0, number);
-                link.bindEnds(source, target);
-              }
-            }
-          }
+                if(connected && ((inputCount > 0 && !target.getTakenInputs().contains(targetPane.getId())
+                                        // check if target has free input
+                                        ) || inputCount < 0 )) {
+                                    addLinkDeleteHandler(link);
+                                    right_pane.getChildren().add(0, link);
+                                    link.bindEnds(source, target, sourcePane, targetPane);
+                                }
+							}
+						}
 
-        }
+				}
 
         event.consume();
       }

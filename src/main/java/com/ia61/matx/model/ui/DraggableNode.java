@@ -12,17 +12,22 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 
 import java.io.IOException;
 import java.util.*;
 
+import static com.ia61.matx.constants.UIConstants.DRAGGABLE_NODE_HEADER_HEIGHT;
+
 public class DraggableNode extends AnchorPane {
 
 	@FXML private AnchorPane root_pane;
 	@FXML private AnchorPane left_link_handle;
 	@FXML private AnchorPane right_link_handle;
+	@FXML private VBox inputs;
+	@FXML private VBox outputs;
 	@FXML private Label title_bar;
 	@FXML private Label close_button;
 	@FXML private HBox node_content;
@@ -44,10 +49,16 @@ public class DraggableNode extends AnchorPane {
 	private NodeLink mDragLink = null;
 	private AnchorPane right_pane = null;
 	private Module module;
+	private List<String> inputsList = new ArrayList<>();
+	private List<String> outputsList = new ArrayList<>();
+	private ModuleIcon moduleIcon;
 
 	private final List <String> mLinkIds = new ArrayList <String> ();
+	private List <String> takenInputs = new ArrayList<>();
 
-	public DraggableNode() {
+	public DraggableNode(ModuleIcon moduleIcon) {
+		setModule(moduleIcon.getModule());
+		setModuleIcon(moduleIcon);
 
 		FXMLLoader fxmlLoader = new FXMLLoader(
 				getClass().getResource("/DraggableNode.fxml")
@@ -55,6 +66,7 @@ public class DraggableNode extends AnchorPane {
 
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
+
 
 		self = this;
 
@@ -75,11 +87,7 @@ public class DraggableNode extends AnchorPane {
 		buildNodeDragHandlers();
 		buildLinkDragHandlers();
 
-		left_link_handle.setOnDragDetected(mLinkHandleDragDetected);
-		right_link_handle.setOnDragDetected(mLinkHandleDragDetected);
-
-		left_link_handle.setOnDragDropped(mLinkHandleDragDropped);
-		right_link_handle.setOnDragDropped(mLinkHandleDragDropped);
+		setTitle_bar(moduleIcon.getName());
 
 		mDragLink = new NodeLink();
 		mDragLink.setVisible(false);
@@ -99,6 +107,57 @@ public class DraggableNode extends AnchorPane {
 		c.setRadius(5.0f);
 		this.getChildren().add(c);
 
+		setType(DragIconType.grey);
+
+
+		setLinkPanesAmount(inputs,
+                getModule().getInputCount()
+        );
+		setLinkPanesAmount(outputs,
+                getModule().getOutputCount()
+        );
+		inputs.setVisible(true);
+		outputs.setVisible(true);
+	}
+
+	private void addLinkPanel(VBox linkPanes, double paneHeight) {
+		AnchorPane anchorPane = new AnchorPane();
+		anchorPane.setId(UUID.randomUUID().toString());
+		anchorPane.setMinHeight(paneHeight);
+		anchorPane.setMinWidth(linkPanes.getPrefWidth());
+		if (linkPanes.getId().contains("inputs")) {
+			anchorPane.getStyleClass().add("left-link-handle");
+			inputsList.add(anchorPane.getId());
+		} else if (linkPanes.getId().contains("outputs")) {
+			outputsList.add(anchorPane.getId());
+			anchorPane.getStyleClass().add("right-link-handle");
+		}
+
+        Circle c =new Circle();
+        c.setRadius(5.0f);
+        anchorPane.getChildren().add(c);
+
+
+		anchorPane.setOnDragDetected(mLinkHandleDragDetected);
+		anchorPane.setOnDragDropped(mLinkHandleDragDropped);
+
+		anchorPane.setVisible(true);
+		linkPanes.getChildren().add(anchorPane);
+	}
+
+	private void setLinkPanesAmount(VBox linkPanes, int portsAmount) {
+		double paneHeight = linkPanes.getPrefHeight();
+		if(portsAmount > 0) {
+            paneHeight = paneHeight / portsAmount;
+			for (int i = 0; i < portsAmount; i++) {
+				addLinkPanel(linkPanes, paneHeight);
+			}
+		} else if (portsAmount == -1) {
+			paneHeight = linkPanes.getPrefHeight();
+			addLinkPanel(linkPanes, paneHeight);
+		} else {
+			System.out.println("panes will not be added");
+		}
 	}
 
 	public void registerLink(String linkId) {
@@ -106,6 +165,8 @@ public class DraggableNode extends AnchorPane {
 	}
 
 	public void removeLink(String linkId) {
+		inputsList.remove(linkId);
+		outputsList.remove(linkId);
 		mLinkIds.remove(linkId);
 	}
 
@@ -115,10 +176,6 @@ public class DraggableNode extends AnchorPane {
 
 	public Module getModule() {
 		return module;
-	}
-
-	public void setModule(Module module) {
-		this.module = module;
 	}
 
 	public void relocateToPoint (Point2D p) {
@@ -138,6 +195,9 @@ public class DraggableNode extends AnchorPane {
 	}
 
 	public void setTitle_bar(String title_bar) {
+		if(this.title_bar == null) {
+			this.title_bar = new Label();
+		}
 		this.title_bar.setText(title_bar);
 	}
 
@@ -312,10 +372,28 @@ public class DraggableNode extends AnchorPane {
 
 				mDragLink.setVisible(false);
 
-				Point2D p = new Point2D(
-						getLayoutX() + (getWidth() / 2.0),
-						getLayoutY() + (getHeight() / 2.0)
-				);
+				double x = getLayoutX();
+				double y = getLayoutY();
+
+				AnchorPane sourcePane = (AnchorPane) event.getSource();
+
+				// set left link
+				for (Node child : inputs.getChildren()) {
+					if (child.getId().equals(sourcePane.getId())) {
+						x += +5;
+						y += child.getLayoutY() + DRAGGABLE_NODE_HEADER_HEIGHT + (outputs.getPrefHeight() / outputs.getChildren().size()) / 2;
+					}
+				}
+				if(x == getLayoutX() && y == getLayoutY()) {
+					// set right link
+					for (Node child : outputs.getChildren()) {
+						if (child.getId().equals(sourcePane.getId())) {
+							x += getPrefWidth() - 5;
+							y += child.getLayoutY() + DRAGGABLE_NODE_HEADER_HEIGHT + (outputs.getPrefHeight() / outputs.getChildren().size()) / 2;
+						}
+					}
+				}
+				Point2D p = new Point2D(x, y);
 
 				mDragLink.setStart(p);
 
@@ -324,7 +402,7 @@ public class DraggableNode extends AnchorPane {
 				DragContainer container = new DragContainer();
 
 				//pass the UUID of the source node for later lookup
-				container.addData("source", getId());
+				container.addData("source", sourcePane.getId());
 
 				content.put(DragContainer.AddLink, container);
 
@@ -354,12 +432,12 @@ public class DraggableNode extends AnchorPane {
 				mDragLink.setVisible(false);
 				right_pane.getChildren().remove(0);
 
-				AnchorPane link_handle = (AnchorPane) event.getSource();
+				AnchorPane targetPane = (AnchorPane) event.getSource();
 
 				ClipboardContent content = new ClipboardContent();
 
 				//pass the UUID of the target node for later lookup
-				container.addData("target", getId());
+				container.addData("target", targetPane.getId());
 
 				content.put(DragContainer.AddLink, container);
 
@@ -408,5 +486,50 @@ public class DraggableNode extends AnchorPane {
 
 	}
 
+	public VBox getInputs() {
+		return inputs;
+	}
 
+	public VBox getOutputs() {
+		return outputs;
+	}
+
+	private void setModule(Module module) {
+		this.module = module;
+	}
+
+	public int getInputIndexNumber(String paneID) {
+		return findIndexNumber(inputsList, paneID);
+	}
+
+	public int getOutputIndexNumber(String paneID) {
+		return findIndexNumber(outputsList, paneID);
+	}
+
+	private int findIndexNumber(List <String> elements, String paneID) {
+		int index = 0;
+		for (String s : elements) {
+			if(s.equals(paneID)) {
+				return index;
+			}
+			index += 1;
+		}
+		return -1;
+	}
+
+	public ModuleIcon getModuleIcon() {
+		return moduleIcon;
+	}
+
+	public void setModuleIcon(ModuleIcon moduleIcon) {
+		this.moduleIcon = moduleIcon;
+	}
+
+	public void addTakenInput(String inputID) {
+		takenInputs.add(inputID);
+	}
+
+	public List<String> getTakenInputs() {
+		return takenInputs;
+	}
 }

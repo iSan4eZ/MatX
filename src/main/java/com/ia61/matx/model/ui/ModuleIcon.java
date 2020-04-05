@@ -12,6 +12,7 @@ public enum ModuleIcon {
   MONITOR("Monitor", new SignalMonitorFactory()),
   NOISE("NoiseSignal", new NoiseSignalGeneratorFactor()),
   SIN("SinSignal", new SinSignalGeneratorFactory()),
+  DIGITAL("DigitSignal", new DigitalSignalGeneratorFactory()),
   PSUMM("PropSummator", new ProportionalSignalSummatorFactory()),
   SSUM("SignalSummator", new SignalSummatorFactory());
 
