@@ -2,17 +2,19 @@ package com.ia61.matx.model.input.impl;
 
 import com.ia61.matx.model.input.Input;
 import com.ia61.matx.model.input.InputConnection;
-import com.ia61.matx.model.output.OutputConnection;
-import com.ia61.matx.model.output.impl.SingleOutput;
+import com.ia61.matx.module.Module;
 import lombok.Getter;
+
+import java.util.Optional;
 
 @Getter
 public abstract class SingleInput implements Input {
 
   private InputConnection firstInput;
 
-  public void connectFirstInput(SingleOutput singleOutput) {
-    firstInput = getConnection(singleOutput);
+  public Boolean connectFirstInput(InputConnection inputConnection) {
+    firstInput = inputConnection;
+    return true;
   }
 
   @Override
@@ -20,12 +22,17 @@ public abstract class SingleInput implements Input {
     return 1;
   }
 
-  public Boolean connectToInput(OutputConnection output, Integer inputNumber) {
-    if (inputNumber == 0) {
-      firstInput = getInputConnection(output);
-      return true;
+  public Boolean connectToInput(Module module, Integer outputNumber, Integer inputNumber) {
+    final Optional<InputConnection> optionalInputConnection = getInputConnection(module, outputNumber);
+    if (!optionalInputConnection.isPresent()) {
+      return false;
     }
-    return false;
+    final InputConnection inputConnection = optionalInputConnection.get();
+    if (inputNumber == 0) {
+      return connectFirstInput(inputConnection);
+    } else {
+      return false;
+    }
   }
 
   public void disconnectFromInput(Integer inputNumber) {

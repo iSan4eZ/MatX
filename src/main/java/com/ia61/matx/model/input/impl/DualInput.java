@@ -2,9 +2,10 @@ package com.ia61.matx.model.input.impl;
 
 import com.ia61.matx.model.input.Input;
 import com.ia61.matx.model.input.InputConnection;
-import com.ia61.matx.model.output.OutputConnection;
-import com.ia61.matx.model.output.impl.SingleOutput;
+import com.ia61.matx.module.Module;
 import lombok.Getter;
+
+import java.util.Optional;
 
 @Getter
 public abstract class DualInput implements Input {
@@ -12,31 +13,34 @@ public abstract class DualInput implements Input {
   private InputConnection firstInput;
   private InputConnection secondInput;
 
-  public void connectFirstInput(SingleOutput singleOutput) {
-    firstInput = getConnection(singleOutput);
+  public Boolean connectFirstInput(InputConnection inputConnection) {
+    firstInput = inputConnection;
+    return true;
   }
 
-  public void connectSecondInput(SingleOutput singleOutput) {
-    secondInput = getConnection(singleOutput);
+  public Boolean connectSecondInput(InputConnection inputConnection) {
+    secondInput = inputConnection;
+    return true;
   }
 
   public int getInputCount() {
     return 2;
   }
 
-  public Boolean connectToInput(OutputConnection output, Integer inputNumber) {
-    final InputConnection inputConnection = getInputConnection(output);
+  public Boolean connectToInput(Module module, Integer outputNumber, Integer inputNumber) {
+    final Optional<InputConnection> optionalInputConnection = getInputConnection(module, outputNumber);
+    if (!optionalInputConnection.isPresent()) {
+      return false;
+    }
+    final InputConnection inputConnection = optionalInputConnection.get();
     switch (inputNumber) {
       case 0:
-        firstInput = inputConnection;
-        break;
+        return connectFirstInput(inputConnection);
       case 1:
-        secondInput = inputConnection;
-        break;
+        return connectSecondInput(inputConnection);
       default:
         return false;
     }
-    return true;
   }
 
   public void disconnectFromInput(Integer inputNumber) {
