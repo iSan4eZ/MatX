@@ -2,6 +2,7 @@ package com.ia61.matx.model.ui;
 
 import com.ia61.matx.service.GeneralProcessor;
 import javafx.concurrent.Service;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,6 +34,8 @@ public class RootLayout extends AnchorPane {
   TextField sim_time;
   @FXML
   ProgressBar progress_bar;
+  @FXML
+  Label result_simulation_label;
 
   private DragIcon mDragOverIcon = null;
 
@@ -340,8 +343,19 @@ public class RootLayout extends AnchorPane {
 
   private void handleSimulateButton() {
     simulate_btn.setOnMouseClicked((event) -> {
-      Service simulation = GeneralProcessor.getProgress();
+      Service<String> simulation = GeneralProcessor.getProgress();
+      simulation.reset();
       progress_bar.progressProperty().bind(simulation.progressProperty());
+      simulation.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+        @Override
+        public void handle(WorkerStateEvent t) {
+          result_simulation_label.setText(t.getSource().getValue().toString());
+        }});
+      simulation.setOnFailed(new EventHandler<WorkerStateEvent>() {
+        @Override
+        public void handle(WorkerStateEvent t) {
+          result_simulation_label.setText("Error occurred");
+        }});
       simulation.start();
     });
   }
