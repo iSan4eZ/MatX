@@ -1,5 +1,6 @@
 package com.ia61.matx.model.ui;
 
+import com.ia61.matx.service.GeneralProcessor;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Objects;
 
 public class RootLayout extends AnchorPane {
@@ -27,7 +27,7 @@ public class RootLayout extends AnchorPane {
   VBox left_pane;
 
   @FXML
-  Button monitorButton;
+  Button simulate_btn;
 
   private DragIcon mDragOverIcon = null;
 
@@ -77,7 +77,7 @@ public class RootLayout extends AnchorPane {
     }
 
     buildDragHandlers();
-    handleMonitorButton();
+    handleSimulateButton();
   }
 
   private void addDragDetection(DragIcon dragIcon) {
@@ -332,20 +332,9 @@ public class RootLayout extends AnchorPane {
     });
   }
 
-  private void handleMonitorButton() {
-    monitorButton.setOnMouseClicked((event) -> {
-//            windowService.buildWindow("LineChart.fxml");
-
-      FXMLLoader fxmlLoader = new FXMLLoader(
-          Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource("LineChart.fxml")));
-      Stage stage = new Stage();
-      try {
-        stage.setScene(new Scene(fxmlLoader.load(), 500, 500));
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      stage.show();
+  private void handleSimulateButton() {
+    simulate_btn.setOnMouseClicked((event) -> {
+      GeneralProcessor.simulate();
     });
-    buildDragHandlers();
   }
 }

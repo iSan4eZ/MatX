@@ -27,7 +27,7 @@
      </MenuBar>
      <ToolBar layoutY="23.0" prefHeight="17.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
        <items>
-         <Button fx:id="monitorButton" mnemonicParsing="false" text="Monitor" />
+         <Button fx:id="simulate_btn" mnemonicParsing="false" text="Simulate" />
        </items>
      </ToolBar>
       <SplitPane fx:id="base_pane" dividerPositions="0.5" layoutY="57.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="143.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="57.0">
