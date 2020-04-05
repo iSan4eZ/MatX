@@ -7,7 +7,7 @@ import com.ia61.matx.service.factory.impl.*;
 public enum ModuleIcon {
 
   CORR("Correlator", new CorrelatorFactory()),
-  INTERRAPTOR("CorrInterraptor", new CorrelatorInterraptorFactory()),
+  INTERRAPTOR("TactInterrupter", new TactInterrupterFactory()),
   MONITOR("Monitor", new SignalMonitorFactory()),
   NOISE("NoiseSignal", new NoiseSignalGeneratorFactor()),
   SIN("SinSignal", new SinSignalGeneratorFactory()),

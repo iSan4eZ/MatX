@@ -23,7 +23,7 @@ public class GeneralProcessor {
       long finalI = i;
       interrupterList.forEach(interrupter -> interrupter.interruptAll(finalI));
       monitorList.forEach(monitor -> monitor.gatherAllInputs(finalI));
-      decisionMakerList.forEach(decisionMaker -> decisionMaker.calculateSymbol(finalI));
+      decisionMakerList.forEach(decisionMaker -> decisionMaker.calculateSymbolValues(finalI));
     }
   }
 
