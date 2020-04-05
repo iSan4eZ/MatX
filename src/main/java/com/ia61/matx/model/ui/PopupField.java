@@ -1,11 +1,14 @@
 package com.ia61.matx.model.ui;
 
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.util.converter.FloatStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LongStringConverter;
 
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -53,9 +56,6 @@ public class PopupField<T> {
       case LABEL:
         control = new Label(getValue() != null ? getValue().toString() : "");
         break;
-      case GRAPH:
-        //TODO create LineChart
-        break;
       case INTEGER :
         control = new TextField();
         ((TextField) control).setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), (Integer) getValue(), integerFilter ));
@@ -79,7 +79,12 @@ public class PopupField<T> {
     }
   }
 
+  private LineChart<Number,Number> createLineChart() {
+    final NumberAxis xAxis = new NumberAxis();
+    final NumberAxis yAxis = new NumberAxis();
 
+    return new LineChart<>(xAxis, yAxis);
+  }
 
   public void setValue(Object value) {
     if (Objects.nonNull(valueSetter)) {
@@ -99,7 +104,13 @@ public class PopupField<T> {
     return control;
   }
 
-  public String getTitle() {
-    return title;
+  public HBox getHBox() {
+    HBox hBox;
+    if (fieldType == FieldType.GRAPH) {
+      hBox = new HBox(new Label(title), createLineChart());
+    } else {
+      hBox = new HBox(new Label(title), control);
+    }
+    return hBox;
   }
 }

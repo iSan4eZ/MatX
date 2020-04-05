@@ -46,7 +46,7 @@ public class PropertyWindow extends AnchorPane {
 
     this.popupFields = popupFields;
     List<HBox> rows = popupFields.stream()
-        .map( pf -> new HBox(new Label(pf.getTitle()), pf.getControl()))
+        .map(PopupField::getHBox)
         .collect(Collectors.toList());
 
     property_list.getChildren().addAll(rows);

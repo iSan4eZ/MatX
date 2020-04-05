@@ -37,7 +37,7 @@ public abstract class AbstractMonitorModule extends MultiInput implements Monito
   @Override
   public List<PopupField<?>> getPopupFields() {
     return Arrays.asList(
-        new PopupField<>(FieldType.INTEGER, this::getPullRate, this::setPullRate, "Частота дискретизации:"),
+        new PopupField<>(FieldType.LONG, this::getPullRate, this::setPullRate, "Частота дискретизации:"),
         new PopupField<>(FieldType.GRAPH, this::getResult, null, ""));
   }
 
