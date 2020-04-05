@@ -20,30 +20,25 @@ public class GeneralProcessor {
   private static Long simulationTime = 4000L;
   private static Long currentTime = 0L;
 
-  private static Service progress = new Service() {
+  private static Service<String> progress = new Service<String>() {
     @Override
-    protected Task createTask() {
-      return new Task() {
+    protected Task<String> createTask() {
+      return new Task<String>() {
         @Override
-        protected Object call() throws Exception {
-          simulate();
-          updateProgress(currentTime, simulationTime);
-          return null;
+        protected String call() throws Exception {
+          monitorList.forEach(Monitor::resetResult);
+          for (long i = 0L; i < simulationTime; i += 1) {
+            long finalI = i;
+            updateProgress(i, simulationTime);
+            interrupterList.forEach(interrupter -> interrupter.interruptAll(finalI));
+            monitorList.forEach(monitor -> monitor.gatherAllInputs(finalI));
+            decisionMakerList.forEach(decisionMaker -> decisionMaker.calculateSymbolValues(finalI));
+          }
+          return "Successful";
         }
       };
     }
   };
-
-  public static void simulate() {
-    monitorList.forEach(Monitor::resetResult);
-    for (long i = 0L; i < simulationTime; i += 1) {
-      long finalI = i;
-      currentTime = i;
-      interrupterList.forEach(interrupter -> interrupter.interruptAll(finalI));
-      monitorList.forEach(monitor -> monitor.gatherAllInputs(finalI));
-      decisionMakerList.forEach(decisionMaker -> decisionMaker.calculateSymbolValues(finalI));
-    }
-  }
 
   public static Long getSimulationTime() {
     return simulationTime;
@@ -53,7 +48,7 @@ public class GeneralProcessor {
     GeneralProcessor.simulationTime = simulationTime;
   }
 
-  public static Service getProgress() {
+  public static Service<String> getProgress() {
     return progress;
   }
 }

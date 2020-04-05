@@ -27,7 +27,7 @@
             <Label fx:id="title_bar" text="Label" />
           </children>
         </GridPane>
-        <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="66.0">
+        <HBox fx:id="node_content" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="66.0">
            <children>
              <VBox fx:id="inputs" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="25.0" />
              <AnchorPane prefHeight="200.0" prefWidth="200.0" />

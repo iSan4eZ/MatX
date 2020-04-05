@@ -24,6 +24,8 @@ public class PropertyWindow extends AnchorPane {
   @FXML
   private Button ok_btn;
 
+  private Stage mStage = null;
+
   private List<PopupField<?>> popupFields;
 
   public PropertyWindow(List<PopupField<?>> popupFields) {
@@ -35,24 +37,25 @@ public class PropertyWindow extends AnchorPane {
     fxmlLoader.setRoot(this);
     fxmlLoader.setController(this);
 
-    Stage stage = new Stage();
+    mStage = new Stage();
     try {
-      stage.setScene(new Scene(fxmlLoader.load()));
+      mStage.setScene(new Scene(fxmlLoader.load()));
     } catch (IOException e) {
       e.printStackTrace();
     }
 
     this.popupFields = popupFields;
     List<HBox> rows = popupFields.stream()
-        .map( pf -> new HBox(new Label(pf.getTitle()), pf.getControl()))
+        .map(PopupField::getHBox)
         .collect(Collectors.toList());
 
     property_list.getChildren().addAll(rows);
-    handleOkButton();
-    stage.show();
+    handleWindowButtons();
+    mStage.show();
   }
 
-  private void handleOkButton() {
+  private void handleWindowButtons() {
+    // 'OK' button
     ok_btn.setOnMouseClicked((event) -> {
       for (PopupField<?> pf : popupFields) {
         switch (pf.getFieldType()) {
@@ -62,6 +65,9 @@ public class PropertyWindow extends AnchorPane {
           case FLOAT:
             pf.setValue(Float.valueOf(((TextField)pf.getControl()).getText()));
             break;
+          case LONG:
+            pf.setValue(Long.valueOf(((TextField)pf.getControl()).getText()));
+            break;
           case BOOLEAN:
             pf.setValue(((CheckBox)pf.getControl()).isSelected());
             break;
@@ -70,6 +76,13 @@ public class PropertyWindow extends AnchorPane {
             break;
         }
       }
+
+      mStage.close();
     });
+
+    // 'Cancel' button
+    cancel_btn.setOnMouseClicked((event) ->
+      mStage.close()
+    );
   }
 }
