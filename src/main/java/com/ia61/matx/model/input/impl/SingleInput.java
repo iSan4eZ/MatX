@@ -37,6 +37,7 @@ public abstract class SingleInput implements Input {
 
   public void disconnectFromInput(Integer inputNumber) {
     if (inputNumber == 0) {
+      disconnectInternally(firstInput);
       firstInput = null;
     }
   }

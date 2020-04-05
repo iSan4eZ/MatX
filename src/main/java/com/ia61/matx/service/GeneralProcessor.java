@@ -27,6 +27,7 @@ public class GeneralProcessor {
         @Override
         protected String call() throws Exception {
           monitorList.forEach(Monitor::resetResult);
+          decisionMakerList.forEach(DecisionMaker::resetResult);
           for (long i = 0L; i < simulationTime; i += 1) {
             long finalI = i;
             updateProgress(i, simulationTime);

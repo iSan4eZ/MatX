@@ -8,6 +8,7 @@ import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.correlator.Correlator;
 import com.ia61.matx.module.impl.interrupter.AbstractInterrupter;
 import com.ia61.matx.module.impl.interrupter.Interruptable;
+import com.ia61.matx.util.ClassUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,7 @@ public class CorrelatorModule extends TripleInput implements Correlator, SingleO
   @Override
   public Boolean connectThirdInput(InputConnection inputConnection) {
     //Third input is for interrupter. Otherwise won't connect
-    if (AbstractInterrupter.class.isAssignableFrom(inputConnection.getConnectedModule().getClass())) {
+    if (ClassUtils.isAssignableFrom(inputConnection.getConnectedModule().getClass(), AbstractInterrupter.class)) {
       final AbstractInterrupter connectedInterrupter = (AbstractInterrupter) inputConnection.getConnectedModule();
       connectedInterrupter.addInterruptable(this);
       super.connectThirdInput(inputConnection);

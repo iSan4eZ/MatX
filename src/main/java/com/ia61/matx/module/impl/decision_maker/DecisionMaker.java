@@ -6,4 +6,6 @@ public interface DecisionMaker extends Module {
 
   void calculateSymbolValues(Long timestamp);
 
+  void resetResult();
+
 }

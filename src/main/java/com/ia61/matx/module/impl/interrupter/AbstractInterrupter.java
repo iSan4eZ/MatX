@@ -25,6 +25,10 @@ public abstract class AbstractInterrupter extends NoInput implements Interrupter
     interruptableModuleList.add(interruptableModule);
   }
 
+  public void removeInterruptable(Interruptable interruptableModule) {
+    interruptableModuleList.remove(interruptableModule);
+  }
+
   public void interruptAll(Long timestamp) {
     if (timestamp % (1000 / interruptFrequency) == 0) {
       interruptableModuleList.forEach(Interruptable::interrupt);

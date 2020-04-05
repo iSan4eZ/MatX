@@ -46,9 +46,11 @@ public abstract class DualInput implements Input {
   public void disconnectFromInput(Integer inputNumber) {
     switch (inputNumber) {
       case 0:
+        disconnectInternally(firstInput);
         firstInput = null;
         return;
       case 1:
+        disconnectInternally(secondInput);
         secondInput = null;
     }
   }

@@ -5,6 +5,7 @@ import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.decision_maker.AbstractDecisionMakerModule;
 import com.ia61.matx.module.impl.interrupter.AbstractInterrupter;
+import com.ia61.matx.util.ClassUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,13 +53,17 @@ public class DecisionMakerModule extends AbstractDecisionMakerModule {
   @Override
   public Boolean connectSecondInput(InputConnection inputConnection) {
     //Second input is for interrupter. Otherwise won't connect
-    if (AbstractInterrupter.class.isAssignableFrom(inputConnection.getConnectedModule().getClass())) {
+    if (ClassUtils.isAssignableFrom(inputConnection.getConnectedModule().getClass(), AbstractInterrupter.class)) {
       final AbstractInterrupter connectedInterrupter = (AbstractInterrupter) inputConnection.getConnectedModule();
       connectedInterrupter.addInterruptable(this);
       super.connectSecondInput(inputConnection);
       return true;
     }
     return false;
+  }
+
+  public void resetResult() {
+    setResultSymbol("");
   }
 
   @Override

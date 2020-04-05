@@ -2,7 +2,11 @@ package com.ia61.matx.model.input;
 
 import com.ia61.matx.model.output.OutputConnection;
 import com.ia61.matx.module.Module;
+import com.ia61.matx.module.impl.interrupter.AbstractInterrupter;
+import com.ia61.matx.module.impl.interrupter.Interruptable;
+import com.ia61.matx.util.ClassUtils;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public interface Input {
@@ -17,5 +21,15 @@ public interface Input {
   Boolean connectToInput(Module module, Integer outputNumber, Integer inputNumber);
 
   void disconnectFromInput(Integer inputNumber);
+
+  default void disconnectInternally(InputConnection inputConnection) {
+    if (Objects.isNull(inputConnection)) {
+      return;
+    }
+    final Module connectedModule = inputConnection.getConnectedModule();
+    if (ClassUtils.isAssignableFrom(connectedModule.getClass(), AbstractInterrupter.class)) {
+      ((AbstractInterrupter) connectedModule).removeInterruptable((Interruptable) this);
+    }
+  }
 
 }

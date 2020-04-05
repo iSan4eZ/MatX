@@ -62,15 +62,19 @@ public abstract class QuadInput implements Input {
   public void disconnectFromInput(Integer inputNumber) {
     switch (inputNumber) {
       case 0:
+        disconnectInternally(firstInput);
         firstInput = null;
         return;
       case 1:
+        disconnectInternally(secondInput);
         secondInput = null;
         return;
       case 2:
+        disconnectInternally(thirdInput);
         thirdInput = null;
         return;
       case 3:
+        disconnectInternally(fourthInput);
         fourthInput = null;
     }
   }

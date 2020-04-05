@@ -33,7 +33,9 @@ public abstract class MultiInput implements Input {
   }
 
   public void disconnectFromInput(Integer inputNumber) {
-    inputList.remove((int) inputNumber);
+    final InputConnection inputConnection = inputList.get(inputNumber);
+    disconnectInternally(inputConnection);
+    inputList.remove(inputConnection);
   }
 
 }
