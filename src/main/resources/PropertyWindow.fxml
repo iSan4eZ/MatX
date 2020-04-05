@@ -6,8 +6,8 @@
 
 <fx:root fx:id="root_pane" prefHeight="400.0" prefWidth="300.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox fx:id="property_list" prefHeight="300.0" prefWidth="300.0" />
-      <HBox alignment="BASELINE_RIGHT" prefHeight="40.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0">
+      <VBox fx:id="property_list" prefHeight="300.0"  prefWidth="300.0" />
+      <HBox alignment="BASELINE_RIGHT" prefHeight="40.0" minWidth="300.0" prefWidth="NaN" AnchorPane.bottomAnchor="0.0">
          <children>
             <Button fx:id="cancel_btn" mnemonicParsing="false" text="Cancel">
                <HBox.margin>

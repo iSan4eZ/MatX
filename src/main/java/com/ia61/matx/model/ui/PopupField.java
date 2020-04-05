@@ -86,11 +86,12 @@ public class PopupField<T> {
      NumberAxis xAxis = new NumberAxis();
      NumberAxis yAxis = new NumberAxis();
      LineChart<?, ?> lineChart = new LineChart<>(xAxis, yAxis);
+     lineChart.setMinWidth(600f);
 
      source.forEach(coordinatesMap -> {
          XYChart.Series series = new XYChart.Series();
          series.getData().addAll(coordinatesMap.entrySet().stream()
-                 .map(entry -> new XYChart.Data(entry.getKey().toString(), entry.getValue()))
+                 .map(entry -> new XYChart.Data(entry.getKey(), entry.getValue()))
                  .collect(Collectors.toList()));
          lineChart.getData().add(series);
      });
