@@ -35,11 +35,11 @@ public class ProportionalSignalSummatorModule extends DualInput implements Summa
   public List<PopupField<?>> getPopupFields() {
     return Arrays.asList(
         new PopupField<>(FieldType.LABEL, null, null,
-            "Коеффициенты для пропорционального сумматора (K1*S1(t) + K2*S2(t))"),
+            "Виконується сума сигналів, згідно з формулою: K1*S1(t) + K2*S2(t)."),
         new PopupField<>(FieldType.FLOAT, this::getFirstSignalCoefficient, this::setFirstSignalCoefficient,
-            "Коеффициент(K1) первого сигнала(S1(t)):"),
+            "Коефіціент(K1) першого сигналу - S1(t):"),
         new PopupField<>(FieldType.FLOAT, this::getSecondSignalCoefficient, this::setSecondSignalCoefficient,
-            "Коеффициент(K2) первого сигнала(S2(t)):")
+            "Коефіціент(K2) другого сигналу S2(t):")
     );
   }
 }

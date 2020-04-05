@@ -20,7 +20,7 @@ public class DigitalSignalGeneratorModule extends AbstractSignalGeneratorModule 
   private Float frequency = 3f;
   private Boolean repeatable = false;
 
-  private String symbol = "101";
+  private String symbol = "";
 
   @Override
   public Float getDataToFirstOutput(Long timestamp) {
@@ -40,10 +40,12 @@ public class DigitalSignalGeneratorModule extends AbstractSignalGeneratorModule 
   @Override
   public List<PopupField<?>> getPopupFields() {
     return Arrays.asList(
-        new PopupField<>(FieldType.INTEGER, this::getPeriodsPerSymbol, this::setPeriodsPerSymbol, "Периоды на символ:"),
+        new PopupField<>(FieldType.LABEL, null, null,
+            "Передає символ дискретним сигналом."),
+        new PopupField<>(FieldType.INTEGER, this::getPeriodsPerSymbol, this::setPeriodsPerSymbol, "Періоди на символ:"),
         new PopupField<>(FieldType.FLOAT, this::getFrequency, this::setFrequency, "Частота (Гц):"),
-        new PopupField<>(FieldType.FLOAT, this::getHeight, this::setHeight, "Амплитуда:"),
-        new PopupField<>(FieldType.BOOLEAN, this::getRepeatable, this::setRepeatable, "Цикличный:"),
+        new PopupField<>(FieldType.FLOAT, this::getHeight, this::setHeight, "Амплітуда:"),
+        new PopupField<>(FieldType.BOOLEAN, this::getRepeatable, this::setRepeatable, "Циклічний:"),
         new PopupField<>(FieldType.BINARY_STRING, this::getSymbol, this::setSymbol, "Символ:")
     );
   }
