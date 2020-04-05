@@ -17,7 +17,7 @@ public class DecisionMakerModule extends AbstractDecisionMakerModule {
 
   private Boolean showUnacceptedSymbols = false;
   private Float minimalAllowance = 0.4f;
-  private Long symbolsReceived = 0L;
+  private Long valuesReceived = 0L;
   private Float previousValue = 0f;
   private Long h = 0L;
 
@@ -28,21 +28,23 @@ public class DecisionMakerModule extends AbstractDecisionMakerModule {
     final Float currentValue = getFirstInput().requestData(timestamp);
     h += currentValue.compareTo(previousValue);
     previousValue = currentValue;
-    symbolsReceived++;
+    valuesReceived++;
   }
 
   //Symbol calculation
   @Override
   public void interrupt() {
-    final float resultValue = h / (float) symbolsReceived;
-    if (resultValue >= minimalAllowance) {
-      resultSymbol += "1";
-    } else if (resultValue <= minimalAllowance * (-1)) {
-      resultSymbol += "0";
-    } else if (showUnacceptedSymbols) {
-      resultSymbol += "?";
+    if (valuesReceived > 0) {
+      final float resultValue = h / (float) valuesReceived;
+      if (resultValue >= minimalAllowance) {
+        resultSymbol += "1";
+      } else if (resultValue <= minimalAllowance * (-1)) {
+        resultSymbol += "0";
+      } else if (showUnacceptedSymbols) {
+        resultSymbol += "?";
+      }
     }
-    symbolsReceived = 0L;
+    valuesReceived = 0L;
     previousValue = 0f;
     h = 0L;
   }
@@ -67,10 +69,10 @@ public class DecisionMakerModule extends AbstractDecisionMakerModule {
   @Override
   public List<PopupField<?>> getPopupFields() {
     return Arrays.asList(
-            new PopupField<>(FieldType.BOOLEAN, this::getShowUnacceptedSymbols, this::setShowUnacceptedSymbols,
-                    "Показывать '?' в случае, если символ не принят:"),
-            new PopupField<>(FieldType.FLOAT, this::getSymbolsReceived, this::setSymbolsReceived,
-                    "Нижний порог принятия символа (например, 0.4 для 40%):"),
-            new PopupField<>(FieldType.LABEL, this::getResultSymbol, null, "Принятый сигнал:"));
+        new PopupField<>(FieldType.BOOLEAN, this::getShowUnacceptedSymbols, this::setShowUnacceptedSymbols,
+            "Показывать '?' в случае, если символ не принят:"),
+        new PopupField<>(FieldType.FLOAT, this::getMinimalAllowance, this::setMinimalAllowance,
+            "Нижний порог принятия символа (например, 0.4 для 40%):"),
+        new PopupField<>(FieldType.LABEL, this::getResultSymbol, null, "Принятый сигнал:"));
   }
 }
