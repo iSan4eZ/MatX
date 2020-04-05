@@ -1,10 +1,8 @@
 package com.ia61.matx.service;
 
-import com.ia61.matx.model.output.Output;
+import com.ia61.matx.module.impl.decision_maker.DecisionMaker;
 import com.ia61.matx.module.impl.interrupter.Interrupter;
-import com.ia61.matx.module.impl.interrupter.impl.CorrelatorInterrupterModule;
 import com.ia61.matx.module.impl.monitor.Monitor;
-import com.ia61.matx.module.impl.signal_generator.SignalGenerator;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -15,6 +13,7 @@ public class GeneralProcessor {
 
   public static List<Monitor> monitorList = new ArrayList<>();
   public static List<Interrupter> interrupterList = new ArrayList<>();
+  public static List<DecisionMaker> decisionMakerList = new ArrayList<>();
 
   private static Long simulationTime = 4000L;
 
@@ -24,6 +23,7 @@ public class GeneralProcessor {
       long finalI = i;
       interrupterList.forEach(interrupter -> interrupter.interruptAll(finalI));
       monitorList.forEach(monitor -> monitor.gatherAllInputs(finalI));
+      decisionMakerList.forEach(decisionMaker -> decisionMaker.calculateSymbol(finalI));
     }
   }
 

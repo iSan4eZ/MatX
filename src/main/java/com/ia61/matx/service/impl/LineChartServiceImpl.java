@@ -22,85 +22,86 @@ import java.util.stream.Collectors;
 
 public class LineChartServiceImpl implements LineChartService {
 
-    @Override
-    public void buildChart(LineChart<?, ?> lineChart) {
+  @Override
+  public void buildChart(LineChart<?, ?> lineChart) {
 
-        GeneralProcessor.simulate();
+    GeneralProcessor.simulate();
 
-        if (GeneralProcessor.monitorList.size() != 0)
-            ((AbstractMonitorModule) GeneralProcessor.monitorList.get(0)).getResult()
+    if (GeneralProcessor.monitorList.size() != 0) {
+      ((AbstractMonitorModule) GeneralProcessor.monitorList.get(0)).getResult()
 
 //        overlayNoiseOverSinChart()
 //        correlateSinChart()
-            .forEach(coordinatesMap -> {
+          .forEach(coordinatesMap -> {
             XYChart.Series series = new XYChart.Series();
             series.getData().addAll(coordinatesMap.entrySet().stream()
                 .map(entry -> new XYChart.Data(entry.getKey().toString(), entry.getValue()))
                 .collect(Collectors.toList()));
             lineChart.getData().add(series);
-        });
-
+          });
     }
 
-    public List<SortedMap<Long, Float>> overlayNoiseOverSinChart() {
-        //Sin generator
-        SinSignalGeneratorModule sinSignalGeneratorModule = new SinSignalGeneratorModule();
-        sinSignalGeneratorModule.setFrequency(2f);
+  }
 
-        //Noise generator
-        NoiseSignalGeneratorModule noiseSignalGeneratorModule = new NoiseSignalGeneratorModule();
+  public List<SortedMap<Long, Float>> overlayNoiseOverSinChart() {
+    //Sin generator
+    SinSignalGeneratorModule sinSignalGeneratorModule = new SinSignalGeneratorModule();
+    sinSignalGeneratorModule.setFrequency(2f);
 
-        //Proportional summator
-        ProportionalSignalSummatorModule proportionalSignalSummatorModule = new ProportionalSignalSummatorModule();
-        proportionalSignalSummatorModule.setFirstSignalCoefficient(1f);
-        proportionalSignalSummatorModule.setSecondSignalCoefficient(0f);
+    //Noise generator
+    NoiseSignalGeneratorModule noiseSignalGeneratorModule = new NoiseSignalGeneratorModule();
 
-        proportionalSignalSummatorModule.connectFirstInput(sinSignalGeneratorModule);
-        proportionalSignalSummatorModule.connectSecondInput(noiseSignalGeneratorModule);
+    //Proportional summator
+    ProportionalSignalSummatorModule proportionalSignalSummatorModule = new ProportionalSignalSummatorModule();
+    proportionalSignalSummatorModule.setFirstSignalCoefficient(1f);
+    proportionalSignalSummatorModule.setSecondSignalCoefficient(0f);
 
-        //Monitor
-        SignalMonitor signalMonitor = new SignalMonitor();
-        signalMonitor.setPullRate(50L);
-        signalMonitor.connectInput(proportionalSignalSummatorModule);
+    proportionalSignalSummatorModule.connectToInput(sinSignalGeneratorModule, 0, 0);
+    proportionalSignalSummatorModule.connectToInput(noiseSignalGeneratorModule, 0, 1);
 
-        GeneralProcessor.simulate();
+    //Monitor
+    SignalMonitor signalMonitor = new SignalMonitor();
+    signalMonitor.setPullRate(50L);
+    signalMonitor.connectToInput(proportionalSignalSummatorModule, 0, 0);
 
-        return signalMonitor.getResult();
-    }
+    GeneralProcessor.simulate();
 
-    public List<SortedMap<Long, Float>> correlateSinChart() {
-        //Sin generator
-        SinSignalGeneratorModule sinSignalGeneratorModule = new SinSignalGeneratorModule();
-        sinSignalGeneratorModule.setFrequency(1f);
-        sinSignalGeneratorModule.setPeriodsPerSymbol(2);
-        sinSignalGeneratorModule.setSymbol("101");
+    return signalMonitor.getResult();
+  }
 
-        //Perfect sin generator
-        SinSignalGeneratorModule perfectSignalGeneratorModule = new SinSignalGeneratorModule();
-        perfectSignalGeneratorModule.setFrequency(3f);
-        perfectSignalGeneratorModule.setPeriodsPerSymbol(1);
-        perfectSignalGeneratorModule.setSymbol("1");
-        perfectSignalGeneratorModule.setRepeatable(true);
+  public List<SortedMap<Long, Float>> correlateSinChart() {
+    //Sin generator
+    SinSignalGeneratorModule sinSignalGeneratorModule = new SinSignalGeneratorModule();
+    sinSignalGeneratorModule.setFrequency(1f);
+    sinSignalGeneratorModule.setPeriodsPerSymbol(2);
+    sinSignalGeneratorModule.setSymbol("101");
 
-        //Correlator
-        CorrelatorModule correlatorModule = new CorrelatorModule();
-        correlatorModule.connectFirstInput(sinSignalGeneratorModule);
-        correlatorModule.connectSecondInput(perfectSignalGeneratorModule);
+    //Perfect sin generator
+    SinSignalGeneratorModule perfectSignalGeneratorModule = new SinSignalGeneratorModule();
+    perfectSignalGeneratorModule.setFrequency(3f);
+    perfectSignalGeneratorModule.setPeriodsPerSymbol(1);
+    perfectSignalGeneratorModule.setSymbol("1");
+    perfectSignalGeneratorModule.setRepeatable(true);
 
-        //Interrupter
-        CorrelatorInterrupterModule correlatorInterrupterModule = new CorrelatorInterrupterModule();
-        correlatorInterrupterModule.setInterruptFrequency(500L);
-        correlatorInterrupterModule.addInterruptable(correlatorModule);
+    //Interrupter
+    CorrelatorInterrupterModule correlatorInterrupterModule = new CorrelatorInterrupterModule();
+    correlatorInterrupterModule.setInterruptFrequency(500L);
 
-        //Monitor
-        SignalMonitor signalMonitor = new SignalMonitor();
-        signalMonitor.setPullRate(10L);
-        signalMonitor.connectInput(correlatorModule);
+    //Correlator
+    CorrelatorModule correlatorModule = new CorrelatorModule();
+    correlatorModule.connectToInput(sinSignalGeneratorModule, 0, 0);
+    correlatorModule.connectToInput(perfectSignalGeneratorModule, 0, 1);
+    correlatorModule.connectToInput(correlatorInterrupterModule, 0, 2);
+
+    //Monitor
+    SignalMonitor signalMonitor = new SignalMonitor();
+    signalMonitor.setPullRate(10L);
+    signalMonitor.connectToInput(correlatorModule, 0, 0);
 //        signalMonitor.connectInput(sinSignalGeneratorModule);
 //        signalMonitor.connectInput(perfectSignalGeneratorModule);
 
-        GeneralProcessor.simulate();
+    GeneralProcessor.simulate();
 
-        return signalMonitor.getResult();
-    }
+    return signalMonitor.getResult();
+  }
 }

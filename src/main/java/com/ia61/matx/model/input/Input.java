@@ -1,29 +1,20 @@
 package com.ia61.matx.model.input;
 
 import com.ia61.matx.model.output.OutputConnection;
-import com.ia61.matx.model.output.impl.SingleOutput;
+import com.ia61.matx.module.Module;
 
-import java.util.Objects;
+import java.util.Optional;
 
 public interface Input {
 
-  default InputConnection getConnection(SingleOutput singleOutput) {
-    if (Objects.nonNull(singleOutput)) {
-      return new InputConnection(singleOutput.getFirstOutput());
-    }
-    return null;
-  }
-
-  default InputConnection getInputConnection(OutputConnection outputConnection) {
-    if (Objects.nonNull(outputConnection)) {
-      return new InputConnection(outputConnection);
-    }
-    return null;
+  default Optional<InputConnection> getInputConnection(Module module, Integer outputNumber) {
+    final Optional<OutputConnection> output = module.getOutput(outputNumber);
+    return output.flatMap(outputConnection -> Optional.of(new InputConnection(module, outputConnection)));
   }
 
   int getInputCount();
 
-  Boolean connectToInput(OutputConnection output, Integer inputNumber);
+  Boolean connectToInput(Module module, Integer outputNumber, Integer inputNumber);
 
   void disconnectFromInput(Integer inputNumber);
 
