@@ -5,8 +5,6 @@ import com.ia61.matx.model.output.impl.SingleOutput;
 import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.module.impl.summator.Summator;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,18 +28,18 @@ public class ProportionalSignalSummatorModule extends DualInput implements Summa
 
   @Override
   public String getModuleName() {
-    return "Пропорциональный Сумматор Сигналов";
+    return "Пропорційний суматор сигналів";
   }
 
   @Override
   public List<PopupField<?>> getPopupFields() {
     return Arrays.asList(
         new PopupField<>(FieldType.LABEL, null, null,
-            "Коеффициенты для пропорционального сумматора (K1*S1(t) + K2*S2(t))"),
+            "Виконується сума сигналів, згідно з формулою: K1*S1(t) + K2*S2(t)."),
         new PopupField<>(FieldType.FLOAT, this::getFirstSignalCoefficient, this::setFirstSignalCoefficient,
-            "Коеффициент(K1) первого сигнала(S1(t)):"),
+            "Коефіціент(K1) першого сигналу - S1(t):"),
         new PopupField<>(FieldType.FLOAT, this::getSecondSignalCoefficient, this::setSecondSignalCoefficient,
-            "Коеффициент(K2) первого сигнала(S2(t)):")
+            "Коефіціент(K2) другого сигналу S2(t):")
     );
   }
 }

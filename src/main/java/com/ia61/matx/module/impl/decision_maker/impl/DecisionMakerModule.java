@@ -63,16 +63,19 @@ public class DecisionMakerModule extends AbstractDecisionMakerModule {
 
   @Override
   public String getModuleName() {
-    return "Модуль принятия решения";
+    return "Модуль прийняття рішення";
   }
 
   @Override
   public List<PopupField<?>> getPopupFields() {
     return Arrays.asList(
+        new PopupField<>(FieldType.LABEL, null, null,
+            "Приймає рішення щодо прийнятого символу на основі сигналу від модуля «Корелятор» та візуалізує прийняті символи. "
+                + "На другий (нижній) вхід потрібно підключати тактовий генератор."),
         new PopupField<>(FieldType.BOOLEAN, this::getShowUnacceptedSymbols, this::setShowUnacceptedSymbols,
-            "Показывать '?' в случае, если символ не принят:"),
+            "Відображати '?' у випадку, коли символ не прийнято:"),
         new PopupField<>(FieldType.FLOAT, this::getMinimalAllowance, this::setMinimalAllowance,
-            "Нижний порог принятия символа (например, 0.4 для 40%):"),
-        new PopupField<>(FieldType.LABEL, this::getResultSymbol, null, "Принятый сигнал:"));
+            "Нижня границя прийняття символу (наприклад, 0.4 для 40%):"),
+        new PopupField<>(FieldType.LABEL, this::getResultSymbol, null, "Прийнятий сигнал:"));
   }
 }

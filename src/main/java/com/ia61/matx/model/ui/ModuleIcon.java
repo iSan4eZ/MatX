@@ -6,15 +6,15 @@ import com.ia61.matx.service.factory.impl.*;
 
 public enum ModuleIcon {
 
-  CORR("Correlator", new CorrelatorFactory()),
-  INTERRUPTER("TactInterrupter", new TactInterrupterFactory()),
-  DECISIONMAKER("DecisionMaker", new DecisionMakerFactory()),
-  MONITOR("Monitor", new SignalMonitorFactory()),
-  NOISE("NoiseSignal", new NoiseSignalGeneratorFactor()),
-  SIN("SinSignal", new SinSignalGeneratorFactory()),
-  DIGITAL("DigitSignal", new DigitalSignalGeneratorFactory()),
-  PSUMM("PropSummator", new ProportionalSignalSummatorFactory()),
-  SSUM("SignalSummator", new SignalSummatorFactory());
+  CORR("КОР", new CorrelatorFactory()),
+  INTERRUPTER("ТГ", new TactInterrupterFactory()),
+  DECISIONMAKER("МПР", new DecisionMakerFactory()),
+  MONITOR("МОН", new SignalMonitorFactory()),
+  NOISE("ГЗ", new NoiseSignalGeneratorFactor()),
+  SIN("ГГС", new SinSignalGeneratorFactory()),
+  DIGITAL("ГДС", new DigitalSignalGeneratorFactory()),
+  PSUMM("ПСУМ", new ProportionalSignalSummatorFactory()),
+  SSUM("СУМ", new SignalSummatorFactory());
 
   private String name;
   private ModuleFactory factory;

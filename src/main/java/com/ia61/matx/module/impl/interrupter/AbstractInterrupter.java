@@ -2,14 +2,11 @@ package com.ia61.matx.module.impl.interrupter;
 
 import com.ia61.matx.model.input.impl.NoInput;
 import com.ia61.matx.model.output.impl.SingleOutput;
-import com.ia61.matx.model.ui.FieldType;
-import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.service.GeneralProcessor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Setter
@@ -32,14 +29,6 @@ public abstract class AbstractInterrupter extends NoInput implements Interrupter
     if (timestamp % (1000 / interruptFrequency) == 0) {
       interruptableModuleList.forEach(Interruptable::interrupt);
     }
-  }
-
-  @Override
-  public List<PopupField<?>> getPopupFields() {
-    return Collections.singletonList(
-        new PopupField<>(FieldType.INTEGER, this::getInterruptFrequency, this::setInterruptFrequency,
-            "Частота прерываний (Гц):")
-    );
   }
 
 }

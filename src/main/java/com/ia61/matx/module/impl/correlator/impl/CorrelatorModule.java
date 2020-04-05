@@ -38,7 +38,7 @@ public class CorrelatorModule extends TripleInput implements Correlator, SingleO
 
   @Override
   public String getModuleName() {
-    return "Коррелятор";
+    return "Корелятор";
   }
 
   @Override
@@ -50,8 +50,8 @@ public class CorrelatorModule extends TripleInput implements Correlator, SingleO
   public List<PopupField<?>> getPopupFields() {
     return Collections.singletonList(
         new PopupField<>(FieldType.LABEL, null, null,
-            "Коррелятор сигналов.\n"
-                + "Осуществляет накопительное суммирование (интегрирование) произведения двух входящих сигналов.\n"
-                + "Прерывается Тактовым Генератором, который надо подключить на третий (нижний) вход коррелятора."));
+            "Корелятор сигналів. "
+                + "Що виконує накопичувальне суммування (інтегрування) добутку двох вхідних сигналів. "
+                + "Переривається Тактовим генератором, котрий необхідно підключати на третій (нижній) вхід корелятора."));
   }
 }

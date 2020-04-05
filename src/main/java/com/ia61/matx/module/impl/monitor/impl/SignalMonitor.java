@@ -29,6 +29,6 @@ public class SignalMonitor extends AbstractMonitorModule {
 
   @Override
   public String getModuleName() {
-    return "Монитор";
+    return "Монітор";
   }
 }
