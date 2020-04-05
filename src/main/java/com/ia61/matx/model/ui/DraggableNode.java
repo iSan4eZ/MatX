@@ -10,12 +10,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +32,7 @@ public class DraggableNode extends AnchorPane {
 	@FXML private VBox outputs;
 	@FXML private Label title_bar;
 	@FXML private Label close_button;
+	@FXML private HBox node_content;
 
 	private EventHandler <MouseEvent> mLinkHandleDragDetected;
 	private EventHandler <DragEvent> mLinkHandleDragDropped;
@@ -309,6 +308,15 @@ public class DraggableNode extends AnchorPane {
 				}
 			}
 
+		});
+
+		//node content double click (show popup window)
+		node_content.setOnMouseClicked(event -> {
+			if (event.getButton().equals(MouseButton.PRIMARY)) {
+				if (event.getClickCount() == 2) {
+					new PropertyWindow(module.getPopupFields());
+				}
+			}
 		});
 
 		//drag detection for node dragging
