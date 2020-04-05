@@ -279,7 +279,6 @@ public class DraggableNode extends AnchorPane {
 			@Override
 			public void handle(MouseEvent event) {
 				AnchorPane parent  = (AnchorPane) self.getParent();
-				parent.getChildren().remove(self);
 
 				//iterate each link id connected to this node
 				//find it's corresponding component in the right-hand
@@ -287,10 +286,8 @@ public class DraggableNode extends AnchorPane {
 
 				//Note:  other nodes connected to these links are not being
 				//notified that the link has been removed.
-				for (ListIterator <String> iterId = mLinkIds.listIterator();
-						iterId.hasNext();) {
-
-					String id = iterId.next();
+				List<String> cloneLinks = (List<String>) ((ArrayList<String>) mLinkIds).clone();
+				for (String iterId : cloneLinks) {
 
 					for (ListIterator <Node> iterNode = parent.getChildren().listIterator();
 							iterNode.hasNext();) {
@@ -300,12 +297,34 @@ public class DraggableNode extends AnchorPane {
 						if (node.getId() == null)
 							continue;
 
-						if (node.getId().equals(id))
-							iterNode.remove();
-					}
+						if (node.getId().equals(iterId)) {
+							NodeLink nodeLink = (NodeLink) node;
 
-					iterId.remove();
+							for (Node n : parent.getChildren()) {
+
+								if (n.getId().equals(nodeLink.getSourceId())) {
+									DraggableNode sourceNode = (DraggableNode) n;
+									sourceNode.getTakenInputs().remove(nodeLink.getSourcePaneId());
+									sourceNode.removeLink(nodeLink.getId());
+								}
+								if (n.getId().equals(nodeLink.getTargetId())) {
+									DraggableNode targetNode = (DraggableNode) n;
+									int inputIndex = targetNode.getInputIndexNumber(nodeLink.getTargetPaneId());
+									targetNode.getTakenInputs().remove(nodeLink.getTargetPaneId());
+									targetNode.getModule().disconnectFromInput(inputIndex);
+									targetNode.removeLink(nodeLink.getId());
+								}
+
+							}
+							if (!node.getId().equals(self.getId())) {
+								iterNode.remove();
+							}
+						}
+					}
+					mLinkIds.remove(iterId);
 				}
+
+				parent.getChildren().remove(self);
 			}
 
 		});
