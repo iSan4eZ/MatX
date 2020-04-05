@@ -1,34 +1,45 @@
 package com.ia61.matx.module.impl.interrupter;
 
 import com.ia61.matx.model.input.impl.NoInput;
-import com.ia61.matx.model.output.impl.NoOutput;
+import com.ia61.matx.model.output.impl.SingleOutput;
+import com.ia61.matx.model.ui.FieldType;
+import com.ia61.matx.model.ui.PopupField;
 import com.ia61.matx.service.GeneralProcessor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Setter
 @Getter
-public abstract class AbstractInterrupter<MODULE extends Interruptable> extends NoInput implements Interrupter,
-    NoOutput {
+public abstract class AbstractInterrupter extends NoInput implements Interrupter,
+    SingleOutput {
 
   private Long interruptFrequency = 3L;
-  private List<MODULE> interruptableModuleList = new ArrayList<>();
+  private List<Interruptable> interruptableModuleList = new ArrayList<>();
 
   public AbstractInterrupter() {
     GeneralProcessor.interrupterList.add(this);
   }
 
-  public void addInterruptable(MODULE interruptableModule) {
+  public void addInterruptable(Interruptable interruptableModule) {
     interruptableModuleList.add(interruptableModule);
   }
 
   public void interruptAll(Long timestamp) {
     if (timestamp % (1000 / interruptFrequency) == 0) {
-      interruptableModuleList.forEach(MODULE::interrupt);
+      interruptableModuleList.forEach(Interruptable::interrupt);
     }
+  }
+
+  @Override
+  public List<PopupField<?>> getPopupFields() {
+    return Collections.singletonList(
+        new PopupField<>(FieldType.INTEGER, this::getInterruptFrequency, this::setInterruptFrequency,
+            "Частота прерываний (Гц):")
+    );
   }
 
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root fx:id="root_pane" prefHeight="400.0" prefWidth="300.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox fx:id="property_list" prefHeight="300.0" prefWidth="300.0" />
+      <HBox prefHeight="60.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0">
+         <children>
+            <Button fx:id="cancel_btn" mnemonicParsing="false" text="Cancel" />
+            <Button fx:id="ok_btn" mnemonicParsing="false" text="OK" />
+         </children>
+      </HBox>
+   </children>
+</fx:root>

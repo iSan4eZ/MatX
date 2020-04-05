@@ -1,6 +1,8 @@
 package com.ia61.matx;
 
 import com.ia61.matx.model.ui.*;
+import com.ia61.matx.module.Module;
+import com.ia61.matx.module.impl.signal_generator.impl.DigitalSignalGeneratorModule;
 import com.ia61.matx.service.LineChartService;
 import com.ia61.matx.service.NodeService;
 import com.ia61.matx.service.WindowService;
@@ -21,7 +23,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -45,6 +46,11 @@ public class Controller extends BorderPane implements Initializable {
     Button monitorButton;
 
     public static ClipboardContent clipboardContent = new ClipboardContent();
+
+    @FXML
+    Button new_proprty_btn;
+
+    Module module = new DigitalSignalGeneratorModule();
 
     private NodeService nodeService;
     private LineChartService lineChartService;
@@ -279,6 +285,12 @@ public class Controller extends BorderPane implements Initializable {
             }
 
             event.consume();
+        });
+    }
+
+    private void handlePropertyButton() {
+        new_proprty_btn.setOnMouseClicked((event) -> {
+            new PropertyWindow(module.getPopupFields());
         });
     }
 }
