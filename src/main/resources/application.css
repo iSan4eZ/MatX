@@ -56,3 +56,12 @@
 .icon-purple {
 	-fx-background-color: purple;
 }
+
+.start-btn{
+	-fx-shape: "M 250 450 L 250 150 L 500 300 Z";
+	-fx-background-color: green;
+}
+
+.start-btn:hover{
+	-fx-background-color: #00a700;
+}
