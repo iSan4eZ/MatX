@@ -1,5 +1,6 @@
 package com.ia61.matx.module.impl.decision_maker.impl;
 
+import com.ia61.matx.model.exception.ModuleException;
 import com.ia61.matx.model.input.InputConnection;
 import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
@@ -11,6 +12,7 @@ import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -26,6 +28,9 @@ public class DecisionMakerModule extends AbstractDecisionMakerModule {
 
   @Override
   public void calculateSymbolValues(Long timestamp) {
+    if (Objects.isNull(getFirstInput())) {
+      throw new ModuleException(this.getClass().getSimpleName() + " has one or more empty connections.", this);
+    }
     final Float currentValue = getFirstInput().requestData(timestamp);
     h += currentValue.compareTo(previousValue);
     previousValue = currentValue;

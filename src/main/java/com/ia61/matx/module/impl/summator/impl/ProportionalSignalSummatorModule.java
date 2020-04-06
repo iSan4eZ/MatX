@@ -1,5 +1,6 @@
 package com.ia61.matx.module.impl.summator.impl;
 
+import com.ia61.matx.model.exception.ModuleException;
 import com.ia61.matx.model.input.impl.DualInput;
 import com.ia61.matx.model.output.impl.SingleOutput;
 import com.ia61.matx.model.ui.FieldType;
@@ -10,6 +11,7 @@ import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -21,6 +23,9 @@ public class ProportionalSignalSummatorModule extends DualInput implements Summa
 
   @Override
   public Float getDataToFirstOutput(Long timestamp) {
+    if (Objects.isNull(getFirstInput()) || Objects.isNull(getSecondInput())) {
+      throw new ModuleException(this.getClass().getSimpleName() + " has one or more empty connections.", this);
+    }
     Float firstValue = getFirstInput().requestData(timestamp) * firstSignalCoefficient;
     Float secondValue = getSecondInput().requestData(timestamp) * secondSignalCoefficient;
     return firstValue + secondValue;

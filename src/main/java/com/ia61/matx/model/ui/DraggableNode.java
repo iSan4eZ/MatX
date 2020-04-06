@@ -1,6 +1,7 @@
 package com.ia61.matx.model.ui;
 
 import com.ia61.matx.module.Module;
+import com.ia61.matx.service.GeneralProcessor;
 import com.ia61.matx.util.Point2dSerial;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -320,7 +321,8 @@ public class DraggableNode extends AnchorPane {
                   DraggableNode targetNode = (DraggableNode) n;
                   int inputIndex = targetNode.getInputIndexNumber(nodeLink.getTargetPaneId());
                   targetNode.getTakenInputs().remove(nodeLink.getTargetPaneId());
-                  targetNode.getModule().disconnectFromInput(inputIndex);
+                  final Module targetModule = targetNode.getModule();
+                  targetModule.disconnectFromInput(inputIndex);
                   targetNode.removeLink(nodeLink.getId());
                 }
 
@@ -333,6 +335,7 @@ public class DraggableNode extends AnchorPane {
           mLinkIds.remove(iterId);
         }
 
+        GeneralProcessor.removeModule(self.getModule());
         parent.getChildren().remove(self);
       }
 
