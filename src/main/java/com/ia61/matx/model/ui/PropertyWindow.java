@@ -41,6 +41,8 @@ public class PropertyWindow extends AnchorPane {
     try {
       mStage.setScene(new Scene(fxmlLoader.load()));
       mStage.setTitle(title);
+      mStage.setMinHeight(340f);
+      mStage.setMinWidth(420f);
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -6,6 +6,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.util.converter.FloatStringConverter;
@@ -89,7 +90,9 @@ public class PopupField<T> {
      NumberAxis xAxis = new NumberAxis();
      NumberAxis yAxis = new NumberAxis();
      LineChart<?, ?> lineChart = new LineChart<>(xAxis, yAxis);
+     lineChart.setPrefWidth(3000f);
      lineChart.setMinWidth(640f);
+     lineChart.setPrefHeight(2000f);
 
      source.forEach(coordinatesMap -> {
          XYChart.Series series = new XYChart.Series();
@@ -122,18 +125,26 @@ public class PopupField<T> {
 
   public HBox getHBox() {
     HBox hBox;
-    if (fieldType == FieldType.GRAPH) {
-      hBox = new HBox(new Label(title), createLineChart());
-    } else {
-      // Configure label
-      Label label = new Label(title);
-      label.setFont(new Font("Arial", 15));
-      label.setWrapText(true);
-      label.setPadding(new Insets(0, 10, 0, 10));
 
+    // Configure label
+    Label label = new Label(title);
+    label.setFont(new Font("Arial", 15));
+    label.setWrapText(true);
+    label.setPadding(new Insets(0, 10, 0, 10));
+
+    // Handle case for large text
+    if (title.length() > 80) {
+        label.setMinHeight(40.0);
+    }
+
+    if (fieldType == FieldType.GRAPH) {
+      hBox = new HBox(label, createLineChart());
+    } else {
       hBox = new HBox(label, control);
     }
+
     hBox.setAlignment(Pos.CENTER_LEFT);
+
     return hBox;
   }
 }
