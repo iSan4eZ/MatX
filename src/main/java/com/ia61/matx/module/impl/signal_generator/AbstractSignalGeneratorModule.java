@@ -33,12 +33,12 @@ public abstract class AbstractSignalGeneratorModule extends NoInput implements S
     return coefficient;
   }
 
-  protected static Float getInterval(Float frequency, Integer periodsPerSymbol) {
-    return 1000f / frequency / periodsPerSymbol;
+  protected static Double getInterval(Float frequency, Integer periodsPerSymbol) {
+    return 1000.0 / (double) frequency / (double) periodsPerSymbol;
   }
 
-  protected static Float getHalfInterval(Float frequency, Integer periodsPerSymbol) {
-    return getInterval(frequency, periodsPerSymbol) / 2f;
+  protected static Double getHalfInterval(Float frequency, Integer periodsPerSymbol) {
+    return getInterval(frequency, periodsPerSymbol) / 2.0;
   }
 
 }

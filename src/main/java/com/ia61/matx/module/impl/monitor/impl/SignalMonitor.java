@@ -12,7 +12,7 @@ public class SignalMonitor extends AbstractMonitorModule {
 
   @Override
   public void gatherAllInputs(Long timestamp) {
-    if (timestamp % getPullRate() == 0) {
+    if (timestamp % (1000 / getPullRate()) == 0) {
       List<SortedMap<Long, Float>> result = getResult();
       while (result.size() < getInputList().size()) {
         result.add(new TreeMap<>());

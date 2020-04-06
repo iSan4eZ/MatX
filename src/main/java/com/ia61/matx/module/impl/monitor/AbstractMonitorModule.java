@@ -17,8 +17,8 @@ import java.util.SortedMap;
 @Setter
 public abstract class AbstractMonitorModule extends MultiInput implements Monitor, NoOutput {
 
-  //frequency of data points in milliseconds
-  private Long pullRate = 10L;
+  //frequency of data points in Hz
+  private Long pullRate = 100L;
 
   //cached result
   private List<SortedMap<Long, Float>> result = new ArrayList<>();
@@ -40,7 +40,7 @@ public abstract class AbstractMonitorModule extends MultiInput implements Monito
             "Відображає результат симуляції блоків, що до нього під’єднані. "
                 + "Відкрийте вікно повторно для оновлення графіку після симуляції."),
         new PopupField<>(FieldType.GRAPH, this::getResult, null, ""),
-        new PopupField<>(FieldType.LONG, this::getPullRate, this::setPullRate, "Частота дискретизації:"));
+        new PopupField<>(FieldType.LONG, this::getPullRate, this::setPullRate, "Частота дискретизації (Гц):"));
   }
 
 }

@@ -30,6 +30,7 @@ public class Main extends Application {
       Scene scene = new Scene(root,1680,920);
       scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
       primaryStage.setScene(scene);
+      primaryStage.setTitle("MatX");
       primaryStage.show();
       primaryStage.setOnCloseRequest(event -> Platform.exit());
 

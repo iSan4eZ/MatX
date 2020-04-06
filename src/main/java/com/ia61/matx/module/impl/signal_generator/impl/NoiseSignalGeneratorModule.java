@@ -15,7 +15,7 @@ import java.util.List;
 public class NoiseSignalGeneratorModule extends AbstractSignalGeneratorModule {
 
   public Float upperBound = 1f;
-  public Float lowerBound = 0f;
+  public Float lowerBound = -1f;
 
   @Override
   public Float getDataToFirstOutput(Long timestamp) {
