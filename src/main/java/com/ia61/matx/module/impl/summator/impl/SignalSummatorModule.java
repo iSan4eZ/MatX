@@ -26,6 +26,6 @@ public class SignalSummatorModule extends MultiInput implements Summator, Single
   @Override
   public List<PopupField<?>> getPopupFields() {
     return Collections.singletonList(
-        new PopupField<>(FieldType.LABEL, null, null, "Суммує сигнали за формулою: S1 + S2 + .... + Sn."));
+        new PopupField<>(FieldType.LABEL, null, null, "Сумує сигнали за формулою: S1 + S2 + .... + Sn."));
   }
 }

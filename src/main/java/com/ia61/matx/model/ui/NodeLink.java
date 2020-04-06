@@ -31,14 +31,15 @@ public class NodeLink extends AnchorPane {
 	private String targetId;
 	private String sourcePaneId;
 	private String targetPaneId;
+	private Boolean toDelete = false;
 
 	public NodeLink() {
-		
+
 		FXMLLoader fxmlLoader = new FXMLLoader(
 				getClass().getResource("/NodeLink.fxml")
-				);
-		
-		fxmlLoader.setRoot(this); 
+		);
+
+		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 
 		try { 
@@ -169,4 +170,11 @@ public class NodeLink extends AnchorPane {
 		return 0;
 	}
 
+	public Boolean getToDelete() {
+		return toDelete;
+	}
+
+	public void setToDelete(Boolean toDelete) {
+		this.toDelete = toDelete;
+	}
 }

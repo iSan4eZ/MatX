@@ -52,7 +52,7 @@ public class CorrelatorModule extends TripleInput implements Correlator, SingleO
     return Collections.singletonList(
         new PopupField<>(FieldType.LABEL, null, null,
             "Корелятор сигналів. "
-                + "Що виконує накопичувальне суммування (інтегрування) добутку двох вхідних сигналів. "
+                + "Що виконує накопичувальне сумування (інтегрування) добутку двох вхідних сигналів. "
                 + "Переривається Тактовим генератором, котрий необхідно підключати на третій (нижній) вхід корелятора."));
   }
 }
