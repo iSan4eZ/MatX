@@ -12,8 +12,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,26 +25,34 @@ import static com.ia61.matx.constants.UIConstants.DRAGGABLE_NODE_HEADER_HEIGHT;
 @Slf4j
 public class DraggableNode extends AnchorPane {
 
-	@FXML private AnchorPane root_pane;
-	@FXML private AnchorPane left_link_handle;
-	@FXML private AnchorPane right_link_handle;
-	@FXML private VBox inputs;
-	@FXML private VBox outputs;
-	@FXML private Label title_bar;
-	@FXML private Label close_button;
-	@FXML private HBox node_content;
+	@FXML
+	private AnchorPane root_pane;
+	@FXML
+	private AnchorPane left_link_handle;
+	@FXML
+	private AnchorPane right_link_handle;
+	@FXML
+	private VBox inputs;
+	@FXML
+	private VBox outputs;
+	@FXML
+	private Label title_bar;
+	@FXML
+	private Label close_button;
+	@FXML
+	private HBox node_content;
 
-	private EventHandler <MouseEvent> mLinkHandleDragDetected;
-	private EventHandler <DragEvent> mLinkHandleDragDropped;
-	private EventHandler <DragEvent> mContextLinkDragOver;
-	private EventHandler <DragEvent> mContextLinkDragDropped;
+	private EventHandler<MouseEvent> mLinkHandleDragDetected;
+	private EventHandler<DragEvent> mLinkHandleDragDropped;
+	private EventHandler<DragEvent> mContextLinkDragOver;
+	private EventHandler<DragEvent> mContextLinkDragDropped;
 
-	private EventHandler <DragEvent> mContextDragOver;
-	private EventHandler <DragEvent> mContextDragDropped;
+	private EventHandler<DragEvent> mContextDragOver;
+	private EventHandler<DragEvent> mContextDragDropped;
 
 	private DragIconType mType = null;
 
-	private Point2D mDragOffset = new Point2D (0.0, 0.0);
+	private Point2D mDragOffset = new Point2D(0.0, 0.0);
 
 	private final DraggableNode self;
 
@@ -55,8 +63,8 @@ public class DraggableNode extends AnchorPane {
 	private List<String> outputsList = new ArrayList<>();
 	private ModuleIcon moduleIcon;
 
-	private final List <String> mLinkIds = new ArrayList <String> ();
-	private List <String> takenInputs = new ArrayList<>();
+	private final List<String> mLinkIds = new ArrayList<String>();
+	private Map<String, List<String>> takenInputs = new HashMap<>();
 
 	public DraggableNode(ModuleIcon moduleIcon) {
 		setModule(moduleIcon.getModule());
@@ -106,13 +114,12 @@ public class DraggableNode extends AnchorPane {
 
 		setType(DragIconType.grey);
 
-
 		setLinkPanesAmount(inputs,
-                getModule().getInputCount()
-        );
+				getModule().getInputCount()
+		);
 		setLinkPanesAmount(outputs,
-                getModule().getOutputCount()
-        );
+				getModule().getOutputCount()
+		);
 		inputs.setVisible(true);
 		outputs.setVisible(true);
 	}
@@ -122,7 +129,7 @@ public class DraggableNode extends AnchorPane {
 		anchorPane.setId(UUID.randomUUID().toString());
 		anchorPane.setMinHeight(paneHeight);
 		anchorPane.setMinWidth(linkPanes.getPrefWidth());
-		Circle c =new Circle();
+		Circle c = new Circle();
 		if (linkPanes.getId().contains("inputs")) {
 			anchorPane.getStyleClass().add("left-link-handle");
 			inputsList.add(anchorPane.getId());
@@ -131,10 +138,9 @@ public class DraggableNode extends AnchorPane {
 			outputsList.add(anchorPane.getId());
 			anchorPane.getStyleClass().add("right-link-handle");
 		}
-        c.setRadius(4.0f);
-        c.setLayoutY(paneHeight / 2);
-        anchorPane.getChildren().add(c);
-
+		c.setRadius(4.0f);
+		c.setLayoutY(paneHeight / 2);
+		anchorPane.getChildren().add(c);
 
 		anchorPane.setOnDragDetected(mLinkHandleDragDetected);
 		anchorPane.setOnDragDropped(mLinkHandleDragDropped);
@@ -145,8 +151,8 @@ public class DraggableNode extends AnchorPane {
 
 	private void setLinkPanesAmount(VBox linkPanes, int portsAmount) {
 		double paneHeight = linkPanes.getPrefHeight();
-		if(portsAmount > 0) {
-            paneHeight = paneHeight / portsAmount;
+		if (portsAmount > 0) {
+			paneHeight = paneHeight / portsAmount;
 			for (int i = 0; i < portsAmount; i++) {
 				addLinkPanel(linkPanes, paneHeight);
 			}
@@ -176,13 +182,13 @@ public class DraggableNode extends AnchorPane {
 		return module;
 	}
 
-	public void relocateToPoint (Point2D p) {
+	public void relocateToPoint(Point2D p) {
 
 		//relocates the object to a point that has been converted to
 		//scene coordinates
 		Point2D localCoords = getParent().sceneToLocal(p);
 
-		relocate (
+		relocate(
 				(int) (localCoords.getX() - mDragOffset.getX()),
 				(int) (localCoords.getY() - mDragOffset.getY())
 		);
@@ -193,15 +199,17 @@ public class DraggableNode extends AnchorPane {
 	}
 
 	public void setTitle_bar(String title_bar) {
-		if(this.title_bar == null) {
+		if (this.title_bar == null) {
 			this.title_bar = new Label();
 		}
 		this.title_bar.setText(title_bar);
 	}
 
-	public DragIconType getType () { return mType; }
+	public DragIconType getType() {
+		return mType;
+	}
 
-	public void setType (DragIconType type) {
+	public void setType(DragIconType type) {
 
 		mType = type;
 
@@ -245,21 +253,21 @@ public class DraggableNode extends AnchorPane {
 
 	public void buildNodeDragHandlers() {
 
-		mContextDragOver = new EventHandler <DragEvent>() {
+		mContextDragOver = new EventHandler<DragEvent>() {
 
 			//dragover to handle node dragging in the right pane view
 			@Override
 			public void handle(DragEvent event) {
 
 				event.acceptTransferModes(TransferMode.ANY);
-				relocateToPoint(new Point2dSerial( event.getSceneX(), event.getSceneY()));
+				relocateToPoint(new Point2dSerial(event.getSceneX(), event.getSceneY()));
 
 				event.consume();
 			}
 		};
 
 		//dragdrop for node dragging
-		mContextDragDropped = new EventHandler <DragEvent> () {
+		mContextDragDropped = new EventHandler<DragEvent>() {
 
 			@Override
 			public void handle(DragEvent event) {
@@ -274,11 +282,11 @@ public class DraggableNode extends AnchorPane {
 		};
 
 		//close button click
-		close_button.setOnMouseClicked( new EventHandler <MouseEvent> () {
+		close_button.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
-				AnchorPane parent  = (AnchorPane) self.getParent();
+				AnchorPane parent = (AnchorPane) self.getParent();
 
 				//iterate each link id connected to this node
 				//find it's corresponding component in the right-hand
@@ -289,13 +297,14 @@ public class DraggableNode extends AnchorPane {
 				List<String> cloneLinks = (List<String>) ((ArrayList<String>) mLinkIds).clone();
 				for (String iterId : cloneLinks) {
 
-					for (ListIterator <Node> iterNode = parent.getChildren().listIterator();
-							iterNode.hasNext();) {
+					for (ListIterator<Node> iterNode = parent.getChildren().listIterator();
+							iterNode.hasNext(); ) {
 
 						Node node = iterNode.next();
 
-						if (node.getId() == null)
+						if (node.getId() == null) {
 							continue;
+						}
 
 						if (node.getId().equals(iterId)) {
 							NodeLink nodeLink = (NodeLink) node;
@@ -339,7 +348,7 @@ public class DraggableNode extends AnchorPane {
 		});
 
 		//drag detection for node dragging
-		title_bar.setOnDragDetected ( new EventHandler <MouseEvent> () {
+		title_bar.setOnDragDetected(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
@@ -347,8 +356,8 @@ public class DraggableNode extends AnchorPane {
 				getParent().setOnDragOver(null);
 				getParent().setOnDragDropped(null);
 
-				getParent().setOnDragOver (mContextDragOver);
-				getParent().setOnDragDropped (mContextDragDropped);
+				getParent().setOnDragOver(mContextDragOver);
+				getParent().setOnDragDropped(mContextDragDropped);
 
 				//begin drag ops
 				mDragOffset = new Point2D(event.getX(), event.getY());
@@ -363,7 +372,7 @@ public class DraggableNode extends AnchorPane {
 //					container.addData ("type", mType.toString());
 				content.put(DragContainer.AddNode, container);
 
-				startDragAndDrop (TransferMode.ANY).setContent(content);
+				startDragAndDrop(TransferMode.ANY).setContent(content);
 
 				event.consume();
 			}
@@ -373,7 +382,7 @@ public class DraggableNode extends AnchorPane {
 
 	private void buildLinkDragHandlers() {
 
-		mLinkHandleDragDetected = new EventHandler <MouseEvent> () {
+		mLinkHandleDragDetected = new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
@@ -392,7 +401,8 @@ public class DraggableNode extends AnchorPane {
 						//Set up user-draggable link
 						right_pane.getChildren().add(0, mDragLink);
 						double x = getLayoutX() + getPrefWidth() - 5;
-						double y = getLayoutY() + child.getLayoutY() + DRAGGABLE_NODE_HEADER_HEIGHT + (outputs.getPrefHeight() / outputs.getChildren().size()) / 2;
+						double y = getLayoutY() + child.getLayoutY() + DRAGGABLE_NODE_HEADER_HEIGHT
+								+ (outputs.getPrefHeight() / outputs.getChildren().size()) / 2;
 						mDragLink.setStart(new Point2D(x, y));
 					}
 				}
@@ -407,13 +417,13 @@ public class DraggableNode extends AnchorPane {
 
 				content.put(DragContainer.AddLink, container);
 
-				startDragAndDrop (TransferMode.ANY).setContent(content);
+				startDragAndDrop(TransferMode.ANY).setContent(content);
 
 				event.consume();
 			}
 		};
 
-		mLinkHandleDragDropped = new EventHandler <DragEvent> () {
+		mLinkHandleDragDropped = new EventHandler<DragEvent>() {
 
 			@Override
 			public void handle(DragEvent event) {
@@ -426,8 +436,9 @@ public class DraggableNode extends AnchorPane {
 				DragContainer container =
 						(DragContainer) event.getDragboard().getContent(DragContainer.AddLink);
 
-				if (container == null)
+				if (container == null) {
 					return;
+				}
 
 				//hide the draggable NodeLink and remove it from the right-hand AnchorPane's children
 				mDragLink.setVisible(false);
@@ -450,15 +461,16 @@ public class DraggableNode extends AnchorPane {
 			}
 		};
 
-		mContextLinkDragOver = new EventHandler <DragEvent> () {
+		mContextLinkDragOver = new EventHandler<DragEvent>() {
 
 			@Override
 			public void handle(DragEvent event) {
 				event.acceptTransferModes(TransferMode.ANY);
 
 				//Relocate end of user-draggable link
-				if (!mDragLink.isVisible())
+				if (!mDragLink.isVisible()) {
 					mDragLink.setVisible(true);
+				}
 
 				mDragLink.setEnd(new Point2D(event.getX(), event.getY()));
 
@@ -468,7 +480,7 @@ public class DraggableNode extends AnchorPane {
 		};
 
 		//drop event for link creation
-		mContextLinkDragDropped = new EventHandler <DragEvent> () {
+		mContextLinkDragDropped = new EventHandler<DragEvent>() {
 
 			@Override
 			public void handle(DragEvent event) {
@@ -511,10 +523,10 @@ public class DraggableNode extends AnchorPane {
 		return findIndexNumber(outputsList, paneID);
 	}
 
-	private int findIndexNumber(List <String> elements, String paneID) {
+	private int findIndexNumber(List<String> elements, String paneID) {
 		int index = 0;
 		for (String s : elements) {
-			if(s.equals(paneID)) {
+			if (s.equals(paneID)) {
 				return index;
 			}
 			index += 1;
@@ -530,11 +542,18 @@ public class DraggableNode extends AnchorPane {
 		this.moduleIcon = moduleIcon;
 	}
 
-	public void addTakenInput(String inputID) {
-		takenInputs.add(inputID);
+	public void addTakenInput(String inputID, String outputId) {
+		takenInputs.putIfAbsent(inputID, new ArrayList<>());
+
+		final List<String> outputs = takenInputs.get(inputID);
+		if (module.getInputCount() > 0) {
+			outputs.add(outputId);
+		} else if (module.getInputCount() < 0) {
+			outputs.add(0, outputId);
+		}
 	}
 
-	public List<String> getTakenInputs() {
+	public Map<String, List<String>> getTakenInputs() {
 		return takenInputs;
 	}
 }

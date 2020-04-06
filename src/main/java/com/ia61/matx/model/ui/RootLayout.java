@@ -8,17 +8,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.CubicCurve;
-import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public class RootLayout extends AnchorPane {
@@ -142,10 +140,19 @@ public class RootLayout extends AnchorPane {
             }
             if (n.getId().equals(nl.getTargetId())) {
               DraggableNode targetNode = (DraggableNode) n;
-              int inputIndex = targetNode.getInputIndexNumber(nl.getTargetPaneId());
-              targetNode.getTakenInputs().remove(nl.getTargetPaneId());
-              targetNode.getModule().disconnectFromInput(inputIndex);
-              targetNode.removeLink(nl.getId());
+              final String targetPaneId = nodeLink.getTargetPaneId();
+              int inputIndex = targetNode.getInputIndexNumber(targetPaneId);
+              final String sourcePaneId = nodeLink.getSourcePaneId();
+
+              final List<String> outputList = targetNode.getTakenInputs().get(targetPaneId);
+              final int index = outputList.indexOf(sourcePaneId);
+              outputList.remove(sourcePaneId);
+              if (outputList.isEmpty()) {
+                targetNode.getTakenInputs().remove(targetPaneId);
+              }
+
+              targetNode.getModule().disconnectFromInput(index);
+              targetNode.removeLink(nodeLink.getId());
             }
 
           }
@@ -323,17 +330,17 @@ public class RootLayout extends AnchorPane {
 
                 int inputCount = target.getModule().getInputCount();
 
-                if((inputCount > 0 && !target.getTakenInputs().contains(targetPane.getId()))
-                    // check if target has free input
-                    || inputCount < 0 ) {
-                  //UI is ready for connecting, now trying to connect on backend
-                  Boolean connected = target.getModule().connectToInput(
-                      source.getModule(),
-                      source.getOutputIndexNumber(sourcePane.getId()),
-                      target.getInputIndexNumber(targetPane.getId()));
-                  //Check if modules are connected on backend and perform linking
-                  if (connected) {
-                    addLinkDeleteHandler(link);
+              if ((inputCount > 0 && !target.getTakenInputs().containsKey(targetPane.getId()))
+                  // check if target has free input
+                  || inputCount < 0) {
+                //UI is ready for connecting, now trying to connect on backend
+                Boolean connected = target.getModule().connectToInput(
+                    source.getModule(),
+                    source.getOutputIndexNumber(sourcePane.getId()),
+                    target.getInputIndexNumber(targetPane.getId()));
+                //Check if modules are connected on backend and perform linking
+                if (connected) {
+                  addLinkDeleteHandler(link);
                     right_pane.getChildren().add(0, link);
                     link.bindEnds(source, target, sourcePane, targetPane);
                   }
