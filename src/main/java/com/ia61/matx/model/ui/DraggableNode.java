@@ -333,7 +333,7 @@ public class DraggableNode extends AnchorPane {
 		node_content.setOnMouseClicked(event -> {
 			if (event.getButton().equals(MouseButton.PRIMARY)) {
 				if (event.getClickCount() == 2) {
-					new PropertyWindow(module.getPopupFields());
+					new PropertyWindow(module.getModuleName(), module.getPopupFields());
 				}
 			}
 		});
