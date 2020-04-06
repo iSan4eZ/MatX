@@ -64,6 +64,9 @@ public class DecisionMakerModule extends AbstractDecisionMakerModule {
 
   public void resetResult() {
     setResultSymbol("");
+    valuesReceived = 0L;
+    previousValue = 0f;
+    h = 0L;
   }
 
   @Override
