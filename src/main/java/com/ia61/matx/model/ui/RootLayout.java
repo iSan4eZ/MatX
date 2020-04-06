@@ -370,7 +370,7 @@ public class RootLayout extends AnchorPane {
       simulation.setOnFailed(new EventHandler<WorkerStateEvent>() {
         @Override
         public void handle(WorkerStateEvent t) {
-          result_simulation_label.setText("Error occurred");
+          result_simulation_label.setText("Виникла помилка");
         }
       });
       simulation.start();
@@ -380,7 +380,7 @@ public class RootLayout extends AnchorPane {
   private void handleSimTimeField() {
     UnaryOperator<TextFormatter.Change> integerFilter = c -> {
       String text = c.getControlNewText();
-      if (text.matches("-?([1-9][0-9]*)?")) {
+      if (text.matches("([1-9][0-9]*)?")) {
         return c;
       }
       return null;

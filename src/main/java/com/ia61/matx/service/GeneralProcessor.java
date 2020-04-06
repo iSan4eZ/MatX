@@ -35,7 +35,7 @@ public class GeneralProcessor {
             monitorList.forEach(monitor -> monitor.gatherAllInputs(finalI));
             decisionMakerList.forEach(decisionMaker -> decisionMaker.calculateSymbolValues(finalI));
           }
-          return "Successful";
+          return "Симуляція пройшла успішно";
         }
       };
     }
