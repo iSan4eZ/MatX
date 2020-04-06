@@ -431,7 +431,9 @@ public class DraggableNode extends AnchorPane {
 
 				//hide the draggable NodeLink and remove it from the right-hand AnchorPane's children
 				mDragLink.setVisible(false);
-				right_pane.getChildren().remove(0);
+				if (!(right_pane.getChildren().get(0) instanceof DraggableNode)) {
+					right_pane.getChildren().remove(0);
+				}
 
 				AnchorPane targetPane = (AnchorPane) event.getSource();
 
