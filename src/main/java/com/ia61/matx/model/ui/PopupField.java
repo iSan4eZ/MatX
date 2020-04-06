@@ -1,10 +1,13 @@
 package com.ia61.matx.model.ui;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 import javafx.util.converter.FloatStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LongStringConverter;
@@ -86,7 +89,7 @@ public class PopupField<T> {
      NumberAxis xAxis = new NumberAxis();
      NumberAxis yAxis = new NumberAxis();
      LineChart<?, ?> lineChart = new LineChart<>(xAxis, yAxis);
-     lineChart.setMinWidth(600f);
+     lineChart.setMinWidth(640f);
 
      source.forEach(coordinatesMap -> {
          XYChart.Series series = new XYChart.Series();
@@ -122,8 +125,15 @@ public class PopupField<T> {
     if (fieldType == FieldType.GRAPH) {
       hBox = new HBox(new Label(title), createLineChart());
     } else {
-      hBox = new HBox(new Label(title), control);
+      // Configure label
+      Label label = new Label(title);
+      label.setFont(new Font("Arial", 15));
+      label.setWrapText(true);
+      label.setPadding(new Insets(0, 10, 0, 10));
+
+      hBox = new HBox(label, control);
     }
+    hBox.setAlignment(Pos.CENTER_LEFT);
     return hBox;
   }
 }

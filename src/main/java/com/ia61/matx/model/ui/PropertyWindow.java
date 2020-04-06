@@ -28,7 +28,7 @@ public class PropertyWindow extends AnchorPane {
 
   private List<PopupField<?>> popupFields;
 
-  public PropertyWindow(List<PopupField<?>> popupFields) {
+  public PropertyWindow(String title, List<PopupField<?>> popupFields) {
 
     FXMLLoader fxmlLoader = new FXMLLoader(
         getClass().getResource("/PropertyWindow.fxml")
@@ -40,6 +40,7 @@ public class PropertyWindow extends AnchorPane {
     mStage = new Stage();
     try {
       mStage.setScene(new Scene(fxmlLoader.load()));
+      mStage.setTitle(title);
     } catch (IOException e) {
       e.printStackTrace();
     }
