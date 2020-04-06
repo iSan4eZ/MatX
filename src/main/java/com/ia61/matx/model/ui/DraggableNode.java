@@ -491,12 +491,12 @@ public class DraggableNode extends AnchorPane {
         getParent().setOnDragOver(null);
         getParent().setOnDragDropped(null);
 
-        //TODO remove if works fine
         //hide the draggable NodeLink and remove it from the right-hand AnchorPane's children
-//        mDragLink.setVisible(false);
-//        if (!(right_pane.getChildren().get(0) instanceof DraggableNode)) {
-//          right_pane.getChildren().remove(0);
-//        }
+        mDragLink.setVisible(false);
+        final Node newChildNode = right_pane.getChildren().get(0);
+        if (!(newChildNode instanceof DraggableNode) && ((NodeLink) newChildNode).getToDelete()) {
+          right_pane.getChildren().remove(newChildNode);
+        }
 
         event.setDropCompleted(true);
         event.consume();
