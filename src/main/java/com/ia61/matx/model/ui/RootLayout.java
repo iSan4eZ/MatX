@@ -141,11 +141,12 @@ public class RootLayout extends AnchorPane {
             if (n.getId().equals(nl.getTargetId())) {
               DraggableNode targetNode = (DraggableNode) n;
               final String targetPaneId = nodeLink.getTargetPaneId();
-              int inputIndex = targetNode.getInputIndexNumber(targetPaneId);
               final String sourcePaneId = nodeLink.getSourcePaneId();
 
               final List<String> outputList = targetNode.getTakenInputs().get(targetPaneId);
-              final int index = outputList.indexOf(sourcePaneId);
+              final int index = targetNode.getModule().getInputCount() > 0
+                  ? targetNode.getInputIndexNumber(targetPaneId)
+                  : outputList.indexOf(sourcePaneId);
               outputList.remove(sourcePaneId);
               if (outputList.isEmpty()) {
                 targetNode.getTakenInputs().remove(targetPaneId);
@@ -254,15 +255,15 @@ public class RootLayout extends AnchorPane {
 //									);
 //						}
 //						else {
-						ModuleIcon moduleIcon = container.getValue("type");
-						DraggableNode node = new DraggableNode(moduleIcon);
-						right_pane.getChildren().add(node);
+            ModuleIcon moduleIcon = container.getValue("type");
+            DraggableNode node = new DraggableNode(moduleIcon);
+            right_pane.getChildren().add(node);
 
-						Point2D cursorPoint = container.getValue("scene_coords");
+            Point2D cursorPoint = container.getValue("scene_coords");
 
-						node.relocateToPoint(
-								new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
-						);
+            node.relocateToPoint(
+                new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
+            );
 //						}
           }
         }
@@ -289,46 +290,46 @@ public class RootLayout extends AnchorPane {
 
           if (sourceId != null && targetId != null) {
 
-						DraggableNode source = null;
-						DraggableNode target = null;
-						AnchorPane sourcePane = null;
-						AnchorPane targetPane = null;
-						for (Node n: right_pane.getChildren()) {
-							if (n instanceof DraggableNode) {
-								for (Node child : ((DraggableNode) n).getInputs().getChildren()) {
-									if(child.getId() == null) {
-										continue;
-									}
-									if (targetId.equals(child.getId())) {
-										target = (DraggableNode) n;
-										targetPane = (AnchorPane) child;
-									}
-									if(sourceId.equals(child.getId())) {
-										source = (DraggableNode) n;
-										sourcePane = (AnchorPane) child;
-									}
-								}
+            DraggableNode source = null;
+            DraggableNode target = null;
+            AnchorPane sourcePane = null;
+            AnchorPane targetPane = null;
+            for (Node n : right_pane.getChildren()) {
+              if (n instanceof DraggableNode) {
+                for (Node child : ((DraggableNode) n).getInputs().getChildren()) {
+                  if (child.getId() == null) {
+                    continue;
+                  }
+                  if (targetId.equals(child.getId())) {
+                    target = (DraggableNode) n;
+                    targetPane = (AnchorPane) child;
+                  }
+                  if (sourceId.equals(child.getId())) {
+                    source = (DraggableNode) n;
+                    sourcePane = (AnchorPane) child;
+                  }
+                }
 
-								for (Node child : ((DraggableNode) n).getOutputs().getChildren()) {
-									if(child.getId() == null) {
-										continue;
-									}
-									if (targetId.equals(child.getId())) {
-										target = (DraggableNode) n;
-										targetPane = (AnchorPane) child;
-									}
-									if(sourceId.equals(child.getId())) {
-										source = (DraggableNode) n;
-										sourcePane = (AnchorPane) child;
-									}
-								}
-							}
+                for (Node child : ((DraggableNode) n).getOutputs().getChildren()) {
+                  if (child.getId() == null) {
+                    continue;
+                  }
+                  if (targetId.equals(child.getId())) {
+                    target = (DraggableNode) n;
+                    targetPane = (AnchorPane) child;
+                  }
+                  if (sourceId.equals(child.getId())) {
+                    source = (DraggableNode) n;
+                    sourcePane = (AnchorPane) child;
+                  }
+                }
+              }
             }
 
             if (source != null && target != null) {
-                NodeLink link = new NodeLink();
+              NodeLink link = new NodeLink();
 
-                int inputCount = target.getModule().getInputCount();
+              int inputCount = target.getModule().getInputCount();
 
               if ((inputCount > 0 && !target.getTakenInputs().containsKey(targetPane.getId()))
                   // check if target has free input
@@ -341,14 +342,14 @@ public class RootLayout extends AnchorPane {
                 //Check if modules are connected on backend and perform linking
                 if (connected) {
                   addLinkDeleteHandler(link);
-                    right_pane.getChildren().add(0, link);
-                    link.bindEnds(source, target, sourcePane, targetPane);
-                  }
+                  right_pane.getChildren().add(0, link);
+                  link.bindEnds(source, target, sourcePane, targetPane);
                 }
-							}
-						}
+              }
+            }
+          }
 
-				}
+        }
 
         event.consume();
       }
@@ -364,12 +365,14 @@ public class RootLayout extends AnchorPane {
         @Override
         public void handle(WorkerStateEvent t) {
           result_simulation_label.setText(t.getSource().getValue().toString());
-        }});
+        }
+      });
       simulation.setOnFailed(new EventHandler<WorkerStateEvent>() {
         @Override
         public void handle(WorkerStateEvent t) {
           result_simulation_label.setText("Error occurred");
-        }});
+        }
+      });
       simulation.start();
     });
   }
@@ -382,8 +385,11 @@ public class RootLayout extends AnchorPane {
       }
       return null;
     };
-    sim_time.setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), Math.toIntExact(GeneralProcessor.getSimulationTime() / 1000), integerFilter ));
-    sim_time.textProperty().addListener((observable, oldValue, newValue) -> GeneralProcessor.setSimulationTime(Long.parseLong(newValue) * 1000));
+    sim_time.setTextFormatter(
+        new TextFormatter<>(new IntegerStringConverter(), Math.toIntExact(GeneralProcessor.getSimulationTime() / 1000),
+            integerFilter));
+    sim_time.textProperty().addListener(
+        (observable, oldValue, newValue) -> GeneralProcessor.setSimulationTime(Long.parseLong(newValue) * 1000));
   }
 
 }
