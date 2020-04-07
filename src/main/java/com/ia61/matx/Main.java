@@ -4,9 +4,11 @@ import com.ia61.matx.model.ui.RootLayout;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -27,7 +29,8 @@ public class Main extends Application {
 
     try {
 //      Parent rootPane = FXMLLoader.load(Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource("Controller.fxml")));
-      Scene scene = new Scene(root,1680,920);
+      Rectangle2D screenVisualBounds = Screen.getPrimary().getVisualBounds();
+      Scene scene = new Scene(root, screenVisualBounds.getWidth() - 50,screenVisualBounds.getHeight() - 80);
       scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
       primaryStage.setScene(scene);
       primaryStage.setTitle("MatX");
