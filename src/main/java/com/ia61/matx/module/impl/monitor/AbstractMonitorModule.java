@@ -2,8 +2,8 @@ package com.ia61.matx.module.impl.monitor;
 
 import com.ia61.matx.model.input.impl.MultiInput;
 import com.ia61.matx.model.output.impl.NoOutput;
-import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
+import com.ia61.matx.model.ui.enums.FieldType;
 import com.ia61.matx.service.GeneralProcessor;
 import lombok.Getter;
 import lombok.Setter;

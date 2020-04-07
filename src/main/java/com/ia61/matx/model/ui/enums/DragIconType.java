@@ -1,4 +1,4 @@
-package com.ia61.matx.model.ui;
+package com.ia61.matx.model.ui.enums;
 
 public enum DragIconType {
 	red,

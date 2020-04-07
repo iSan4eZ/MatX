@@ -2,8 +2,8 @@ package com.ia61.matx.module.impl.decision_maker.impl;
 
 import com.ia61.matx.model.exception.ModuleException;
 import com.ia61.matx.model.input.InputConnection;
-import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
+import com.ia61.matx.model.ui.enums.FieldType;
 import com.ia61.matx.module.impl.decision_maker.AbstractDecisionMakerModule;
 import com.ia61.matx.module.impl.interrupter.AbstractInterrupter;
 import com.ia61.matx.util.ClassUtils;

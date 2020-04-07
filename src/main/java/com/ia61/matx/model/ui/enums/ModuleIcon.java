@@ -1,4 +1,4 @@
-package com.ia61.matx.model.ui;
+package com.ia61.matx.model.ui.enums;
 
 import com.ia61.matx.module.Module;
 import com.ia61.matx.service.factory.ModuleFactory;

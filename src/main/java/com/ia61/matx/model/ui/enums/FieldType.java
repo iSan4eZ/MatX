@@ -1,4 +1,4 @@
-package com.ia61.matx.model.ui;
+package com.ia61.matx.model.ui.enums;
 
 public enum FieldType {
 
@@ -8,6 +8,7 @@ public enum FieldType {
   FLOAT,
   LONG,
   BOOLEAN,
-  BINARY_STRING
+  BINARY_STRING,
+  ENUM
 
 }

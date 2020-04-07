@@ -1,13 +1,12 @@
 package com.ia61.matx.model.ui;
 
-import com.ia61.matx.model.ui.DragIconType;
+import com.ia61.matx.model.ui.enums.DragIconType;
+import com.ia61.matx.model.ui.enums.ModuleIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.CubicCurve;
 
 import java.io.IOException;
 

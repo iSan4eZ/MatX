@@ -2,8 +2,8 @@ package com.ia61.matx.module.impl.summator.impl;
 
 import com.ia61.matx.model.input.impl.MultiInput;
 import com.ia61.matx.model.output.impl.SingleOutput;
-import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
+import com.ia61.matx.model.ui.enums.FieldType;
 import com.ia61.matx.module.impl.summator.Summator;
 
 import java.util.Collections;

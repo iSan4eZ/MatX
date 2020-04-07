@@ -1,7 +1,7 @@
 package com.ia61.matx.module.impl.signal_generator.impl;
 
-import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
+import com.ia61.matx.model.ui.enums.FieldType;
 import com.ia61.matx.module.impl.signal_generator.AbstractSignalGeneratorModule;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,15 +19,20 @@ public class DigitalSignalGeneratorModule extends AbstractSignalGeneratorModule 
   //Hz - amount of periods per second
   private Float frequency = 3f;
   private Boolean repeatable = false;
+  private Long timeOffset = 0L;
 
   private String symbol = "";
 
   @Override
   public Float getDataToFirstOutput(Long timestamp) {
-    final int coefficient = getCurrentCoefficient(timestamp, frequency, repeatable, symbol);
+    final long timestampWithOffset = timestamp - timeOffset;
+    if (timestampWithOffset < 0) {
+      return 0f;
+    }
+    final int coefficient = getCurrentCoefficient(timestampWithOffset, frequency, repeatable, symbol);
 
     final float signalPart = getHalfInterval(frequency, periodsPerSymbol)
-        .compareTo(timestamp % getInterval(frequency, periodsPerSymbol)) * height;
+        .compareTo(timestampWithOffset % getInterval(frequency, periodsPerSymbol)) * height;
 
     return (signalPart * coefficient) + offset;
   }
@@ -46,7 +51,8 @@ public class DigitalSignalGeneratorModule extends AbstractSignalGeneratorModule 
         new PopupField<>(FieldType.FLOAT, this::getFrequency, this::setFrequency, "Частота (Гц):"),
         new PopupField<>(FieldType.FLOAT, this::getHeight, this::setHeight, "Амплітуда:"),
         new PopupField<>(FieldType.BOOLEAN, this::getRepeatable, this::setRepeatable, "Циклічний:"),
-        new PopupField<>(FieldType.BINARY_STRING, this::getSymbol, this::setSymbol, "Символ:")
+        new PopupField<>(FieldType.BINARY_STRING, this::getSymbol, this::setSymbol, "Символ:"),
+        new PopupField<>(FieldType.LONG, this::getTimeOffset, this::setTimeOffset, "Затримка (мс):")
     );
   }
 }

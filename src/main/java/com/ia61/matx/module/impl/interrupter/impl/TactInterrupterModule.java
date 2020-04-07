@@ -1,7 +1,7 @@
 package com.ia61.matx.module.impl.interrupter.impl;
 
-import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
+import com.ia61.matx.model.ui.enums.FieldType;
 import com.ia61.matx.module.impl.interrupter.AbstractInterrupter;
 
 import java.util.Arrays;

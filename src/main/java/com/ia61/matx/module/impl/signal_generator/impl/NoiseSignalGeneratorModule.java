@@ -1,7 +1,8 @@
 package com.ia61.matx.module.impl.signal_generator.impl;
 
-import com.ia61.matx.model.ui.FieldType;
 import com.ia61.matx.model.ui.PopupField;
+import com.ia61.matx.model.ui.enums.FieldType;
+import com.ia61.matx.model.ui.enums.NoiseType;
 import com.ia61.matx.module.impl.signal_generator.AbstractSignalGeneratorModule;
 import com.ia61.matx.util.NumberUtil;
 import lombok.Getter;
@@ -14,8 +15,9 @@ import java.util.List;
 @Setter
 public class NoiseSignalGeneratorModule extends AbstractSignalGeneratorModule {
 
-  public Float upperBound = 1f;
-  public Float lowerBound = -1f;
+  private Float upperBound = 1f;
+  private Float lowerBound = -1f;
+  private NoiseType noiseType = NoiseType.WHITE;
 
   @Override
   public Float getDataToFirstOutput(Long timestamp) {
@@ -34,6 +36,8 @@ public class NoiseSignalGeneratorModule extends AbstractSignalGeneratorModule {
             "Генерує псевдорандомні значення у вказаних границях."),
         new PopupField<>(FieldType.FLOAT, this::getLowerBound, this::setLowerBound, "Нижня границя:"),
         new PopupField<>(FieldType.FLOAT, this::getUpperBound, this::setUpperBound, "Верхня границя:")
+        //TODO implement noise types
+//        , new PopupField<>(FieldType.ENUM, this::getNoiseType, this::setNoiseType, "Тип завади:")
     );
   }
 }

@@ -1,5 +1,6 @@
 package com.ia61.matx.model.ui;
 
+import com.ia61.matx.model.ui.enums.ModuleIcon;
 import com.ia61.matx.service.GeneralProcessor;
 import javafx.concurrent.Service;
 import javafx.concurrent.WorkerStateEvent;

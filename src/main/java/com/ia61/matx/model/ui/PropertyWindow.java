@@ -3,7 +3,10 @@ package com.ia61.matx.model.ui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -69,14 +72,16 @@ public class PropertyWindow extends AnchorPane {
             pf.setValue(Float.valueOf(((TextField)pf.getControl()).getText()));
             break;
           case LONG:
-            pf.setValue(Long.valueOf(((TextField)pf.getControl()).getText()));
+            pf.setValue(Long.valueOf(((TextField) pf.getControl()).getText()));
             break;
           case BOOLEAN:
-            pf.setValue(((CheckBox)pf.getControl()).isSelected());
+            pf.setValue(((CheckBox) pf.getControl()).isSelected());
             break;
           case BINARY_STRING:
-            pf.setValue(((TextField)pf.getControl()).getText());
+            pf.setValue(((TextField) pf.getControl()).getText());
             break;
+          case ENUM:
+            pf.setValue(((ComboBox) pf.getControl()).getValue());
         }
       }
 
