@@ -69,4 +69,14 @@ public class GeneralProcessor {
     interrupterList.remove(moduleToRemove);
     decisionMakerList.remove(moduleToRemove);
   }
+
+  public static void addModule(Module moduleToAdd) {
+    if (moduleToAdd instanceof Monitor) {
+      monitorList.add((Monitor) moduleToAdd);
+    } else if (moduleToAdd instanceof Interrupter) {
+      interrupterList.add((Interrupter) moduleToAdd);
+    } else if (moduleToAdd instanceof DecisionMaker) {
+      decisionMakerList.add((DecisionMaker) moduleToAdd);
+    }
+  }
 }

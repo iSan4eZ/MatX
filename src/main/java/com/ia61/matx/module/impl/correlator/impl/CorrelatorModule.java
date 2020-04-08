@@ -18,15 +18,19 @@ import java.util.Objects;
 public class CorrelatorModule extends TripleInput implements Correlator, SingleOutput, Interruptable {
 
   private Float currentValue = 0f;
+  private Long previousTimestamp = -1L;
 
   @Override
   public Float getDataToFirstOutput(Long timestamp) {
-    if (Objects.isNull(getFirstInput()) || Objects.isNull(getSecondInput())) {
-      throw new ModuleException(this.getClass().getSimpleName() + " has one or more empty connections.", this);
+    if (!previousTimestamp.equals(timestamp)) {
+      if (Objects.isNull(getFirstInput()) || Objects.isNull(getSecondInput())) {
+        throw new ModuleException(this.getClass().getSimpleName() + " has one or more empty connections.", this);
+      }
+      Float firstValue = getFirstInput().requestData(timestamp);
+      Float secondValue = getSecondInput().requestData(timestamp);
+      currentValue += firstValue * secondValue;
     }
-    Float firstValue = getFirstInput().requestData(timestamp);
-    Float secondValue = getSecondInput().requestData(timestamp);
-    currentValue += firstValue * secondValue;
+    previousTimestamp = timestamp;
     return currentValue;
   }
 
@@ -50,6 +54,7 @@ public class CorrelatorModule extends TripleInput implements Correlator, SingleO
   @Override
   public void interrupt() {
     currentValue = 0f;
+    previousTimestamp = -1L;
   }
 
   @Override

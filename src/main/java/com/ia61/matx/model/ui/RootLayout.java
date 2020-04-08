@@ -380,6 +380,9 @@ public class RootLayout extends AnchorPane {
 
   public void clearRightPane() {
     right_pane.getChildren().clear();
+    GeneralProcessor.interrupterList.clear();
+    GeneralProcessor.decisionMakerList.clear();
+    GeneralProcessor.monitorList.clear();
   }
 
   private void handleSimulateButton() {

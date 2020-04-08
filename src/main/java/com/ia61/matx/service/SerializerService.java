@@ -66,6 +66,7 @@ public class SerializerService {
             final Map<String, DraggableNode> draggableNodeMap = rootLayout.getRight_pane().getChildren().stream()
                 .filter(node -> node instanceof DraggableNode)
                 .map(node -> (DraggableNode) node)
+                .peek(node -> GeneralProcessor.addModule(node.getModule()))
                 .collect(Collectors.toMap(DraggableNode::getId, Function.identity()));
 
             nodeLinkDtoList.forEach(nodeLinkDto -> {
