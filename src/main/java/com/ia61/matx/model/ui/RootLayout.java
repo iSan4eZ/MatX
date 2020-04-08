@@ -2,6 +2,8 @@ package com.ia61.matx.model.ui;
 
 import com.ia61.matx.model.ui.enums.ModuleIcon;
 import com.ia61.matx.service.GeneralProcessor;
+import com.ia61.matx.service.SerializerService;
+import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -87,6 +89,8 @@ public class RootLayout extends AnchorPane {
     buildDragHandlers();
     handleSimulateButton();
     handleSimTimeField();
+
+    SerializerService.setRootLayout(this);
   }
 
   private void addDragDetection(DragIcon dragIcon) {
@@ -243,41 +247,13 @@ public class RootLayout extends AnchorPane {
 
         if (container != null) {
           if (container.getValue("scene_coords") != null) {
-
-//						if (container.getValue("type").equals(DragIconType.cubic_curve.toString())) {
-//							CubicCurveDemo curve = new CubicCurveDemo();
-//
-//							right_pane.getChildren().add(curve);
-//
-//							Point2D cursorPoint = container.getValue("scene_coords");
-//
-//							curve.relocateToPoint(
-//									new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
-//									);
-//						}
-//						else {
             ModuleIcon moduleIcon = container.getValue("type");
             DraggableNode node = new DraggableNode(moduleIcon);
-            right_pane.getChildren().add(node);
 
             Point2D cursorPoint = container.getValue("scene_coords");
-
-            node.relocateToPoint(
-                new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
-            );
-//						}
+            addDraggableNode(node, new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32));
           }
         }
-				/*
-				//Move node drag operation
-				container = 
-						(DragContainer) event.getDragboard().getContent(DragContainer.DragNode);
-				
-				if (container != null) {
-					if (container.getValue("type") != null)
-						System.out.println ("Moved node " + container.getValue("type"));
-				}
-				*/
 
         //AddLink drag operation
         container =
@@ -328,25 +304,7 @@ public class RootLayout extends AnchorPane {
             }
 
             if (source != null && target != null) {
-              NodeLink link = new NodeLink();
-
-              int inputCount = target.getModule().getInputCount();
-
-              if ((inputCount > 0 && !target.getTakenInputs().containsKey(targetPane.getId()))
-                  // check if target has free input
-                  || inputCount < 0) {
-                //UI is ready for connecting, now trying to connect on backend
-                Boolean connected = target.getModule().connectToInput(
-                    source.getModule(),
-                    source.getOutputIndexNumber(sourcePane.getId()),
-                    target.getInputIndexNumber(targetPane.getId()));
-                //Check if modules are connected on backend and perform linking
-                if (connected) {
-                  addLinkDeleteHandler(link);
-                  right_pane.getChildren().add(0, link);
-                  link.bindEnds(source, target, sourcePane, targetPane);
-                }
-              }
+              addNodeLink(source, target, sourcePane, targetPane);
             }
           }
 
@@ -355,6 +313,49 @@ public class RootLayout extends AnchorPane {
         event.consume();
       }
     });
+  }
+
+  public void addNodeLink(DraggableNode source, DraggableNode target, AnchorPane sourcePane, AnchorPane targetPane) {
+    Platform.runLater(
+        () -> {
+          NodeLink link = new NodeLink();
+
+          int inputCount = target.getModule().getInputCount();
+
+          if ((inputCount > 0 && !target.getTakenInputs().containsKey(targetPane.getId()))
+              // check if target has free input
+              || inputCount < 0) {
+            //UI is ready for connecting, now trying to connect on backend
+            Boolean connected = target.getModule().connectToInput(
+                source.getModule(),
+                source.getOutputIndexNumber(sourcePane.getId()),
+                target.getInputIndexNumber(targetPane.getId()));
+            //Check if modules are connected on backend and perform linking
+            if (connected) {
+              addLinkDeleteHandler(link);
+              right_pane.getChildren().add(0, link);
+              link.bindEnds(source, target, sourcePane, targetPane);
+            }
+          }
+        }
+    );
+  }
+
+  public void addDraggableNode(DraggableNode node, Point2D point2D) {
+    Platform.runLater(
+        () -> {
+          right_pane.getChildren().add(node);
+          node.relocateToPoint(point2D);
+        }
+    );
+  }
+
+  public void clearRightPane() {
+    Platform.runLater(
+        () -> {
+          right_pane.getChildren().clear();
+        }
+    );
   }
 
   private void handleSimulateButton() {
@@ -391,6 +392,10 @@ public class RootLayout extends AnchorPane {
             integerFilter));
     sim_time.textProperty().addListener(
         (observable, oldValue, newValue) -> GeneralProcessor.setSimulationTime(Long.parseLong(newValue) * 1000));
+  }
+
+  public AnchorPane getRight_pane() {
+    return right_pane;
   }
 
 }

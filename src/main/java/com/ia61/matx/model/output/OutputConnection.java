@@ -1,6 +1,8 @@
 package com.ia61.matx.model.output;
 
-public interface OutputConnection {
+import java.io.Serializable;
+
+public interface OutputConnection extends Serializable {
 
   Float gatherData(Long timestamp);
 

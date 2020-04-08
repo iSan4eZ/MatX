@@ -6,10 +6,11 @@ import com.ia61.matx.module.impl.interrupter.AbstractInterrupter;
 import com.ia61.matx.module.impl.interrupter.Interruptable;
 import com.ia61.matx.util.ClassUtils;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 
-public interface Input {
+public interface Input extends Serializable {
 
   default Optional<InputConnection> getInputConnection(Module module, Integer outputNumber) {
     final Optional<OutputConnection> output = module.getOutput(outputNumber);
