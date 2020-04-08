@@ -1,5 +1,6 @@
 package com.ia61.matx.model.ui;
 
+import com.ia61.matx.Main;
 import com.ia61.matx.model.ui.enums.ModuleIcon;
 import com.ia61.matx.service.GeneralProcessor;
 import com.ia61.matx.service.SerializerService;
@@ -16,8 +17,10 @@ import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.CubicCurve;
+import javafx.stage.FileChooser;
 import javafx.util.converter.IntegerStringConverter;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.function.UnaryOperator;
@@ -38,6 +41,10 @@ public class RootLayout extends AnchorPane {
   ProgressBar progress_bar;
   @FXML
   Label result_simulation_label;
+  @FXML
+  MenuItem save_as_menu_item;
+  @FXML
+  MenuItem load_menu_item;
 
   private DragIcon mDragOverIcon = null;
 
@@ -85,6 +92,36 @@ public class RootLayout extends AnchorPane {
       icn.setModuleIcon(ModuleIcon.values()[i]);
       left_pane.getChildren().add(icn);
     }
+
+    save_as_menu_item.setOnAction(event -> {
+      FileChooser fileChooser = new FileChooser();
+
+      //Set extension filter for text files
+      FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("MatX project (*.matx)", "*.matx");
+      fileChooser.getExtensionFilters().add(extFilter);
+
+      //Show save file dialog
+      File file = fileChooser.showSaveDialog(Main.getPrimaryStage());
+
+      if (file != null) {
+        SerializerService.save(file.getPath());
+      }
+    });
+
+    load_menu_item.setOnAction(event -> {
+      FileChooser fileChooser = new FileChooser();
+
+      //Set extension filter for text files
+      FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("MatX project (*.matx)", "*.matx");
+      fileChooser.getExtensionFilters().add(extFilter);
+
+      //Show save file dialog
+      File file = fileChooser.showOpenDialog(Main.getPrimaryStage());
+
+      if (file != null) {
+        SerializerService.load(file.getPath());
+      }
+    });
 
     buildDragHandlers();
     handleSimulateButton();
