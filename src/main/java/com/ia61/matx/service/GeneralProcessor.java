@@ -40,8 +40,6 @@ public class GeneralProcessor {
               monitorList.forEach(monitor -> monitor.gatherAllInputs(finalI));
               decisionMakerList.forEach(decisionMaker -> decisionMaker.calculateSymbolValues(finalI));
             }
-            SerializerService.save("save.matx");
-            SerializerService.load("save.matx");
             return "Симуляція пройшла успішно!";
           } catch (ModuleException e) {
             return e.getModule().getModuleName() + " має порожні входи.";
