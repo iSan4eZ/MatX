@@ -4,7 +4,6 @@ import com.ia61.matx.Main;
 import com.ia61.matx.model.ui.enums.ModuleIcon;
 import com.ia61.matx.service.GeneralProcessor;
 import com.ia61.matx.service.SerializerService;
-import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -353,46 +352,34 @@ public class RootLayout extends AnchorPane {
   }
 
   public void addNodeLink(DraggableNode source, DraggableNode target, AnchorPane sourcePane, AnchorPane targetPane) {
-    Platform.runLater(
-        () -> {
-          NodeLink link = new NodeLink();
+    NodeLink link = new NodeLink();
 
-          int inputCount = target.getModule().getInputCount();
+    int inputCount = target.getModule().getInputCount();
 
-          if ((inputCount > 0 && !target.getTakenInputs().containsKey(targetPane.getId()))
-              // check if target has free input
-              || inputCount < 0) {
-            //UI is ready for connecting, now trying to connect on backend
-            Boolean connected = target.getModule().connectToInput(
-                source.getModule(),
-                source.getOutputIndexNumber(sourcePane.getId()),
-                target.getInputIndexNumber(targetPane.getId()));
-            //Check if modules are connected on backend and perform linking
-            if (connected) {
-              addLinkDeleteHandler(link);
-              right_pane.getChildren().add(0, link);
-              link.bindEnds(source, target, sourcePane, targetPane);
-            }
-          }
-        }
-    );
+    if ((inputCount > 0 && !target.getTakenInputs().containsKey(targetPane.getId()))
+        // check if target has free input
+        || inputCount < 0) {
+      //UI is ready for connecting, now trying to connect on backend
+      Boolean connected = target.getModule().connectToInput(
+          source.getModule(),
+          source.getOutputIndexNumber(sourcePane.getId()),
+          target.getInputIndexNumber(targetPane.getId()));
+      //Check if modules are connected on backend and perform linking
+      if (connected) {
+        addLinkDeleteHandler(link);
+        right_pane.getChildren().add(0, link);
+        link.bindEnds(source, target, sourcePane, targetPane);
+      }
+    }
   }
 
   public void addDraggableNode(DraggableNode node, Point2D point2D) {
-    Platform.runLater(
-        () -> {
-          right_pane.getChildren().add(node);
-          node.relocateToPoint(point2D);
-        }
-    );
+    right_pane.getChildren().add(node);
+    node.relocateToPoint(point2D);
   }
 
   public void clearRightPane() {
-    Platform.runLater(
-        () -> {
-          right_pane.getChildren().clear();
-        }
-    );
+    right_pane.getChildren().clear();
   }
 
   private void handleSimulateButton() {
