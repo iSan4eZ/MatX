@@ -17,7 +17,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -127,23 +127,48 @@ public class DraggableNode extends AnchorPane {
     outputs.setVisible(true);
   }
 
-  private void addLinkPanel(VBox linkPanes, double paneHeight) {
+  private void addLinkPanel(VBox linkPanes, double paneHeight, boolean multiPort) {
     AnchorPane anchorPane = new AnchorPane();
     anchorPane.setId(UUID.randomUUID().toString());
     anchorPane.setMinHeight(paneHeight);
     anchorPane.setMinWidth(linkPanes.getPrefWidth());
-    Circle c = new Circle();
+
+    Polygon portIcon = new Polygon();
+    double polygonSide = 10;
+    if (multiPort) {
+      portIcon.getPoints().addAll(
+          0.0, 0.0,
+          polygonSide, polygonSide * 2 / 4,
+          polygonSide, polygonSide * 6 / 4,
+          0.0, polygonSide * 8 / 4,
+          0.0, polygonSide * 6 / 4,
+          polygonSide * 2 / 4, polygonSide * 5 / 4,
+          polygonSide * 2 / 4, polygonSide * 3 / 4,
+          0.0, polygonSide * 2 / 4);
+    } else {
+      portIcon.getPoints().addAll(
+          0.0, 0.0,
+          polygonSide, polygonSide * 3 / 4,
+          0.0, polygonSide * 6 / 4,
+          0.0, polygonSide * 4 / 4,
+          polygonSide * 2 / 4, polygonSide * 3 / 4,
+          0.0, polygonSide * 2 / 4);
+    }
+
     if (linkPanes.getId().contains("inputs")) {
+      portIcon.setLayoutX(polygonSide / (-2.2));
       anchorPane.getStyleClass().add("left-link-handle");
       inputsList.add(anchorPane.getId());
     } else if (linkPanes.getId().contains("outputs")) {
-      c.setCenterX(linkPanes.getPrefWidth());
+      portIcon.setLayoutX(linkPanes.getPrefWidth() - polygonSide / 2);
       outputsList.add(anchorPane.getId());
       anchorPane.getStyleClass().add("right-link-handle");
     }
-    c.setRadius(4.0f);
-    c.setLayoutY(paneHeight / 2);
-    anchorPane.getChildren().add(c);
+    portIcon.setLayoutY(paneHeight / 2 -
+        (multiPort
+            ? (polygonSide * 8 / 9)
+            : (polygonSide * 6 / 9)));
+    anchorPane.getChildren().add(portIcon);
 
     anchorPane.setOnDragDetected(mLinkHandleDragDetected);
     anchorPane.setOnDragDropped(mLinkHandleDragDropped);
@@ -157,11 +182,11 @@ public class DraggableNode extends AnchorPane {
     if (portsAmount > 0) {
       paneHeight = paneHeight / portsAmount;
       for (int i = 0; i < portsAmount; i++) {
-        addLinkPanel(linkPanes, paneHeight);
+        addLinkPanel(linkPanes, paneHeight, false);
       }
     } else if (portsAmount == -1) {
       paneHeight = linkPanes.getPrefHeight();
-      addLinkPanel(linkPanes, paneHeight);
+      addLinkPanel(linkPanes, paneHeight, true);
     } else {
       log.info("pane will not be added");
     }
