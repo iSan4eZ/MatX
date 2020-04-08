@@ -22,8 +22,8 @@ public class DraggableNodeDto implements SerializableDto {
 
   public DraggableNodeDto(DraggableNode draggableNode) {
     this.moduleIcon = draggableNode.getModuleIcon();
-    this.xPosition = draggableNode.getLayoutX() + 32;
-    this.yPosition = draggableNode.getLayoutY() + 32;
+    this.xPosition = draggableNode.getLayoutX() + 89;
+    this.yPosition = draggableNode.getLayoutY() + 46;
     this.id = draggableNode.getId();
     this.inputIdList = draggableNode.getInputs().getChildren().stream()
         .map(Node::getId)
