@@ -69,8 +69,19 @@ public class DraggableNode extends AnchorPane {
   private final List<String> mLinkIds = new ArrayList<String>();
   private Map<String, List<String>> takenInputs = new HashMap<>();
 
+  private final List<String> inputIdList;
+  private final List<String> outputIdList;
+
   public DraggableNode(ModuleIcon moduleIcon) {
-    setModule(moduleIcon.getModule());
+    this(moduleIcon, moduleIcon.getModule(), UUID.randomUUID().toString(), new ArrayList<>(), new ArrayList<>());
+
+  }
+
+  public DraggableNode(ModuleIcon moduleIcon, Module module, String id, List<String> inputIdList,
+      List<String> outputIdList) {
+    this.inputIdList = inputIdList;
+    this.outputIdList = outputIdList;
+    setModule(module);
     setModuleIcon(moduleIcon);
 
     FXMLLoader fxmlLoader = new FXMLLoader(
@@ -88,9 +99,7 @@ public class DraggableNode extends AnchorPane {
     } catch (IOException exception) {
       throw new RuntimeException(exception);
     }
-    //provide a universally unique identifier for this object
-    setId(UUID.randomUUID().toString());
-
+    setId(id);
   }
 
   @FXML
@@ -118,18 +127,18 @@ public class DraggableNode extends AnchorPane {
     setType(DragIconType.grey);
 
     setLinkPanesAmount(inputs,
-        getModule().getInputCount()
+        getModule().getInputCount(), this.inputIdList
     );
     setLinkPanesAmount(outputs,
-        getModule().getOutputCount()
+        getModule().getOutputCount(), this.outputIdList
     );
     inputs.setVisible(true);
     outputs.setVisible(true);
   }
 
-  private void addLinkPanel(VBox linkPanes, double paneHeight, boolean multiPort) {
+  private void addLinkPanel(VBox linkPanes, double paneHeight, String id, boolean multiPort) {
     AnchorPane anchorPane = new AnchorPane();
-    anchorPane.setId(UUID.randomUUID().toString());
+    anchorPane.setId(id);
     anchorPane.setMinHeight(paneHeight);
     anchorPane.setMinWidth(linkPanes.getPrefWidth());
 
@@ -177,16 +186,18 @@ public class DraggableNode extends AnchorPane {
     linkPanes.getChildren().add(anchorPane);
   }
 
-  private void setLinkPanesAmount(VBox linkPanes, int portsAmount) {
+  private void setLinkPanesAmount(VBox linkPanes, int portsAmount, List<String> idList) {
     double paneHeight = linkPanes.getPrefHeight();
     if (portsAmount > 0) {
       paneHeight = paneHeight / portsAmount;
       for (int i = 0; i < portsAmount; i++) {
-        addLinkPanel(linkPanes, paneHeight, false);
+        final String id = idList.isEmpty() ? UUID.randomUUID().toString() : idList.get(i);
+        addLinkPanel(linkPanes, paneHeight, id, false);
       }
     } else if (portsAmount == -1) {
       paneHeight = linkPanes.getPrefHeight();
-      addLinkPanel(linkPanes, paneHeight, true);
+      final String id = idList.isEmpty() ? UUID.randomUUID().toString() : idList.get(0);
+      addLinkPanel(linkPanes, paneHeight, id, true);
     } else {
       log.info("pane will not be added");
     }

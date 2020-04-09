@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <fx:root fx:id="root_pane" minHeight="200.0" minWidth="200.0" stylesheets="@application.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
      <ToolBar layoutY="23.0" prefHeight="17.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
        <items>
-         <Button fx:id="simulate_btn" mnemonicParsing="false" styleClass="start-btn" />
-            <TextField fx:id="sim_time" prefHeight="25.0" prefWidth="98.0" promptText="Simulation time" />
-            <Label text="сек" />
-            <ProgressBar fx:id="progress_bar" prefWidth="200.0" progress="0.0" />
-            <Label text="\%" />
-            <Label fx:id="result_simulation_label" />
+         <MenuBar>
+           <menus>
+             <Menu mnemonicParsing="false" text="Файл">
+               <items>
+                 <MenuItem fx:id="save_as_menu_item" mnemonicParsing="false" text="Зберегти проект як..."/>
+                 <MenuItem fx:id="load_menu_item" mnemonicParsing="false" text="Завантажити з файлу..."/>
+               </items>
+             </Menu>
+           </menus>
+         </MenuBar>
+         <Button fx:id="simulate_btn" mnemonicParsing="false" styleClass="start-btn"/>
+         <TextField fx:id="sim_time" prefHeight="25.0" prefWidth="98.0" promptText="Simulation time"/>
+         <Label text="сек"/>
+         <ProgressBar fx:id="progress_bar" prefWidth="200.0" progress="0.0"/>
+         <Label text="\%"/>
+         <Label fx:id="result_simulation_label"/>
        </items>
      </ToolBar>
       <SplitPane fx:id="base_pane" dividerPositions="0.5" layoutY="57.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="143.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">

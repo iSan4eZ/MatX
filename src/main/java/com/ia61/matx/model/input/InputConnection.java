@@ -3,7 +3,9 @@ package com.ia61.matx.model.input;
 import com.ia61.matx.model.output.OutputConnection;
 import com.ia61.matx.module.Module;
 
-public class InputConnection {
+import java.io.Serializable;
+
+public class InputConnection implements Serializable {
 
   private Module connectedModule;
   private OutputConnection connectedOutput;

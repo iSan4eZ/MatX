@@ -23,18 +23,22 @@ public class DecisionMakerModule extends AbstractDecisionMakerModule {
   private Long valuesReceived = 0L;
   private Float previousValue = 0f;
   private Long h = 0L;
+  private Long previousTimestamp = -1L;
 
   private String resultSymbol = "";
 
   @Override
   public void calculateSymbolValues(Long timestamp) {
-    if (Objects.isNull(getFirstInput())) {
-      throw new ModuleException(this.getClass().getSimpleName() + " has one or more empty connections.", this);
+    if (!previousTimestamp.equals(timestamp)) {
+      if (Objects.isNull(getFirstInput())) {
+        throw new ModuleException(this.getClass().getSimpleName() + " has one or more empty connections.", this);
+      }
+      final Float currentValue = getFirstInput().requestData(timestamp);
+      h += currentValue.compareTo(previousValue);
+      previousValue = currentValue;
+      valuesReceived++;
     }
-    final Float currentValue = getFirstInput().requestData(timestamp);
-    h += currentValue.compareTo(previousValue);
-    previousValue = currentValue;
-    valuesReceived++;
+    previousTimestamp = timestamp;
   }
 
   //Symbol calculation
@@ -50,6 +54,7 @@ public class DecisionMakerModule extends AbstractDecisionMakerModule {
         resultSymbol += "?";
       }
     }
+    previousTimestamp = -1L;
     valuesReceived = 0L;
     previousValue = 0f;
     h = 0L;
