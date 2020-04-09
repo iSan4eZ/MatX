@@ -387,6 +387,7 @@ public class RootLayout extends AnchorPane {
 
   private void handleSimulateButton() {
     simulate_btn.setOnMouseClicked((event) -> {
+      result_simulation_label.setText("");
       Service<String> simulation = GeneralProcessor.getProgress();
       simulation.reset();
       progress_bar.progressProperty().bind(simulation.progressProperty());

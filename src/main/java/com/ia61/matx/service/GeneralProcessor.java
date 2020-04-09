@@ -30,6 +30,7 @@ public class GeneralProcessor {
       return new Task<String>() {
         @Override
         protected String call() throws Exception {
+          final long startTs = System.currentTimeMillis();
           try {
             monitorList.forEach(Monitor::resetResult);
             decisionMakerList.forEach(DecisionMaker::resetResult);
@@ -40,12 +41,14 @@ public class GeneralProcessor {
               monitorList.forEach(monitor -> monitor.gatherAllInputs(finalI));
               decisionMakerList.forEach(decisionMaker -> decisionMaker.calculateSymbolValues(finalI));
             }
-            return "Симуляція пройшла успішно!";
+            final long endTs = System.currentTimeMillis();
+            return "Симуляція пройшла успішно! (" + (endTs / startTs / 1000f) + " сек)";
           } catch (ModuleException e) {
             return e.getModule().getModuleName() + " має порожні входи.";
           } catch (Exception e) {
+            final long endTs = System.currentTimeMillis();
             log.error("Error in simulation", e);
-            return "Виникла помилка.";
+            return "Виникла помилка. (" + (endTs / startTs / 1000f) + " сек)";
           }
         }
       };
