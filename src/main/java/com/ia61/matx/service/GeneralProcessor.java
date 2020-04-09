@@ -42,7 +42,7 @@ public class GeneralProcessor {
               decisionMakerList.forEach(decisionMaker -> decisionMaker.calculateSymbolValues(finalI));
             }
             final long endTs = System.currentTimeMillis();
-            return "Симуляція пройшла успішно! (" + (endTs / startTs / 1000f) + " сек)";
+            return "Симуляція пройшла успішно! (" + ((endTs - startTs) / 1000f) + " сек)";
           } catch (ModuleException e) {
             return e.getModule().getModuleName() + " має порожні входи.";
           } catch (Exception e) {
