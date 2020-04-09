@@ -4,6 +4,8 @@ import com.ia61.matx.Main;
 import com.ia61.matx.model.ui.enums.ModuleIcon;
 import com.ia61.matx.service.GeneralProcessor;
 import com.ia61.matx.service.SerializerService;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -40,6 +42,8 @@ public class RootLayout extends AnchorPane {
   ProgressBar progress_bar;
   @FXML
   Label result_simulation_label;
+  @FXML
+  Label simulation_percent_label;
   @FXML
   MenuItem save_as_menu_item;
   @FXML
@@ -387,9 +391,14 @@ public class RootLayout extends AnchorPane {
 
   private void handleSimulateButton() {
     simulate_btn.setOnMouseClicked((event) -> {
+      result_simulation_label.setText("");
       Service<String> simulation = GeneralProcessor.getProgress();
       simulation.reset();
-      progress_bar.progressProperty().bind(simulation.progressProperty());
+      final ReadOnlyDoubleProperty simulationProgressProperty = simulation.progressProperty();
+      simulation_percent_label.textProperty().bind(Bindings.concat(Bindings
+          .createDoubleBinding(() -> Math.round(simulationProgressProperty.get() * 10000) / 100.0,
+              simulationProgressProperty), "%"));
+      progress_bar.progressProperty().bind(simulationProgressProperty);
       simulation.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
         @Override
         public void handle(WorkerStateEvent t) {

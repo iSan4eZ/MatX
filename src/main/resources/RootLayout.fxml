@@ -21,7 +21,7 @@
          <TextField fx:id="sim_time" prefHeight="25.0" prefWidth="98.0" promptText="Simulation time"/>
          <Label text="сек"/>
          <ProgressBar fx:id="progress_bar" prefWidth="200.0" progress="0.0"/>
-         <Label text="\%"/>
+         <Label fx:id="simulation_percent_label" text="0%"/>
          <Label fx:id="result_simulation_label"/>
        </items>
      </ToolBar>
