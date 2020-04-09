@@ -10,6 +10,8 @@ import javafx.concurrent.Task;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class GeneralProcessor {
   public static List<Monitor> monitorList = new ArrayList<>();
   public static List<Interrupter> interrupterList = new ArrayList<>();
   public static List<DecisionMaker> decisionMakerList = new ArrayList<>();
+  private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
   private static Long simulationTime = 4000L;
   private static Long currentTime = 0L;
@@ -36,24 +39,29 @@ public class GeneralProcessor {
             decisionMakerList.forEach(DecisionMaker::resetResult);
             for (long i = 0L; i < simulationTime; i += 1) {
               long finalI = i;
-              updateProgress(i, simulationTime);
+              updateProgress(i, simulationTime - 1);
               interrupterList.forEach(interrupter -> interrupter.interruptAll(finalI));
               monitorList.forEach(monitor -> monitor.gatherAllInputs(finalI));
               decisionMakerList.forEach(decisionMaker -> decisionMaker.calculateSymbolValues(finalI));
             }
             final long endTs = System.currentTimeMillis();
-            return "Симуляція пройшла успішно! (" + ((endTs - startTs) / 1000f) + " сек)";
+            return getPrefix() + "Симуляція пройшла успішно! ("
+                + ((endTs - startTs) / 1000f) + " сек)";
           } catch (ModuleException e) {
-            return e.getModule().getModuleName() + " має порожні входи.";
+            return getPrefix() + e.getModule().getModuleName() + " має порожні входи.";
           } catch (Exception e) {
             final long endTs = System.currentTimeMillis();
             log.error("Error in simulation", e);
-            return "Виникла помилка. (" + (endTs / startTs / 1000f) + " сек)";
+            return getPrefix() + "Виникла помилка. (" + (endTs / startTs / 1000f) + " сек)";
           }
         }
       };
     }
   };
+
+  private static String getPrefix() {
+    return "[" + LocalDateTime.now().format(dateTimeFormatter) + "]: ";
+  }
 
   public static Long getSimulationTime() {
     return simulationTime;
